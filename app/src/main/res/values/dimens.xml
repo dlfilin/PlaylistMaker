@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_font_size">22sp</dimen>
+    <dimen name="margin_from_top_title">40dp</dimen>
+    <dimen name="settings_font_size">16sp</dimen>
+    <dimen name="padding_top">14dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
+    <dimen name="padding_bottom">28dp</dimen>
+    <dimen name="settings_item_height">61dp</dimen>
+</resources>
