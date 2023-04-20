@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="24dp"
+        app:navigationIcon="@drawable/ic_arrow_back">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/settings"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/main_font_size"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/padding_left"
+        android:paddingEnd="@dimen/padding_right"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:paddingVertical="@dimen/padding_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/dark_theme"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_font_size" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/padding_left"
+        android:paddingEnd="@dimen/padding_right"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:paddingVertical="@dimen/padding_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/share_app"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_font_size"
+        app:drawableEndCompat="@drawable/ic_share" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/padding_left"
+        android:paddingEnd="@dimen/padding_right"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:paddingVertical="@dimen/padding_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/ask_support"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_font_size"
+        app:drawableEndCompat="@drawable/ic_support" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/padding_left"
+        android:paddingEnd="@dimen/padding_right"
+        android:drawablePadding="@dimen/drawable_padding"
+        android:paddingVertical="@dimen/padding_vertical"
+        android:gravity="center_vertical"
+        android:text="@string/user_agreement"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_font_size"
+        app:drawableEndCompat="@drawable/ic_arrow_forward" />
+
+
+</LinearLayout>
