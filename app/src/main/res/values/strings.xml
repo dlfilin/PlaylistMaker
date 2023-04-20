@@ -6,9 +6,11 @@
     <string name="settings">Настройки</string>
     <string name="dark_theme">Темная тема</string>
     <string name="share_app">Поделиться приложением</string>
-    <string name="ask_support">Написать в поддержку</string>
+    <string name="contact_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="library_message">Экран Медиатеки</string>
     <string name="search_message">Экран поиска</string>
     <string name="go_back_button">назад</string>
+    <string name="clear_button">очистить</string>
+
 </resources>

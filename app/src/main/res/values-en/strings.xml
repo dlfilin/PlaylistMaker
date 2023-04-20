@@ -6,9 +6,11 @@
     <string name="settings">Settings</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="share_app">Share app</string>
-    <string name="ask_support">Contact support</string>
+    <string name="contact_support">Contact support</string>
     <string name="user_agreement">User Agreement</string>
     <string name="library_message">Media Library Screen</string>
     <string name="search_message">Search Screen</string>
-    <string name="go_back_button">go_back_button</string>
+    <string name="go_back_button">back</string>
+    <string name="clear_button">clear</string>
+
 </resources>
