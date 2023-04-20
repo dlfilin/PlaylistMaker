@@ -5,7 +5,8 @@
     <color name="settings_background">#1A1B22</color>
     <color name="settings_menu_text">#FFFFFF</color>
     <color name="settings_menu_icon">#FFFFFF</color>
-    <color name="yp_light_gray">#E6E8EB</color>
+    <color name="search_hint">#1A1B22</color>
+    <color name="search_bg">#FFFFFF</color>
 
 
 </resources>

@@ -7,7 +7,7 @@
     <color name="settings_background">#FFFFFF</color>
     <color name="settings_menu_text">#000000</color>
     <color name="settings_menu_icon">#AEAFB4</color>
-    <color name="yp_text_gray">#AEAFB4</color>
-    <color name="yp_light_gray">#E6E8EB</color>
+    <color name="search_hint">#AEAFB4</color>
+    <color name="search_bg">#E6E8EB</color>
 
 </resources>
