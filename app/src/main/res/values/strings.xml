@@ -12,5 +12,10 @@
     <string name="search_message">Экран поиска</string>
     <string name="go_back_button">назад</string>
     <string name="clear_button">очистить</string>
+    <string name="android_course_link" translatable="false">https://practicum.yandex.ru/android-developer/</string>
+    <string name="my_email" translatable="false">danila.filin@yandex.ru</string>
+    <string name="default_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="default_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="ys_offer_link" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
 
 </resources>

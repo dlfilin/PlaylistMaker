@@ -12,5 +12,7 @@
     <string name="search_message">Search Screen</string>
     <string name="go_back_button">back</string>
     <string name="clear_button">clear</string>
+    <string name="default_email_subject">Message to the developers of Playlist Maker Application</string>
+    <string name="default_email_text">Thanks to the developers of such a great App!</string>
 
 </resources>

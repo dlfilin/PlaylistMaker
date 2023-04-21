@@ -23,7 +23,7 @@ class SettingsActivity : AppCompatActivity() {
                 action = Intent.ACTION_SEND
                 putExtra(
                     Intent.EXTRA_TEXT,
-                    "https://practicum.yandex.ru/android-developer/"
+                    getString(R.string.android_course_link)
                 )
                 type = "text/plain"
             }, null)
@@ -34,14 +34,14 @@ class SettingsActivity : AppCompatActivity() {
         contactSupportButton.setOnClickListener {
             val sendIntent = Intent(Intent.ACTION_SENDTO)
             sendIntent.data = Uri.parse("mailto:")
-            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("danila.filin@yandex.ru"))
+            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
             sendIntent.putExtra(
                 Intent.EXTRA_SUBJECT,
-                "Сообщение разработчикам и разработчицам приложения Playlist Maker"
+                getString(R.string.default_email_subject)
             )
             sendIntent.putExtra(
                 Intent.EXTRA_TEXT,
-                "Спасибо разработчикам и разработчицам за крутое приложение!"
+                getString(R.string.default_email_text)
             )
             startActivity(sendIntent)
         }
@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://yandex.ru/legal/practicum_offer/")
+                    Uri.parse(getString(R.string.ys_offer_link))
                 )
             )
         }
