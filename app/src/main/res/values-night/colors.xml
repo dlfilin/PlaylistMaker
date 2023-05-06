@@ -2,10 +2,10 @@
 <resources>
     <color name="main_menu_background">#1A1B22</color>
     <color name="bw_title">#FFFFFF</color>
-    <color name="settings_background">#1A1B22</color>
-    <color name="settings_menu_text">#FFFFFF</color>
-    <color name="settings_menu_icon">#FFFFFF</color>
-    <color name="search_hint">#1A1B22</color>
+    <color name="bw_background">#1A1B22</color>
+    <color name="bw_text">#FFFFFF</color>
+    <color name="gray_white">#FFFFFF</color>
+    <color name="gray_black">#1A1B22</color>
     <color name="search_bg">#FFFFFF</color>
 
 

@@ -11,21 +11,32 @@
         <item name="android:textAppearance">@style/ys_medium_22</item>
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/drawable_padding</item>
+        <item name="iconPadding">@dimen/padding_8</item>
         <item name="iconTint">@color/yp_black</item>
     </style>
 
     <style name="SettingsActListItemStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">@dimen/padding_left</item>
-        <item name="android:paddingEnd">@dimen/padding_right</item>
+        <item name="android:paddingStart">@dimen/padding_16</item>
+        <item name="android:paddingEnd">@dimen/padding_12</item>
         <item name="android:paddingVertical">@dimen/padding_vertical</item>
-        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+        <item name="android:drawablePadding">@dimen/padding_8</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/settings_menu_text</item>
+        <item name="android:textColor">@color/bw_text</item>
         <item name="android:textAppearance">@style/ys_regular_16</item>
-        <item name="drawableTint">@color/settings_menu_icon</item>
+        <item name="drawableTint">@color/gray_white</item>
+    </style>
+
+    <style name="BackNavigationButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">@dimen/margin_start</item>
+        <item name="android:layout_marginEnd">@dimen/padding_12</item>
+        <item name="android:paddingHorizontal">@dimen/padding_12</item>
+        <item name="android:paddingVertical">@dimen/padding_12</item>
+        <item name="android:src">@drawable/ic_arrow_back</item>
     </style>
 
     <style name="TopTitleStyle">
@@ -36,13 +47,19 @@
     </style>
 
     <style name="ys_regular_16">
-        <item name="android:textSize">@dimen/settings_font_size</item>
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="ys_regular_11">
+        <item name="android:textSize">11sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
     </style>
 
     <style name="ys_medium_22">
-        <item name="android:textSize">@dimen/main_font_size</item>
+        <item name="android:textSize">@dimen/font_22</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
     </style>

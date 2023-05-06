@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.app
 
 import android.content.Intent
 import android.net.Uri
@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var backButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backButton = findViewById<ImageView>(R.id.settings_back)
+        backButton = findViewById(R.id.settings_back)
         backButton.setOnClickListener { finish() }
 
         val shareAppButton = findViewById<TextView>(R.id.share_app)
@@ -32,18 +35,19 @@ class SettingsActivity : AppCompatActivity() {
 
         val contactSupportButton = findViewById<TextView>(R.id.contact_support)
         contactSupportButton.setOnClickListener {
-            val sendIntent = Intent(Intent.ACTION_SENDTO)
-            sendIntent.data = Uri.parse("mailto:")
-            sendIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
-            sendIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.default_email_subject)
-            )
-            sendIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                getString(R.string.default_email_text)
-            )
-            startActivity(sendIntent)
+            Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
+                putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.default_email_subject)
+                )
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    getString(R.string.default_email_text)
+                )
+                startActivity(this)
+            }
         }
 
         val userAgreementButton = findViewById<TextView>(R.id.user_agreement)
