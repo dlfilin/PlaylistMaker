@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="settings_background">#F5F5F5</color>
+    <color name="main_menu_background">#1A1B22</color>
+    <color name="bw_title">#FFFFFF</color>
+    <color name="settings_background">#1A1B22</color>
+    <color name="settings_menu_text">#FFFFFF</color>
+    <color name="settings_menu_icon">#FFFFFF</color>
+    <color name="search_hint">#1A1B22</color>
+    <color name="search_bg">#FFFFFF</color>
+
+
 </resources>
