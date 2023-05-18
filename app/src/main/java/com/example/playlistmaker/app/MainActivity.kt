@@ -8,23 +8,26 @@ import com.example.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
 
-    private fun navigateTo(clazz: Class<out AppCompatActivity>) {
-        val intent = Intent(this, clazz)
-        startActivity(intent)
-    }
+    private lateinit var searchButton: Button
+    private lateinit var libraryButton: Button
+    private lateinit var settingsButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val searchButton = findViewById<Button>(R.id.searchButton)
+        searchButton = findViewById(R.id.searchButton)
         searchButton.setOnClickListener { navigateTo(SearchActivity::class.java) }
 
-        val libraryButton = findViewById<Button>(R.id.libraryButton)
+        libraryButton = findViewById(R.id.libraryButton)
         libraryButton.setOnClickListener { navigateTo(LibraryActivity::class.java) }
 
-        val settingsButton = findViewById<Button>(R.id.settingsButton)
+        settingsButton = findViewById(R.id.settingsButton)
         settingsButton.setOnClickListener { navigateTo(SettingsActivity::class.java) }
     }
 
+    private fun navigateTo(clazz: Class<out AppCompatActivity>) {
+        val intent = Intent(this, clazz)
+        startActivity(intent)
+    }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bw_background"
+    android:background="@color/white_black"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,12 +17,12 @@
             android:id="@+id/search_back"
             style="@style/BackNavigationButton"
             android:contentDescription="@string/go_back_button"
-            app:tint="@color/bw_title" />
+            app:tint="@color/black_white" />
 
         <TextView
             style="@style/TopTitleStyle"
             android:text="@string/search"
-            android:textColor="@color/bw_title" />
+            android:textColor="@color/black_white" />
 
     </LinearLayout>
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_from_top_title"
+        android:layout_marginBottom="@dimen/margin_24"
         android:background="@drawable/rounded_rect"
         android:backgroundTint="@color/search_bg">
 
@@ -45,10 +45,12 @@
             android:drawablePadding="@dimen/padding_8"
             android:drawableTint="@color/gray_black"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="@dimen/padding_12"
             android:paddingEnd="@dimen/padding_12"
+            android:singleLine="true"
             android:textAppearance="@style/ys_regular_16"
             android:textColor="@color/yp_black"
             android:textColorHint="@color/gray_black" />
@@ -66,11 +68,66 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_track_search"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="5"
-        tools:listitem="@layout/search_item_view" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_track_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/search_item_view" />
+
+        <LinearLayout
+            android:id="@+id/placeholder_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/placeholder_marginTop"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/placeholder_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_16"
+                android:contentDescription="@string/placeholder_image"
+                android:src="@drawable/ic_internet_issue" />
+
+            <TextView
+                android:id="@+id/placeholder_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="@dimen/margin_24"
+                android:layout_marginBottom="@dimen/margin_24"
+                android:text="@string/internet_issue"
+                android:textAlignment="center"
+                android:textAppearance="@style/ys_medium_19"
+                android:textColor="@color/black_white" />
+
+            <Button
+                android:id="@+id/placeholder_refresh"
+                android:layout_width="@dimen/placeholder_buttonWidth"
+                android:layout_height="@dimen/placeholder_buttonHeight"
+                android:backgroundTint="@color/black_white"
+                android:insetTop="@dimen/zeroDP"
+                android:insetBottom="@dimen/zeroDP"
+                android:paddingStart="@dimen/padding_8"
+                android:paddingTop="@dimen/padding_6"
+                android:paddingEnd="@dimen/padding_6"
+                android:paddingBottom="@dimen/padding_6"
+                android:text="@string/refresh"
+                android:textAllCaps="false"
+                android:textAppearance="@style/ys_medium_14"
+                android:textColor="@color/white_black"
+                app:cornerRadius="@dimen/corner_radius_PH_button" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>
