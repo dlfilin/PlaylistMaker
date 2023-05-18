@@ -154,14 +154,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         outState.putString(SEARCH_REQUEST, savedSearchRequest)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         savedSearchRequest = savedInstanceState.getString(SEARCH_REQUEST, "")
         searchEditText.setText(savedSearchRequest)
+
+        if (savedSearchRequest.isNotEmpty()) searchTracks(savedSearchRequest)
     }
 
     private fun showPlaceholderView(placeholder: Placeholder) {
