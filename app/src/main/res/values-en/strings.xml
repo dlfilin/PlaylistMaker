@@ -14,5 +14,6 @@
     <string name="clear_button">clear</string>
     <string name="default_email_subject">Message to the developers of Playlist Maker Application</string>
     <string name="default_email_text">Thanks to the developers of such a great App!</string>
+    <string name="track_image">track_image</string>
 
 </resources>

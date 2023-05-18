@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/settings_background"
+    android:background="@color/bw_background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,15 +14,8 @@
 
         <ImageView
             android:id="@+id/settings_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="@dimen/back_padding"
+            style="@style/BackNavigationButton"
             android:contentDescription="@string/go_back_button"
-            android:paddingHorizontal="@dimen/back_padding"
-            android:paddingVertical="@dimen/back_padding"
-            android:src="@drawable/ic_arrow_back"
             app:tint="@color/bw_title" />
 
         <TextView
