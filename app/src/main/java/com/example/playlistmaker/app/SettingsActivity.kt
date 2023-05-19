@@ -11,6 +11,9 @@ import com.example.playlistmaker.R
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var backButton: ImageView
+    private lateinit var shareAppButton: TextView
+    private lateinit var contactSupportButton: TextView
+    private lateinit var userAgreementButton: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         backButton = findViewById(R.id.settings_back)
         backButton.setOnClickListener { finish() }
 
-        val shareAppButton = findViewById<TextView>(R.id.share_app)
+        shareAppButton = findViewById(R.id.share_app)
         shareAppButton.setOnClickListener {
 
             val shareIntent = Intent.createChooser(Intent().apply {
@@ -33,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        val contactSupportButton = findViewById<TextView>(R.id.contact_support)
+        contactSupportButton = findViewById(R.id.contact_support)
         contactSupportButton.setOnClickListener {
             Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
@@ -50,7 +53,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        val userAgreementButton = findViewById<TextView>(R.id.user_agreement)
+        userAgreementButton = findViewById(R.id.user_agreement)
         userAgreementButton.setOnClickListener {
             startActivity(
                 Intent(

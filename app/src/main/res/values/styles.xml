@@ -58,6 +58,18 @@
         <item name="android:textFontWeight">400</item>
     </style>
 
+    <style name="ys_medium_14">
+        <item name="android:textSize">@dimen/font_14</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
+    <style name="ys_medium_19">
+        <item name="android:textSize">@dimen/font_19</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
     <style name="ys_medium_22">
         <item name="android:textSize">@dimen/font_22</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>

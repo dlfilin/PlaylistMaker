@@ -3,7 +3,7 @@
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_menu_background</item>
-        <item name="colorOnPrimary">@color/bw_title</item>
+        <item name="colorOnPrimary">@color/black_white</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

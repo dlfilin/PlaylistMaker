@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_menu_background">#1A1B22</color>
-    <color name="bw_title">#FFFFFF</color>
-    <color name="bw_background">#1A1B22</color>
+    <color name="black_white">#FFFFFF</color>
+    <color name="white_black">#1A1B22</color>
     <color name="bw_text">#FFFFFF</color>
     <color name="gray_white">#FFFFFF</color>
     <color name="gray_black">#1A1B22</color>
