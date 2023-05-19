@@ -29,11 +29,6 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_REQUEST = "SEARCH_REQUEST"
     }
 
-    enum class Placeholder {
-        NOTHING_FOUND,
-        INTERNET_ISSUE;
-    }
-
     private var savedSearchRequest: String = ""
 
     private lateinit var backButton: ImageView
@@ -59,27 +54,11 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        placeholderVG = findViewById(R.id.placeholder_view)
-        placeholderImage = findViewById(R.id.placeholder_image)
-        placeholderText = findViewById(R.id.placeholder_text)
-        placeholderRefreshButton = findViewById(R.id.placeholder_refresh)
-        backButton = findViewById(R.id.search_back)
-        searchEditText = findViewById(R.id.searchEditText)
-        clearSearch = findViewById(R.id.clearSearch)
-        rvTrackSearch = findViewById(R.id.rv_track_search)
+        initViews()
 
         backButton.setOnClickListener { finish() }
 
-        clearSearch.setOnClickListener {
-            searchEditText.setText("")
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-            if (tracks.size > 0) {
-                tracks.clear()
-                adapter.notifyDataSetChanged()
-            }
-        }
+        clearSearch.setOnClickListener { handleClearSearchClick() }
 
         val searchTextWatcher = object : TextWatcher {
 
@@ -109,34 +88,13 @@ class SearchActivity : AppCompatActivity() {
                 response: Response<TracksListResponse>
             ) {
                 when (response.code()) {
-                    200 -> {
-                        val res = response.body()?.results
-                        val resCount = response.body()?.resultCount
-                        if (res?.isNotEmpty() == true) {
-                            placeholderVG.visibility = View.GONE
-                            tracks.clear()
-                            tracks.addAll(res)
-                            adapter.notifyDataSetChanged()
-                            Toast.makeText(
-                                applicationContext,
-                                "Found ${tracks.size} = $resCount",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } else {
-                            showPlaceholderView(Placeholder.NOTHING_FOUND)
-                        }
-                    }
+                    200 -> handleSuccessfulSearch(response)
                     else -> showPlaceholderView(Placeholder.INTERNET_ISSUE)
                 }
             }
 
             override fun onFailure(call: Call<TracksListResponse>, t: Throwable) {
                 showPlaceholderView(Placeholder.INTERNET_ISSUE)
-                Toast.makeText(
-                    applicationContext,
-                    t.message.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
 
@@ -195,6 +153,43 @@ class SearchActivity : AppCompatActivity() {
                 query = query,
                 callback = tracksListResponseCallback
             )
+        }
+    }
+
+    private fun handleClearSearchClick() {
+        searchEditText.setText("")
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+        if (tracks.size > 0) {
+            tracks.clear()
+            adapter.notifyDataSetChanged()
+        } else {
+            placeholderVG.visibility = View.GONE
+        }
+    }
+
+    private fun initViews() {
+        placeholderVG = findViewById(R.id.placeholder_view)
+        placeholderImage = findViewById(R.id.placeholder_image)
+        placeholderText = findViewById(R.id.placeholder_text)
+        placeholderRefreshButton = findViewById(R.id.placeholder_refresh)
+        backButton = findViewById(R.id.search_back)
+        searchEditText = findViewById(R.id.searchEditText)
+        clearSearch = findViewById(R.id.clearSearch)
+        rvTrackSearch = findViewById(R.id.rv_track_search)
+    }
+
+    private fun handleSuccessfulSearch(response: Response<TracksListResponse>) {
+        val res = response.body()?.results
+        response.body()?.resultCount
+        if (res?.isNotEmpty() == true) {
+            placeholderVG.visibility = View.GONE
+            tracks.clear()
+            tracks.addAll(res)
+            adapter.notifyDataSetChanged()
+        } else {
+            showPlaceholderView(Placeholder.NOTHING_FOUND)
         }
     }
 }
