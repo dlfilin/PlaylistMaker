@@ -18,5 +18,7 @@
     <string name="nothing_found">No results</string>
     <string name="internet_issue">Connection problems\n\nRequest failed. Please check your Internet connection</string>
     <string name="refresh">Refresh</string>
+    <string name="clear_history">Clear history</string>
+    <string name="you_searched">Search history</string>
 
 </resources>
