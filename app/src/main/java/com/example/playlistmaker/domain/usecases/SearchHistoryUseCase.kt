@@ -10,20 +10,19 @@ const val KEY_TRACKS_HISTORY = "key_tracks_history"
 
 class SearchHistoryUseCase(private val sharedPrefs: SharedPreferences) {
 
+    private val gson = Gson()
+
     fun addTrack(track: Track): List<Track> {
 
         val tracks = getTracksFromHistory().toMutableList()
 
-        val index = tracks.indexOf(track)
-        if (index != -1) {
-            tracks.removeAt(index)
-        } else {
-            if (tracks.size == MAX_HISTORY_SIZE)
-                tracks.removeLastOrNull()
+        val wasRemoved = tracks.remove(track)
+        if (!wasRemoved && tracks.size == MAX_HISTORY_SIZE) {
+            tracks.removeLastOrNull()
         }
         tracks.add(0, element = track)
 
-        val tracksJSON = Gson().toJson(tracks)
+        val tracksJSON = gson.toJson(tracks)
         sharedPrefs.edit().putString(KEY_TRACKS_HISTORY, tracksJSON).apply()
 
         return tracks
@@ -37,7 +36,7 @@ class SearchHistoryUseCase(private val sharedPrefs: SharedPreferences) {
 
         val tracksJSON = sharedPrefs.getString(KEY_TRACKS_HISTORY, null)
 
-        return if (tracksJSON != null ) Gson().fromJson(tracksJSON,Array<Track>::class.java)
+        return if (tracksJSON != null) gson.fromJson(tracksJSON, Array<Track>::class.java)
         else return emptyArray()
 
     }
