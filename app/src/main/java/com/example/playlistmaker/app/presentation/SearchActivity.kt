@@ -153,21 +153,26 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.setText(savedSearchRequest)
 
         if (savedSearchRequest.isNotEmpty()) {
-            tracks.clear()
-            tracks.addAll(
-                Gson().fromJson(
-                    savedInstanceState.getString(FOUND_TRACKS, ""),
-                    Array<Track>::class.java
-                )
+//            tracks.clear()
+//            tracks.addAll(
+//                Gson().fromJson(
+//                    savedInstanceState.getString(FOUND_TRACKS, ""),
+//                    Array<Track>::class.java
+//                )
+//            )
+            val newList = Gson().fromJson(
+                savedInstanceState.getString(FOUND_TRACKS, ""),
+                Array<Track>::class.java
             )
-            tracksSearchAdapter.notifyDataSetChanged()
+            tracksSearchAdapter.updateListItems(newList = newList.toList())
         }
     }
 
     private fun showPlaceholderView(placeholder: Placeholder) {
 
-        tracks.clear()
-        tracksSearchAdapter.notifyDataSetChanged()
+        //tracks.clear()
+        //tracksSearchAdapter.notifyDataSetChanged()
+        tracksSearchAdapter.updateListItems(emptyList())
 
         placeholderVG.visibility = View.VISIBLE
 
@@ -189,10 +194,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showTracksHistoryVG(params: List<Track>) {
-        tracksHistory.clear()
-        if (params.isNotEmpty())
-            tracksHistory.addAll(params)
-        tracksHistoryAdapter.notifyDataSetChanged()
+//        tracksHistory.clear()
+//        if (params.isNotEmpty())
+//            tracksHistory.addAll(params)
+//        tracksHistoryAdapter.notifyDataSetChanged()
+        tracksHistoryAdapter.updateListItems(params)
         tracksHistoryVG.isVisible = tracksHistory.isNotEmpty()
     }
 
@@ -202,8 +208,7 @@ class SearchActivity : AppCompatActivity() {
             getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         if (tracks.size > 0) {
-            tracks.clear()
-            tracksSearchAdapter.notifyDataSetChanged()
+            tracksSearchAdapter.updateListItems(emptyList())
         } else {
             placeholderVG.visibility = View.GONE
         }
@@ -234,12 +239,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun handleSuccessfulSearch(response: Response<TracksListResponse>) {
-        val res = response.body()?.results
-        if (res?.isNotEmpty() == true) {
+        val newList = response.body()?.results
+        if (newList?.isNotEmpty() == true) {
             placeholderVG.visibility = View.GONE
-            tracks.clear()
-            tracks.addAll(res)
-            tracksSearchAdapter.notifyDataSetChanged()
+//            tracks.clear()
+//            tracks.addAll(res)
+//            tracksSearchAdapter.notifyDataSetChanged()
+            tracksSearchAdapter.updateListItems(newList)
         } else {
             showPlaceholderView(Placeholder.NOTHING_FOUND)
         }
@@ -250,9 +256,10 @@ class SearchActivity : AppCompatActivity() {
         //перейти на экран аудиоплеера
         startActivity(Intent(this, LibraryActivity::class.java))
         Toast.makeText(this, "Playing ${track.trackName}", Toast.LENGTH_SHORT).show()
-        tracksHistory.clear()
-        tracksHistory.addAll(resultTracksHistory)
-        tracksHistoryAdapter.notifyDataSetChanged()
+//        tracksHistory.clear()
+//        tracksHistory.addAll(resultTracksHistory)
+//        tracksHistoryAdapter.notifyDataSetChanged()
+        tracksHistoryAdapter.updateListItems(resultTracksHistory)
     }
 
     override fun onStart() {

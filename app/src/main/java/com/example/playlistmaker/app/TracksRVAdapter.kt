@@ -1,12 +1,14 @@
 package com.example.playlistmaker.app
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.domain.OnTrackClickListener
 import com.example.playlistmaker.domain.models.Track
+import java.util.ArrayList
 
 class TracksRVAdapter(
-    private val items: List<Track>,
+    private val items: ArrayList<Track>,
     private val onTrackClickListener: OnTrackClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
@@ -21,5 +23,20 @@ class TracksRVAdapter(
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun updateListItems(newList: List<Track>) {
+        if (newList.isEmpty()) {
+            val size = items.size
+            items.clear()
+            this.notifyItemRangeRemoved(0, size)
+        } else {
+            val diffCallback = TracksDiffCallback(oldList = items, newList = newList)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+            items.clear()
+            items.addAll(newList)
+            diffResult.dispatchUpdatesTo(this)
+        }
     }
 }
