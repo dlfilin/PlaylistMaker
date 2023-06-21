@@ -1,6 +1,7 @@
-package com.example.playlistmaker.models
+package com.example.playlistmaker.domain.models
 
 data class Track(
+    val trackId: Int, // id трека
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
     val trackTimeMillis: String, // Продолжительность трека

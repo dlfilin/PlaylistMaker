@@ -1,5 +1,7 @@
-package com.example.playlistmaker.app
+package com.example.playlistmaker.domain.usecases
 
+import com.example.playlistmaker.domain.ItunesApi
+import com.example.playlistmaker.domain.models.TracksListResponse
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,8 +19,10 @@ class SearchTracksUseCase {
 
     fun execute(query: String, callback: Callback<TracksListResponse>) {
 
-        itunesService.searchTracks(text = query)
-            .enqueue(callback)
+        if (query.isNotEmpty()) {
+            itunesService.searchTracks(text = query)
+                .enqueue(callback)
+        }
     }
 
 }

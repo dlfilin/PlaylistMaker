@@ -25,7 +25,7 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/darkTheme"
         style="@style/SettingsActListItemStyle"
         android:text="@string/dark_theme" />

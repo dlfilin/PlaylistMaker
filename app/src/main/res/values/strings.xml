@@ -22,6 +22,8 @@
     <string name="internet_issue">Проблема со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="refresh">Обновить</string>
     <string name="placeholder_image" translatable="false">placeholder_image</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="you_searched">История поиска</string>
 
 
 </resources>
