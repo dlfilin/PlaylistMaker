@@ -24,6 +24,16 @@
     <string name="placeholder_image" translatable="false">placeholder_image</string>
     <string name="clear_history">Очистить историю</string>
     <string name="you_searched">История поиска</string>
+    <string name="album_image">album_image</string>
+    <string name="track_length">Длительность</string>
+    <string name="country">Страна</string>
+    <string name="genre">Жанр</string>
+    <string name="year">Год</string>
+    <string name="album">Альбом</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="play_button">Play</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="default_playback_time" translatable="false">00:00</string>
 
 
 </resources>

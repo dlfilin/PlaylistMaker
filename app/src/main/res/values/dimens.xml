@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="font_13">13sp</dimen>
     <dimen name="font_14">14sp</dimen>
     <dimen name="font_16">16sp</dimen>
     <dimen name="font_19">19sp</dimen>
     <dimen name="font_22">22sp</dimen>
     <dimen name="artist_time_font_11">11sp</dimen>
     <dimen name="margin_1">1dp</dimen>
-    <dimen name="margin_start">4dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_20">20dp</dimen>
     <dimen name="margin_24">24dp</dimen>
@@ -22,6 +23,7 @@
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="track_image">45dp</dimen>
     <dimen name="track_rounded_corner">2dp</dimen>
+    <dimen name="album_rounded_corner">8dp</dimen>
     <dimen name="placeholder_marginTop">86dp</dimen>
     <dimen name="placeholder_buttonWidth">91dp</dimen>
     <dimen name="placeholder_buttonHeight">36dp</dimen>
