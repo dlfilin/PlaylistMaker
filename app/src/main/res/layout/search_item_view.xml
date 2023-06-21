@@ -45,7 +45,7 @@
 
             <TextView
                 android:id="@+id/artist_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
@@ -64,7 +64,6 @@
                 android:id="@+id/track_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="@style/ys_regular_11"
                 android:textColor="@color/gray_white"
