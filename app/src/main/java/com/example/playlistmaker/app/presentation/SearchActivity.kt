@@ -15,11 +15,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.app.CURRENT_TRACK
 import com.example.playlistmaker.app.Placeholder
 import com.example.playlistmaker.app.TracksRVAdapter
 import com.example.playlistmaker.domain.usecases.SearchTracksUseCase
@@ -153,13 +153,6 @@ class SearchActivity : AppCompatActivity() {
         searchEditText.setText(savedSearchRequest)
 
         if (savedSearchRequest.isNotEmpty()) {
-//            tracks.clear()
-//            tracks.addAll(
-//                Gson().fromJson(
-//                    savedInstanceState.getString(FOUND_TRACKS, ""),
-//                    Array<Track>::class.java
-//                )
-//            )
             val newList = Gson().fromJson(
                 savedInstanceState.getString(FOUND_TRACKS, ""),
                 Array<Track>::class.java
@@ -170,8 +163,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showPlaceholderView(placeholder: Placeholder) {
 
-        //tracks.clear()
-        //tracksSearchAdapter.notifyDataSetChanged()
         tracksSearchAdapter.updateListItems(emptyList())
 
         placeholderVG.visibility = View.VISIBLE
@@ -194,10 +185,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showTracksHistoryVG(params: List<Track>) {
-//        tracksHistory.clear()
-//        if (params.isNotEmpty())
-//            tracksHistory.addAll(params)
-//        tracksHistoryAdapter.notifyDataSetChanged()
         tracksHistoryAdapter.updateListItems(params)
         tracksHistoryVG.isVisible = tracksHistory.isNotEmpty()
     }
@@ -242,9 +229,6 @@ class SearchActivity : AppCompatActivity() {
         val newList = response.body()?.results
         if (newList?.isNotEmpty() == true) {
             placeholderVG.visibility = View.GONE
-//            tracks.clear()
-//            tracks.addAll(res)
-//            tracksSearchAdapter.notifyDataSetChanged()
             tracksSearchAdapter.updateListItems(newList)
         } else {
             showPlaceholderView(Placeholder.NOTHING_FOUND)
@@ -254,11 +238,9 @@ class SearchActivity : AppCompatActivity() {
     private fun onTrackClicked(track: Track) {
         val resultTracksHistory = searchHistoryUseCase.addTrack(track = track)
         //перейти на экран аудиоплеера
-        startActivity(Intent(this, LibraryActivity::class.java))
-        Toast.makeText(this, "Playing ${track.trackName}", Toast.LENGTH_SHORT).show()
-//        tracksHistory.clear()
-//        tracksHistory.addAll(resultTracksHistory)
-//        tracksHistoryAdapter.notifyDataSetChanged()
+        val intent = Intent(this, AudioPlayerActivity::class.java)
+        intent.putExtra(CURRENT_TRACK, Gson().toJson(track))
+        startActivity(intent)
         tracksHistoryAdapter.updateListItems(resultTracksHistory)
     }
 

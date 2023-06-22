@@ -20,5 +20,14 @@
     <string name="refresh">Refresh</string>
     <string name="clear_history">Clear history</string>
     <string name="you_searched">Search history</string>
+    <string name="album_image">album_image</string>
+    <string name="track_length">Duration</string>
+    <string name="country">Country</string>
+    <string name="genre">Genre</string>
+    <string name="year">Year</string>
+    <string name="album">Album</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="play_button">Play</string>
+    <string name="add_to_favorites">Add to favorites</string>
 
 </resources>
