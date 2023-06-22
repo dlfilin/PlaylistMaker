@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.app.CURRENT_TRACK
 import com.example.playlistmaker.app.Placeholder
 import com.example.playlistmaker.app.TracksRVAdapter
 import com.example.playlistmaker.domain.usecases.SearchTracksUseCase
@@ -238,7 +239,7 @@ class SearchActivity : AppCompatActivity() {
         val resultTracksHistory = searchHistoryUseCase.addTrack(track = track)
         //перейти на экран аудиоплеера
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra("CURRENT_TRACK", Gson().toJson(track))
+        intent.putExtra(CURRENT_TRACK, Gson().toJson(track))
         startActivity(intent)
         tracksHistoryAdapter.updateListItems(resultTracksHistory)
     }

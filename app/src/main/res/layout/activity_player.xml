@@ -160,7 +160,7 @@
     <TextView
         android:id="@+id/track_length"
         style="@style/track_info"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="@dimen/margin_16"
         android:text="@string/track_length"
         app:layout_constraintBottom_toTopOf="@id/album"
         app:layout_constraintStart_toStartOf="@+id/left_guideline_16" />
@@ -176,7 +176,7 @@
     <TextView
         android:id="@+id/album"
         style="@style/track_info"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="@dimen/margin_16"
         android:text="@string/album"
         app:layout_constraintBottom_toTopOf="@id/year"
         app:layout_constraintStart_toStartOf="@+id/left_guideline_16" />
@@ -192,7 +192,7 @@
     <TextView
         android:id="@+id/year"
         style="@style/track_info"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="@dimen/margin_16"
         android:text="@string/year"
         app:layout_constraintBottom_toTopOf="@id/genre"
         app:layout_constraintStart_toStartOf="@+id/left_guideline_16" />
@@ -208,7 +208,7 @@
     <TextView
         android:id="@+id/genre"
         style="@style/track_info"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="@dimen/margin_16"
         android:text="@string/genre"
         app:layout_constraintBottom_toTopOf="@id/country"
         app:layout_constraintStart_toStartOf="@+id/left_guideline_16" />

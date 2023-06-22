@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 
 const val KEY_SHARED_PREFS = "playmaker_shared_prefs"
 const val KEY_DARK_THEME = "dark_theme"
+const val CURRENT_TRACK = "current_track"
 
 class App : Application() {
 
