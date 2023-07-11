@@ -4,9 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -14,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,11 +36,6 @@ import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object {
-        const val SEARCH_REQUEST = "SEARCH_REQUEST"
-        const val FOUND_TRACKS = "FOUND_TRACKS"
-    }
-
     private var savedSearchRequest: String = ""
 
     private lateinit var backButton: ImageView
@@ -52,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tracksHistoryRV: RecyclerView
     private lateinit var tracksHistoryVG: LinearLayout
     private lateinit var clearTracksHistoryButton: Button
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var tracksListResponseCallback: Callback<TracksListResponse>
 
@@ -70,6 +68,13 @@ class SearchActivity : AppCompatActivity() {
     private val tracksSearchAdapter = TracksRVAdapter(tracks) { onTrackClicked(it) }
     private val tracksHistoryAdapter = TracksRVAdapter(tracksHistory) { onTrackClicked(it) }
 
+    private val handler = Handler(Looper.getMainLooper())
+
+    private val searchRunnable =
+        Runnable { searchTracksUseCase.execute(savedSearchRequest, tracksListResponseCallback) }
+
+    private var isClickAllowed = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -77,37 +82,35 @@ class SearchActivity : AppCompatActivity() {
         initViews()
         showTracksHistoryVG(searchHistoryUseCase.getTracksFromHistory().toList())
 
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         clearSearch.setOnClickListener { handleClearSearchClick() }
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (savedSearchRequest.isNotEmpty()) {
-                    searchTracksUseCase.execute(
-                        savedSearchRequest,
-                        callback = tracksListResponseCallback
-                    )
-                    tracksHistoryVG.isVisible = false
-                }
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideInputKeyboard()
             }
             false
         }
 
         searchEditText.addTextChangedListener(object : TextWatcher {
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearSearch.isVisible = !s.isNullOrEmpty()
                 savedSearchRequest = s.toString()
+
+                if (s.isNullOrEmpty()) {
+                    clearSearch.isVisible = false
+                    tracksHistoryVG.isVisible = true
+                    trackSearchRV.isVisible = false
+                    progressBar.isVisible = false
+                } else {
+                    searchTracksDebounced()
+                }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         tracksListResponseCallback = object : Callback<TracksListResponse> {
@@ -116,6 +119,7 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<TracksListResponse>,
                 response: Response<TracksListResponse>
             ) {
+                progressBar.isVisible = false
                 when (response.code()) {
                     200 -> handleSuccessfulSearch(response)
                     else -> showPlaceholderView(Placeholder.INTERNET_ISSUE)
@@ -123,12 +127,13 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<TracksListResponse>, t: Throwable) {
+                progressBar.isVisible = false
                 showPlaceholderView(Placeholder.INTERNET_ISSUE)
             }
         }
 
         placeholderRefreshButton.setOnClickListener {
-            searchTracksUseCase.execute(savedSearchRequest, callback = tracksListResponseCallback)
+            searchTracksDebounced()
         }
 
         clearTracksHistoryButton.setOnClickListener {
@@ -191,9 +196,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun handleClearSearchClick() {
         searchEditText.setText("")
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+        hideInputKeyboard()
         if (tracks.size > 0) {
             tracksSearchAdapter.updateListItems(emptyList())
         } else {
@@ -223,12 +226,15 @@ class SearchActivity : AppCompatActivity() {
         tracksHistoryVG = findViewById(R.id.tracks_history_view)
         clearTracksHistoryButton = findViewById(R.id.tracks_history_clear)
 
+        progressBar = findViewById(R.id.progressBar)
+
     }
 
     private fun handleSuccessfulSearch(response: Response<TracksListResponse>) {
         val newList = response.body()?.results
         if (newList?.isNotEmpty() == true) {
             placeholderVG.visibility = View.GONE
+            trackSearchRV.isVisible = true
             tracksSearchAdapter.updateListItems(newList)
         } else {
             showPlaceholderView(Placeholder.NOTHING_FOUND)
@@ -236,19 +242,52 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onTrackClicked(track: Track) {
-        val resultTracksHistory = searchHistoryUseCase.addTrack(track = track)
-        //перейти на экран аудиоплеера
-        val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra(CURRENT_TRACK, Gson().toJson(track))
-        startActivity(intent)
-        tracksHistoryAdapter.updateListItems(resultTracksHistory)
+        if (clickDebounced()) {
+            val resultTracksHistory = searchHistoryUseCase.addTrack(track = track)
+            //перейти на экран аудиоплеера
+            val intent = Intent(this, AudioPlayerActivity::class.java)
+            intent.putExtra(CURRENT_TRACK, Gson().toJson(track))
+            startActivity(intent)
+            tracksHistoryAdapter.updateListItems(resultTracksHistory)
+        }
+    }
+
+    private fun searchTracksDebounced() {
+        clearSearch.isVisible = true
+        tracksHistoryVG.isVisible = false
+        trackSearchRV.isVisible = false
+        placeholderVG.isVisible = false
+        progressBar.isVisible = true
+
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounced(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun hideInputKeyboard() {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(searchEditText.windowToken, 0)
     }
 
     override fun onStart() {
         super.onStart()
-        Log.e("filin", "onStart")
-
         searchEditText.requestFocus()
+    }
+
+    companion object {
+        private const val SEARCH_REQUEST = "SEARCH_REQUEST"
+        private const val FOUND_TRACKS = "FOUND_TRACKS"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }

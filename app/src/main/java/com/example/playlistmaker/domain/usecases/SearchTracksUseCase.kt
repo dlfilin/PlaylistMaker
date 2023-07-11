@@ -20,8 +20,7 @@ class SearchTracksUseCase {
     fun execute(query: String, callback: Callback<TracksListResponse>) {
 
         if (query.isNotEmpty()) {
-            itunesService.searchTracks(text = query)
-                .enqueue(callback)
+            itunesService.searchTracks(text = query).enqueue(callback)
         }
     }
 
