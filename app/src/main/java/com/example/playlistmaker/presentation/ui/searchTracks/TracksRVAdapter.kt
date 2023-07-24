@@ -1,9 +1,8 @@
-package com.example.playlistmaker.app
+package com.example.playlistmaker.presentation.ui.searchTracks
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.domain.OnTrackClickListener
 import com.example.playlistmaker.domain.models.Track
 import java.util.ArrayList
 

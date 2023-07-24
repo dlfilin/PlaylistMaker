@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.usecases
 
-import com.example.playlistmaker.domain.ItunesApi
-import com.example.playlistmaker.domain.models.TracksListResponse
+import com.example.playlistmaker.data.network.ItunesApi
+import com.example.playlistmaker.data.dto.TracksListResponse
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
