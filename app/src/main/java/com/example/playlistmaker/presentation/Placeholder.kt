@@ -1,4 +1,4 @@
-package com.example.playlistmaker.app
+package com.example.playlistmaker.presentation
 
 enum class Placeholder {
     NOTHING_FOUND,

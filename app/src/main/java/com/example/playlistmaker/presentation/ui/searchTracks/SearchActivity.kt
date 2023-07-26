@@ -1,4 +1,4 @@
-package com.example.playlistmaker.app.presentation
+package com.example.playlistmaker.presentation.ui.searchTracks
 
 import android.content.Context
 import android.content.Intent
@@ -21,14 +21,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.app.CURRENT_TRACK
-import com.example.playlistmaker.app.Placeholder
-import com.example.playlistmaker.app.TracksRVAdapter
+import com.example.playlistmaker.presentation.CURRENT_TRACK
+import com.example.playlistmaker.presentation.Placeholder
 import com.example.playlistmaker.domain.usecases.SearchTracksUseCase
-import com.example.playlistmaker.domain.models.TracksListResponse
+import com.example.playlistmaker.data.dto.TracksListResponse
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.usecases.KEY_TRACKS_HISTORY
 import com.example.playlistmaker.domain.usecases.SearchHistoryUseCase
+import com.example.playlistmaker.presentation.ui.audioPlayer.AudioPlayerActivity
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -71,7 +71,9 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val searchRunnable =
-        Runnable { searchTracksUseCase.execute(savedSearchRequest, tracksListResponseCallback) }
+        Runnable {
+            searchRequest()
+        }
 
     private var isClickAllowed = true
 
@@ -133,7 +135,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         placeholderRefreshButton.setOnClickListener {
-            searchTracksDebounced()
+            searchRequest()
         }
 
         clearTracksHistoryButton.setOnClickListener {
@@ -252,13 +254,16 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchTracksDebounced() {
+    private fun searchRequest() {
         clearSearch.isVisible = true
         tracksHistoryVG.isVisible = false
         trackSearchRV.isVisible = false
         placeholderVG.isVisible = false
         progressBar.isVisible = true
+        searchTracksUseCase.execute(savedSearchRequest, tracksListResponseCallback)
+    }
 
+    private fun searchTracksDebounced() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }

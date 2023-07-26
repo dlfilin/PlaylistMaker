@@ -1,4 +1,4 @@
-package com.example.playlistmaker.app
+package com.example.playlistmaker.presentation.ui.searchTracks
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.playlistmaker.domain.models.Track

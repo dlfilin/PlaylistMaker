@@ -1,4 +1,4 @@
-package com.example.playlistmaker.app.presentation
+package com.example.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.app.App
+import com.example.playlistmaker.presentation.App
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
