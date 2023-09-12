@@ -9,7 +9,7 @@
     android:paddingVertical="@dimen/padding_8"
     android:paddingStart="@dimen/padding_13"
     android:paddingEnd="@dimen/padding_12"
-    tools:viewBindingIgnore="true">
+    tools:viewBindingIgnore="false">
 
     <ImageView
         android:id="@+id/track_art"

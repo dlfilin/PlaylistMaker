@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.LibraryActivity"
-    tools:viewBindingIgnore="true">
+    tools:context=".ui.library.activity.LibraryActivity"
+    tools:viewBindingIgnore="false">
 
     <TextView
         android:id="@+id/message1"
