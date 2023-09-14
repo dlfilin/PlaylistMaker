@@ -12,16 +12,16 @@ import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.player.models.PlayerState
 import com.example.playlistmaker.ui.player.models.PlayerScreenState
-import com.example.playlistmaker.ui.player.view_model.AudioPlayerViewModel
+import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
 
-    private lateinit var viewModel: AudioPlayerViewModel
+    private lateinit var viewModel: PlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +30,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            AudioPlayerViewModel.getViewModelFactory(currentTrack)
-        )[AudioPlayerViewModel::class.java]
+            PlayerViewModel.getViewModelFactory(currentTrack)
+        )[PlayerViewModel::class.java]
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -85,7 +85,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                 .centerCrop()
                 .transform(
                     RoundedCorners(
-                        this@AudioPlayerActivity.resources
+                        this@PlayerActivity.resources
                             .getDimensionPixelSize(R.dimen.album_rounded_corner)
                     )
                 )

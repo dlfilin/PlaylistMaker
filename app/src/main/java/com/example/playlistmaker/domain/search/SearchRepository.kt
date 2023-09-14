@@ -3,7 +3,7 @@ package com.example.playlistmaker.domain.search
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.models.Resource
 
-interface TracksRepository {
+interface SearchRepository {
     fun searchTracks(expression: String): Resource<List<Track>>
 
     fun addTrackToFavorites(track: Track)

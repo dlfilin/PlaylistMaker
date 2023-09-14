@@ -30,7 +30,10 @@
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/darkTheme"
         style="@style/SettingsActListItemStyle"
-        android:text="@string/dark_theme" />
+        android:width="32dp"
+        android:text="@string/dark_theme"
+        app:thumbTint="@color/switch_knob"
+        app:trackTint="@color/switch_track" />
 
     <TextView
         android:id="@+id/share_app"

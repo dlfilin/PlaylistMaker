@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.player
 
-interface TrackPlayer {
+interface PlayerInteractor {
 
     fun preparePlayer(url: String, statusObserver: StatusObserver)
 
@@ -20,4 +20,5 @@ interface TrackPlayer {
 
         fun onCompletion()
     }
+
 }

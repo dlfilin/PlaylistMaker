@@ -18,22 +18,22 @@ import com.example.playlistmaker.App.Companion.CURRENT_TRACK
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.ui.player.activity.AudioPlayerActivity
-import com.example.playlistmaker.ui.search.models.SearchState
-import com.example.playlistmaker.ui.search.view_model.TracksSearchViewModel
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.search.models.SearchScreenState
+import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.google.gson.Gson
 
 
-class TracksSearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private lateinit var viewModel: TracksSearchViewModel
+    private lateinit var viewModel: SearchViewModel
 
     private lateinit var textWatcher: TextWatcher
 
-    private val tracksSearchAdapter = TracksAdapter { onTrackClicked(it) }
-    private val tracksHistoryAdapter = TracksAdapter { onTrackClicked(it) }
+    private val tracksSearchAdapter = SearchAdapter { onTrackClicked(it) }
+    private val tracksHistoryAdapter = SearchAdapter { onTrackClicked(it) }
 
     private var isClickAllowed = true
 
@@ -44,8 +44,8 @@ class TracksSearchActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            TracksSearchViewModel.getViewModelFactory()
-        )[TracksSearchViewModel::class.java]
+            SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -128,6 +128,12 @@ class TracksSearchActivity : AppCompatActivity() {
         inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
     }
 
+    private fun showInputKeyboard() {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
     override fun onStart() {
         super.onStart()
         binding.searchEditText.requestFocus()
@@ -138,14 +144,14 @@ class TracksSearchActivity : AppCompatActivity() {
         binding.searchEditText.removeTextChangedListener(textWatcher)
     }
 
-    private fun render(state: SearchState) {
+    private fun render(state: SearchScreenState) {
         when (state) {
-            is SearchState.Content -> showContent(state.tracks)
-            is SearchState.EmptySearch -> showPlaceholder(isEmptyResult = true, null)
-            is SearchState.Error -> showPlaceholder(isEmptyResult = false, code = state.code)
-            is SearchState.Loading -> showLoading()
-            is SearchState.History -> showHistory(state.history)
-            is SearchState.ClearScreen -> showClearScreen()
+            is SearchScreenState.Content -> showContent(state.tracks)
+            is SearchScreenState.EmptySearch -> showPlaceholder(isEmptyResult = true, null)
+            is SearchScreenState.Error -> showPlaceholder(isEmptyResult = false, code = state.code)
+            is SearchScreenState.Loading -> showLoading()
+            is SearchScreenState.History -> showHistory(state.history)
+            is SearchScreenState.ClearScreen -> showClearScreen()
         }
     }
 
@@ -218,7 +224,7 @@ class TracksSearchActivity : AppCompatActivity() {
         if (clickDebounced()) {
             viewModel.addTrackToHistory(track = track)
 
-            val intent = Intent(this, AudioPlayerActivity::class.java)
+            val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra(CURRENT_TRACK, Gson().toJson(track))
             startActivity(intent)
         }

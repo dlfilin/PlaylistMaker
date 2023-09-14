@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.ui.settings.activity.SettingsActivity
 import com.example.playlistmaker.ui.library.activity.LibraryActivity
-import com.example.playlistmaker.ui.search.activity.TracksSearchActivity
+import com.example.playlistmaker.ui.search.activity.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding) {
-            searchButton.setOnClickListener { navigateTo(TracksSearchActivity::class.java) }
+            searchButton.setOnClickListener { navigateTo(SearchActivity::class.java) }
 
             libraryButton.setOnClickListener { navigateTo(LibraryActivity::class.java) }
 
