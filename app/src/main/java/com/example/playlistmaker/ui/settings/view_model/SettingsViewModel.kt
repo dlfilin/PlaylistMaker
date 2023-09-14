@@ -1,33 +1,27 @@
 package com.example.playlistmaker.ui.settings.view_model
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.domain.sharing.model.EmailData
-import com.example.playlistmaker.creator.Creator
 
 class SettingsViewModel(
     private val application: Application,
     private val sharingInteractor: SharingInteractor,
     private val settingsInteractor: SettingsInteractor,
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val themeLiveData = MutableLiveData<ThemeSettings>()
+    fun observeTheme(): LiveData<ThemeSettings> = themeLiveData
 
     init {
-        themeLiveData.value = settingsInteractor.getThemeSettings()
+        themeLiveData.postValue(settingsInteractor.getThemeSettings())
     }
-
-    fun observeTheme(): LiveData<ThemeSettings> = themeLiveData
 
     fun toggleDarkTheme(isDarkTheme: Boolean) {
         val theme = ThemeSettings(isDarkTheme)
@@ -53,17 +47,4 @@ class SettingsViewModel(
         sharingInteractor.openSupport(EmailData(myEmail, defaultSubject, defaultText))
     }
 
-    companion object {
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as Application
-                SettingsViewModel(
-                    app,
-                    Creator.provideSharingInteractor(app),
-                    Creator.provideSettingsInteractor(app)
-                )
-            }
-        }
-    }
 }

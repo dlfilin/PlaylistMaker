@@ -4,9 +4,13 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.PlayerRepository
 
-class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
+class PlayerRepositoryImpl : PlayerRepository {
+
+    private var mediaPlayer = MediaPlayer()
 
     override fun preparePlayer(url: String, statusObserver: PlayerInteractor.StatusObserver) {
+
+        mediaPlayer = MediaPlayer()
 
         mediaPlayer.setDataSource(url)
 

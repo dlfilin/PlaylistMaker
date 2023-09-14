@@ -1,10 +1,10 @@
 package com.example.playlistmaker.data.search.impl
 
+import com.example.playlistmaker.data.LocalStorage
 import com.example.playlistmaker.data.search.NetworkClient
-import com.example.playlistmaker.data.search.dto.TrackDto
-import com.example.playlistmaker.data.search.dto.TracksSearchRequest
-import com.example.playlistmaker.data.search.dto.TracksSearchResponse
-import com.example.playlistmaker.data.storage.LocalStorage
+import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.data.dto.TracksSearchRequest
+import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.models.Resource

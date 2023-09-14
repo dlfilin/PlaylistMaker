@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.player.activity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.App.Companion.CURRENT_TRACK
@@ -14,6 +13,9 @@ import com.example.playlistmaker.ui.player.models.PlayerState
 import com.example.playlistmaker.ui.player.models.PlayerScreenState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -21,17 +23,18 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
 
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var currentTrack: Track
+
+    private val gson: Gson by inject()
+
+    private val viewModel by viewModel<PlayerViewModel> {
+        parametersOf(currentTrack)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val currentTrack = Gson().fromJson(intent.getStringExtra(CURRENT_TRACK), Track::class.java)
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(currentTrack)
-        )[PlayerViewModel::class.java]
+        currentTrack = gson.fromJson(intent.getStringExtra(CURRENT_TRACK), Track::class.java)
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -54,14 +57,15 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel.getTrackPositionLiveData().observe(this) {
             binding.playbackTime.text = SimpleDateFormat(
-                "mm:ss",
-                Locale.getDefault()
+                "mm:ss", Locale.getDefault()
             ).format(it)
         }
 
         binding.btBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         binding.btPlay.setOnClickListener { viewModel.playbackControl() }
+
+        viewModel.preparePlayer()
 
     }
 
@@ -79,17 +83,12 @@ class PlayerActivity : AppCompatActivity() {
 
         with(binding) {
 
-            Glide.with(applicationContext)
-                .load(currentTrack.getCoverArtwork())
-                .placeholder(R.drawable.ic_placeholder_big)
-                .centerCrop()
-                .transform(
+            Glide.with(applicationContext).load(currentTrack.getCoverArtwork())
+                .placeholder(R.drawable.ic_placeholder_big).centerCrop().transform(
                     RoundedCorners(
-                        this@PlayerActivity.resources
-                            .getDimensionPixelSize(R.dimen.album_rounded_corner)
+                        this@PlayerActivity.resources.getDimensionPixelSize(R.dimen.album_rounded_corner)
                     )
-                )
-                .into(albumCover)
+                ).into(albumCover)
 
             trackName.text = currentTrack.trackName
             artistName.text = currentTrack.artistName
