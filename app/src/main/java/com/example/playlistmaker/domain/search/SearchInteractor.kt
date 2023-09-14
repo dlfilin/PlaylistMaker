@@ -2,7 +2,7 @@ package com.example.playlistmaker.domain.search
 
 import com.example.playlistmaker.domain.models.Track
 
-interface TracksInteractor {
+interface SearchInteractor {
 
     fun searchTracks(expression: String, consumer: TracksConsumer)
 

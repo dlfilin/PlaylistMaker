@@ -11,20 +11,20 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.search.TracksInteractor
+import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.ui.search.models.SearchState
+import com.example.playlistmaker.ui.search.models.SearchScreenState
 
-class TracksSearchViewModel(
+class SearchViewModel(
     application: Application,
-    private val tracksInteractor: TracksInteractor
+    private val searchInteractor: SearchInteractor
 ) :
     AndroidViewModel(application) {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val stateLiveData = MutableLiveData<SearchState>()
-    fun observeState(): LiveData<SearchState> = stateLiveData
+    private val stateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.ClearScreen)
+    fun observeState(): LiveData<SearchScreenState> = stateLiveData
 
     private var latestSearchText: String? = null
 
@@ -43,6 +43,8 @@ class TracksSearchViewModel(
             handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
             return
         }
+
+        if (changedText == latestSearchText) return
 
         latestSearchText = changedText
 
@@ -63,9 +65,9 @@ class TracksSearchViewModel(
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            renderState(SearchState.Loading)
+            renderState(SearchScreenState.Loading)
 
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
+            searchInteractor.searchTracks(newSearchText, object : SearchInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>?, errorCode: Int?) {
                     val tracks = mutableListOf<Track>()
                     if (foundTracks != null) {
@@ -74,16 +76,16 @@ class TracksSearchViewModel(
 
                     when {
                         errorCode != null -> {
-                            renderState(SearchState.Error(code = errorCode))
+                            renderState(SearchScreenState.Error(code = errorCode))
                         }
 
                         tracks.isEmpty() -> {
-                            renderState(SearchState.EmptySearch)
+                            renderState(SearchScreenState.EmptySearch)
                         }
 
                         else -> {
                             renderState(
-                                SearchState.Content(
+                                SearchScreenState.Content(
                                     tracks = tracks,
                                 )
                             )
@@ -95,35 +97,30 @@ class TracksSearchViewModel(
     }
 
     fun renderTracksHistory() {
-        tracksInteractor.getTracksFromHistory(object : TracksInteractor.TracksConsumer {
+        searchInteractor.getTracksFromHistory(object : SearchInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>?, errorCode: Int?) {
-                val history = mutableListOf<Track>()
-                if (foundTracks != null) {
-                    history.addAll(foundTracks)
-                }
-
-                if (history.isEmpty()) {
-                    renderState(SearchState.ClearScreen)
+                if (foundTracks.isNullOrEmpty()) {
+                    renderState(SearchScreenState.ClearScreen)
                 } else {
-                    renderState(SearchState.History(history))
+                    renderState(SearchScreenState.History(foundTracks))
                 }
             }
         })
     }
 
     fun addTrackToHistory(track: Track) {
-        tracksInteractor.addTrackToHistory(track)
-        if (stateLiveData.value is SearchState.History) {
+        searchInteractor.addTrackToHistory(track)
+        if (stateLiveData.value is SearchScreenState.History) {
             renderTracksHistory()
         }
     }
 
     fun clearHistory() {
-        tracksInteractor.clearTracksHistory()
-        renderState(SearchState.ClearScreen)
+        searchInteractor.clearTracksHistory()
+        renderState(SearchScreenState.ClearScreen)
     }
 
-    private fun renderState(state: SearchState) {
+    private fun renderState(state: SearchScreenState) {
         stateLiveData.postValue(state)
     }
 
@@ -134,7 +131,7 @@ class TracksSearchViewModel(
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as Application
-                TracksSearchViewModel(app, Creator.provideTracksInteractor(app))
+                SearchViewModel(app, Creator.provideSearchInteractor(app))
             }
         }
     }

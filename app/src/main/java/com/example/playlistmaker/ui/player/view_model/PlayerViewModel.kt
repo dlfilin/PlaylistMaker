@@ -9,22 +9,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.player.TrackPlayer
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.ui.player.models.PlayerScreenState
 import com.example.playlistmaker.ui.player.models.PlayerState
 
-class AudioPlayerViewModel(
+class PlayerViewModel(
     track: Track,
-    private val trackPlayer: TrackPlayer,
+    private val playerInteractor: PlayerInteractor,
 ) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val trackTimeRunnable: Runnable
 
     private val screenStateLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
-    private val playerStateLiveData =
-        MutableLiveData(PlayerState.STATE_DEFAULT)
+    private val playerStateLiveData = MutableLiveData(PlayerState.STATE_DEFAULT)
     private val trackPositionLiveData = MutableLiveData(0)
 
     fun getScreenStateLiveData(): LiveData<PlayerScreenState> = screenStateLiveData
@@ -36,17 +35,18 @@ class AudioPlayerViewModel(
 
         trackTimeRunnable = object : Runnable {
             override fun run() {
-                val position = trackPlayer.currentPosition()
+                val position = playerInteractor.currentPosition()
                 trackPositionLiveData.value = position
 
-                if (getCurrentPlayerState() == PlayerState.STATE_PLAYING)
-                    handler.postDelayed(this, REFRESH_TRACK_TIME_DELAY)
+                if (getCurrentPlayerState() == PlayerState.STATE_PLAYING) handler.postDelayed(
+                    this,
+                    REFRESH_TRACK_TIME_DELAY
+                )
             }
         }
 
-        trackPlayer.preparePlayer(
-            track.previewUrl,
-            statusObserver = object : TrackPlayer.StatusObserver {
+        playerInteractor.preparePlayer(track.previewUrl,
+            statusObserver = object : PlayerInteractor.StatusObserver {
 
                 override fun onPrepared() {
                     playerStateLiveData.value = PlayerState.STATE_PREPARED
@@ -61,7 +61,7 @@ class AudioPlayerViewModel(
     }
 
     override fun onCleared() {
-        trackPlayer.release()
+        playerInteractor.release()
         handler.removeCallbacksAndMessages(REFRESH_TRACK_TIME_DELAY)
     }
 
@@ -70,19 +70,19 @@ class AudioPlayerViewModel(
     }
 
     private fun startPlayer() {
-        trackPlayer.play()
+        playerInteractor.play()
         playerStateLiveData.value = PlayerState.STATE_PLAYING
         handler.post(trackTimeRunnable)
     }
 
     fun pausePlayer() {
-        trackPlayer.pause()
+        playerInteractor.pause()
         playerStateLiveData.value = PlayerState.STATE_PAUSED
         handler.removeCallbacks(trackTimeRunnable)
     }
 
     fun releasePlayer() {
-        trackPlayer.release()
+        playerInteractor.release()
         playerStateLiveData.value = PlayerState.STATE_DEFAULT
         handler.removeCallbacks(trackTimeRunnable)
     }
@@ -110,9 +110,9 @@ class AudioPlayerViewModel(
 
         fun getViewModelFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                AudioPlayerViewModel(
+                PlayerViewModel(
                     track,
-                    Creator.provideTrackPlayer(),
+                    Creator.providePlayerInteractor(),
                 )
             }
         }

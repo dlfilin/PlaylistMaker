@@ -1,11 +1,12 @@
 package com.example.playlistmaker.data.player.impl
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.domain.player.TrackPlayer
+import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.player.PlayerRepository
 
-class AndroidMediaPlayerImpl(private var mediaPlayer: MediaPlayer) : TrackPlayer {
+class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
 
-    override fun preparePlayer(url: String, statusObserver: TrackPlayer.StatusObserver) {
+    override fun preparePlayer(url: String, statusObserver: PlayerInteractor.StatusObserver) {
 
         mediaPlayer.setDataSource(url)
 

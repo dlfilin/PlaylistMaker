@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data.search.storage
+package com.example.playlistmaker.data.storage
 
 import android.content.SharedPreferences
 import com.example.playlistmaker.data.search.dto.Response

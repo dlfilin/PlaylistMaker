@@ -11,8 +11,8 @@ import com.example.playlistmaker.databinding.SearchItemViewBinding
 import com.example.playlistmaker.domain.models.Track
 import java.util.ArrayList
 
-class TracksAdapter(private val onTrackClickListener: TrackClickListener) :
-    RecyclerView.Adapter<TracksAdapter.TrackViewHolder>() {
+class SearchAdapter(private val onTrackClickListener: TrackClickListener) :
+    RecyclerView.Adapter<SearchAdapter.TrackViewHolder>() {
 
     private var items = ArrayList<Track>()
 
