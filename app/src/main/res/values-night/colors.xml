@@ -9,6 +9,6 @@
     <color name="gray_black">#1A1B22</color>
     <color name="search_bg">#FFFFFF</color>
     <color name="track_gray">#AEAFB4</color>
-
-
+    <color name="switch_knob">#3772E7</color>
+    <color name="switch_track">#9FBBF3</color>
 </resources>
