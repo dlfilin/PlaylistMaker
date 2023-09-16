@@ -1,7 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
-import android.media.MediaPlayer
+import android.content.SharedPreferences
 import com.example.playlistmaker.App
 import com.example.playlistmaker.data.LocalStorage
 import com.example.playlistmaker.data.search.NetworkClient
@@ -22,13 +22,11 @@ val dataModule = module {
             .create(ItunesApi::class.java)
     }
 
-    single {
+    single<SharedPreferences> {
         androidContext().getSharedPreferences(App.LOCAL_STORAGE, Context.MODE_PRIVATE)
     }
 
     factory { Gson() }
-
-    factory { MediaPlayer() }
 
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidContext())

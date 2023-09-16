@@ -6,7 +6,7 @@ import com.example.playlistmaker.domain.player.PlayerRepository
 
 class PlayerRepositoryImpl : PlayerRepository {
 
-    private var mediaPlayer = MediaPlayer()
+    private lateinit var mediaPlayer: MediaPlayer
 
     override fun preparePlayer(url: String, statusObserver: PlayerInteractor.StatusObserver) {
 

@@ -36,8 +36,6 @@ class SearchViewModel(
             return
         }
 
-        if (changedText == latestSearchText) return
-
         latestSearchText = changedText
 
         if (debounced) {

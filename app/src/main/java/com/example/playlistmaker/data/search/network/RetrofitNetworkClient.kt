@@ -9,20 +9,27 @@ import com.example.playlistmaker.data.dto.TracksSearchRequest
 
 class RetrofitNetworkClient(
     private val itunesService: ItunesApi,
-    private val context: Context) : NetworkClient {
+    private val context: Context
+) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
-        if (dto !is TracksSearchRequest) {
+        if (dto is TracksSearchRequest) {
+            val response = try {
+                itunesService.searchTracks(dto.expression).execute()
+            } catch (ex: Exception) {
+                null
+            }
+            val body = response?.body()
+            return body?.apply { resultCode = response.code() } ?: Response().apply {
+                if (response != null) {
+                    resultCode = response.code()
+                }
+            }
+        } else {
             return Response().apply { resultCode = 400 }
-        }
-
-        val response = itunesService.searchTracks(dto.expression).execute()
-        val body = response.body()
-        return body?.apply { resultCode = response.code() } ?: Response().apply {
-            resultCode = response.code()
         }
     }
 
