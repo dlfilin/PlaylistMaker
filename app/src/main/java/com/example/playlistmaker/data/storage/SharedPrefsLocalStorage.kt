@@ -1,36 +1,38 @@
 package com.example.playlistmaker.data.storage
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.data.search.dto.Response
-import com.example.playlistmaker.data.search.dto.TrackDto
-import com.example.playlistmaker.data.search.dto.TracksSearchResponse
+import com.example.playlistmaker.data.LocalStorage
+import com.example.playlistmaker.data.dto.Response
+import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.google.gson.Gson
 
-class LocalStorage(private val sharedPreferences: SharedPreferences) {
+class SharedPrefsLocalStorage(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) : LocalStorage {
 
-    private val gson = Gson()
-
-    fun addToFavorites(trackId: Int) {
+    override fun addToFavorites(trackId: Int) {
         changeFavorites(trackId = trackId, remove = false)
     }
 
-    fun removeFromFavorites(trackId: Int) {
+    override fun removeFromFavorites(trackId: Int) {
         changeFavorites(trackId = trackId, remove = true)
     }
 
-    private fun changeFavorites(trackId: Int, remove: Boolean) {
+    override fun changeFavorites(trackId: Int, remove: Boolean) {
         val mutableSet = getSavedFavorites().toMutableSet()
         val modified =
             if (remove) mutableSet.remove(trackId.toString()) else mutableSet.add(trackId.toString())
         if (modified) sharedPreferences.edit().putStringSet(KEY_FAVORITES, mutableSet).apply()
     }
 
-    fun getSavedFavorites(): Set<String> {
+    override fun getSavedFavorites(): Set<String> {
         return sharedPreferences.getStringSet(KEY_FAVORITES, emptySet()) ?: emptySet()
     }
 
-    fun addTrackToHistory(track: TrackDto) {
+    override fun addTrackToHistory(track: TrackDto) {
 
         val tracks = (getTracksFromHistory() as TracksSearchResponse).results.toMutableList()
 
@@ -46,14 +48,12 @@ class LocalStorage(private val sharedPreferences: SharedPreferences) {
             .apply()
     }
 
-//    fun removeTrackFromHistory(track: Track) {}
-
-    fun clearTracksHistory() {
+    override fun clearTracksHistory() {
         sharedPreferences.edit()
             .remove(KEY_TRACKS_HISTORY).apply()
     }
 
-    fun getTracksFromHistory(): Response {
+    override fun getTracksFromHistory(): Response {
 
         val tracksJSON = sharedPreferences.getString(KEY_TRACKS_HISTORY, null)
 
@@ -64,12 +64,12 @@ class LocalStorage(private val sharedPreferences: SharedPreferences) {
         }
     }
 
-    fun getThemeSettings(): ThemeSettings {
+    override fun getThemeSettings(): ThemeSettings {
         val darkTheme = sharedPreferences.getBoolean(KEY_DARK_THEME, false)
         return ThemeSettings(darkTheme)
     }
 
-    fun updateThemeSetting(settings: ThemeSettings) {
+    override fun updateThemeSetting(settings: ThemeSettings) {
         sharedPreferences.edit()
             .putBoolean(KEY_DARK_THEME, settings.isDarkTheme)
             .apply()

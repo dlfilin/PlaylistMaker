@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name=".ui.player.activity.PlayerActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

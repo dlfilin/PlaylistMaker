@@ -5,17 +5,13 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.ui.player.models.PlayerScreenState
 import com.example.playlistmaker.ui.player.models.PlayerState
 
 class PlayerViewModel(
-    track: Track,
+    private val track: Track,
     private val playerInteractor: PlayerInteractor,
 ) : ViewModel() {
 
@@ -36,7 +32,7 @@ class PlayerViewModel(
         trackTimeRunnable = object : Runnable {
             override fun run() {
                 val position = playerInteractor.currentPosition()
-                trackPositionLiveData.value = position
+                trackPositionLiveData.postValue(position)
 
                 if (getCurrentPlayerState() == PlayerState.STATE_PLAYING) handler.postDelayed(
                     this,
@@ -45,19 +41,6 @@ class PlayerViewModel(
             }
         }
 
-        playerInteractor.preparePlayer(track.previewUrl,
-            statusObserver = object : PlayerInteractor.StatusObserver {
-
-                override fun onPrepared() {
-                    playerStateLiveData.value = PlayerState.STATE_PREPARED
-                }
-
-                override fun onCompletion() {
-                    playerStateLiveData.value = PlayerState.STATE_PREPARED
-                    trackPositionLiveData.value = 0
-                    handler.removeCallbacks(trackTimeRunnable)
-                }
-            })
     }
 
     override fun onCleared() {
@@ -69,21 +52,37 @@ class PlayerViewModel(
         return playerStateLiveData.value ?: PlayerState.STATE_DEFAULT
     }
 
+    fun preparePlayer() {
+        playerInteractor.preparePlayer(track.previewUrl,
+            statusObserver = object : PlayerInteractor.StatusObserver {
+
+                override fun onPrepared() {
+                    playerStateLiveData.postValue(PlayerState.STATE_PREPARED)
+                }
+
+                override fun onCompletion() {
+                    playerStateLiveData.postValue(PlayerState.STATE_PREPARED)
+                    trackPositionLiveData.postValue(0)
+                    handler.removeCallbacks(trackTimeRunnable)
+                }
+            })
+    }
+
     private fun startPlayer() {
         playerInteractor.play()
-        playerStateLiveData.value = PlayerState.STATE_PLAYING
+        playerStateLiveData.postValue(PlayerState.STATE_PLAYING)
         handler.post(trackTimeRunnable)
     }
 
     fun pausePlayer() {
         playerInteractor.pause()
-        playerStateLiveData.value = PlayerState.STATE_PAUSED
+        playerStateLiveData.postValue(PlayerState.STATE_PAUSED)
         handler.removeCallbacks(trackTimeRunnable)
     }
 
     fun releasePlayer() {
         playerInteractor.release()
-        playerStateLiveData.value = PlayerState.STATE_DEFAULT
+        playerStateLiveData.postValue(PlayerState.STATE_DEFAULT)
         handler.removeCallbacks(trackTimeRunnable)
     }
 
@@ -99,22 +98,13 @@ class PlayerViewModel(
             }
 
             PlayerState.STATE_DEFAULT -> {
-                return
             }
         }
     }
 
     companion object {
 
-        private const val REFRESH_TRACK_TIME_DELAY = 400L
+        private const val REFRESH_TRACK_TIME_DELAY = 300L
 
-        fun getViewModelFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    track,
-                    Creator.providePlayerInteractor(),
-                )
-            }
-        }
     }
 }

@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.App.Companion.CURRENT_TRACK
 import com.example.playlistmaker.R
@@ -22,13 +21,14 @@ import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.models.SearchScreenState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
 
     private lateinit var textWatcher: TextWatcher
 
@@ -41,11 +41,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
