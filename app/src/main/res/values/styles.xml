@@ -11,17 +11,17 @@
         <item name="android:textAppearance">@style/ys_medium_22</item>
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="iconGravity">textStart</item>
-        <item name="iconPadding">@dimen/padding_8</item>
+        <item name="iconPadding">@dimen/space_8</item>
         <item name="iconTint">@color/yp_black</item>
     </style>
 
     <style name="SettingsActListItemStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingStart">@dimen/padding_16</item>
-        <item name="android:paddingEnd">@dimen/padding_12</item>
-        <item name="android:paddingVertical">@dimen/padding_vertical</item>
-        <item name="android:drawablePadding">@dimen/padding_8</item>
+        <item name="android:paddingStart">@dimen/space_16</item>
+        <item name="android:paddingEnd">@dimen/space_12</item>
+        <item name="android:paddingVertical">@dimen/space_21</item>
+        <item name="android:drawablePadding">@dimen/space_8</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/bw_text</item>
         <item name="android:textAppearance">@style/ys_regular_16</item>
@@ -32,10 +32,10 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginStart">@dimen/margin_4</item>
-        <item name="android:layout_marginEnd">@dimen/padding_12</item>
-        <item name="android:paddingHorizontal">@dimen/padding_12</item>
-        <item name="android:paddingVertical">@dimen/padding_12</item>
+        <item name="android:layout_marginStart">@dimen/space_4</item>
+        <item name="android:layout_marginEnd">@dimen/space_12</item>
+        <item name="android:paddingHorizontal">@dimen/space_12</item>
+        <item name="android:paddingVertical">@dimen/space_12</item>
         <item name="android:src">@drawable/ic_arrow_back</item>
     </style>
 
@@ -98,7 +98,7 @@
     <style name="track_info_values">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/margin_16</item>
+        <item name="android:layout_marginStart">@dimen/space_16</item>
         <item name="android:ellipsize">end</item>
         <item name="android:gravity">end</item>
         <item name="android:maxLines">1</item>
