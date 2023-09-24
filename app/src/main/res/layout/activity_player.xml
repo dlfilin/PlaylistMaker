@@ -10,8 +10,8 @@
         android:id="@+id/bt_back"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="@dimen/margin_4"
-        android:layout_marginTop="@dimen/margin_4"
+        android:layout_marginStart="@dimen/space_4"
+        android:layout_marginTop="@dimen/space_4"
         android:background="@null"
         android:backgroundTint="@color/white_black"
         android:contentDescription="@string/go_back_button"
@@ -40,28 +40,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/margin_24" />
+                app:layout_constraintGuide_begin="@dimen/space_24" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/right_guideline_24"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/margin_24" />
+                app:layout_constraintGuide_end="@dimen/space_24" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/left_guideline_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/margin_16" />
+                app:layout_constraintGuide_begin="@dimen/space_16" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/right_guideline_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/margin_16" />
+                app:layout_constraintGuide_end="@dimen/space_16" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/track_info_barrier"
@@ -93,7 +93,7 @@
                 android:id="@+id/track_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_24"
+                android:layout_marginTop="@dimen/space_24"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="@style/ys_medium_22"
@@ -159,7 +159,7 @@
                 android:id="@+id/playback_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_4"
+                android:layout_marginTop="@dimen/space_4"
                 android:text="@string/default_playback_time"
                 android:textAppearance="@style/ys_medium_14"
                 android:textColor="@color/black_white"
@@ -186,7 +186,7 @@
             <TextView
                 android:id="@+id/album"
                 style="@style/track_info"
-                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginTop="@dimen/space_16"
                 android:text="@string/album"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_16"
                 app:layout_constraintTop_toBottomOf="@id/track_length" />
@@ -202,7 +202,7 @@
             <TextView
                 android:id="@+id/year"
                 style="@style/track_info"
-                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginTop="@dimen/space_16"
                 android:text="@string/year"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_16"
                 app:layout_constraintTop_toBottomOf="@id/album" />
@@ -218,7 +218,7 @@
             <TextView
                 android:id="@+id/genre"
                 style="@style/track_info"
-                android:layout_marginTop="@dimen/margin_16"
+                android:layout_marginTop="@dimen/space_16"
                 android:text="@string/genre"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_16"
                 app:layout_constraintTop_toBottomOf="@id/year" />
@@ -234,8 +234,8 @@
             <TextView
                 android:id="@+id/country"
                 style="@style/track_info"
-                android:layout_marginTop="@dimen/margin_16"
-                android:paddingBottom="@dimen/padding_28"
+                android:layout_marginTop="@dimen/space_16"
+                android:paddingBottom="@dimen/space_28"
                 android:text="@string/country"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_16"
                 app:layout_constraintTop_toBottomOf="@id/genre" />

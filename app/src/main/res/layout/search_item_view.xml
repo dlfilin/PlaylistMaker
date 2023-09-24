@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingVertical="@dimen/padding_8"
-    android:paddingStart="@dimen/padding_13"
-    android:paddingEnd="@dimen/padding_12"
+    android:paddingVertical="@dimen/space_8"
+    android:paddingStart="@dimen/space_13"
+    android:paddingEnd="@dimen/space_12"
     tools:viewBindingIgnore="false">
 
     <ImageView
@@ -21,8 +21,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_8"
-        android:layout_marginEnd="@dimen/padding_8"
+        android:layout_marginStart="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -30,7 +30,7 @@
             android:id="@+id/track_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_1"
+            android:layout_marginBottom="@dimen/space_1"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/ys_regular_16"
@@ -55,8 +55,8 @@
                 tools:text="The Beatles111111111111111111111111111111111111" />
 
             <ImageView
-                android:layout_width="@dimen/padding_13"
-                android:layout_height="@dimen/padding_13"
+                android:layout_width="@dimen/space_13"
+                android:layout_height="@dimen/space_13"
                 android:src="@drawable/ic_point_separator"
                 app:tint="@color/gray_white" />
 

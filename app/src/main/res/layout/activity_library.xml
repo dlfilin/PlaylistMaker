@@ -1,17 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.library.activity.LibraryActivity"
-    tools:viewBindingIgnore="false">
+    android:background="@color/white_black"
+    android:orientation="vertical"
+    tools:context=".ui.library.LibraryActivity">
 
-    <TextView
-        android:id="@+id/message1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/library_message"/>
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/libraryBackButton"
+            style="@style/BackNavigationButton"
+            android:contentDescription="@string/go_back_button"
+            app:tint="@color/black_white" />
+
+        <TextView
+            style="@style/TopTitleStyle"
+            android:text="@string/library"
+            android:textColor="@color/black_white" />
+
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white_black"
+        app:tabIndicator="@drawable/tab_ind"
+        app:tabIndicatorColor="@color/black_white"
+        app:tabMode="fixed"
+        app:tabPaddingEnd="@dimen/space_16"
+        app:tabPaddingStart="@dimen/space_16"
+        app:tabTextAppearance="@style/ys_medium_14"
+        app:tabTextColor="@color/black_white" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

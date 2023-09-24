@@ -24,7 +24,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.library.activity.LibraryActivity"
+            android:name=".ui.library.LibraryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
