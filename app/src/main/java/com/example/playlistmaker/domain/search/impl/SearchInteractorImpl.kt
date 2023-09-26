@@ -3,7 +3,7 @@ package com.example.playlistmaker.domain.search.impl
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.search.SearchRepository
-import com.example.playlistmaker.domain.models.Resource
+import com.example.playlistmaker.util.Resource
 import java.util.concurrent.Executors
 
 class SearchInteractorImpl(private val repository: SearchRepository) : SearchInteractor {

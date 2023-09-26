@@ -1,7 +1,7 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.ui.ResourceProvider
-import com.example.playlistmaker.ui.ResourceProviderImpl
+import com.example.playlistmaker.util.ResourceProvider
+import com.example.playlistmaker.util.ResourceProviderImpl
 import org.koin.dsl.module
 
 val UiModule = module {
