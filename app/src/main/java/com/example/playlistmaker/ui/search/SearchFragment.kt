@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,14 +117,12 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
         _binding = null
-        Log.i("MYY", "SearchFragment onDestroyView")
 
     }
 
     override fun onStop() {
         super.onStop()
         viewModel.clearSearchHandler()
-        Log.i("MYY", "SearchFragment onStop")
     }
 
     private fun clickDebounced(): Boolean {
