@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="font_11">11sp</dimen>
+    <dimen name="font_12">12sp</dimen>
     <dimen name="font_13">13sp</dimen>
     <dimen name="font_14">14sp</dimen>
     <dimen name="font_16">16sp</dimen>
@@ -27,6 +28,7 @@
     <dimen name="album_rounded_corner">8dp</dimen>
     <dimen name="corner_radius_PH_button">54dp</dimen>
     <dimen name="size_36">36dp</dimen>
+    <dimen name="size_48">48dp</dimen>
     <dimen name="size_91">91dp</dimen>
     <dimen name="zeroDP">0dp</dimen>
 </resources>

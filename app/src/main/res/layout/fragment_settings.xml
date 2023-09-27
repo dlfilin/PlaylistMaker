@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white_black"
+    android:orientation="vertical"
+    tools:context=".ui.settings.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_24"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TopTitleStyle"
+            android:text="@string/settings"
+            android:textColor="@color/black_white" />
+
+    </LinearLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/darkTheme"
+        style="@style/SettingsActListItemStyle"
+        android:width="32dp"
+        android:text="@string/dark_theme"
+        app:thumbTint="@color/switch_knob"
+        app:trackTint="@color/switch_track" />
+
+    <TextView
+        android:id="@+id/share_app"
+        style="@style/SettingsActListItemStyle"
+        android:text="@string/share_app"
+        app:drawableEndCompat="@drawable/ic_share" />
+
+    <TextView
+        android:id="@+id/contact_support"
+        style="@style/SettingsActListItemStyle"
+        android:text="@string/contact_support"
+        app:drawableEndCompat="@drawable/ic_support" />
+
+    <TextView
+        android:id="@+id/user_agreement"
+        style="@style/SettingsActListItemStyle"
+        android:text="@string/user_agreement"
+        app:drawableEndCompat="@drawable/ic_arrow_forward" />
+
+</LinearLayout>
