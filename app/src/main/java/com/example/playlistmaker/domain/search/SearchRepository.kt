@@ -8,16 +8,4 @@ interface SearchRepository {
 
     fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 
-    fun addTrackToFavorites(track: Track)
-
-    fun removeTrackFromFavorites(track: Track)
-
-    fun addTrackToHistory(track: Track)
-
-    fun removeTrackFromHistory(track: Track)
-
-    fun clearTracksHistory()
-
-    fun getTracksFromHistory(): Resource<List<Track>>
-
 }

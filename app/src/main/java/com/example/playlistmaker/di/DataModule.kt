@@ -3,11 +3,15 @@ package com.example.playlistmaker.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.playlistmaker.App
-import com.example.playlistmaker.data.LocalStorage
+import com.example.playlistmaker.data.FavoritesStorage
+import com.example.playlistmaker.data.search.HistoryStorage
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.ItunesApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.storage.SharedPrefsLocalStorage
+import com.example.playlistmaker.data.search.impl.HistoryStorageImpl
+import com.example.playlistmaker.data.settings.SettingsStorage
+import com.example.playlistmaker.data.settings.impl.SettingsStorageImpl
+import com.example.playlistmaker.data.storage.FavoritesStorageImpl
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -32,8 +36,16 @@ val dataModule = module {
         RetrofitNetworkClient(get(), androidContext())
     }
 
-    single<LocalStorage> {
-        SharedPrefsLocalStorage(get(), get())
+    single<HistoryStorage> {
+        HistoryStorageImpl(get(), get())
+    }
+
+    single<FavoritesStorage> {
+        FavoritesStorageImpl(get())
+    }
+
+    single<SettingsStorage> {
+        SettingsStorageImpl(get())
     }
 
 }

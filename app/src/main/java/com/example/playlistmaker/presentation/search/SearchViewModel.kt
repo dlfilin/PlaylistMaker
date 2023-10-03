@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.search.HistoryInteractor
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.ui.search.SearchScreenState
 import kotlinx.coroutines.Job
@@ -12,7 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val historyInteractor: HistoryInteractor
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.ClearScreen)
@@ -86,7 +88,7 @@ class SearchViewModel(
 
 
     fun renderTracksHistory() {
-        searchInteractor.getTracksFromHistory(object : SearchInteractor.TracksConsumer {
+        historyInteractor.getTracksFromHistory(object : HistoryInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>?, errorCode: Int?) {
                 if (foundTracks.isNullOrEmpty()) {
                     renderState(SearchScreenState.ClearScreen)
@@ -98,14 +100,14 @@ class SearchViewModel(
     }
 
     fun addTrackToHistory(track: Track) {
-        searchInteractor.addTrackToHistory(track)
+        historyInteractor.addTrackToHistory(track)
         if (stateLiveData.value is SearchScreenState.History) {
             renderTracksHistory()
         }
     }
 
     fun clearHistory() {
-        searchInteractor.clearTracksHistory()
+        historyInteractor.clearTracksHistory()
         renderState(SearchScreenState.ClearScreen)
     }
 
