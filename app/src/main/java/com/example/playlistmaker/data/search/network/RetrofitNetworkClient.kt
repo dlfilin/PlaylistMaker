@@ -6,11 +6,14 @@ import android.net.NetworkCapabilities
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TracksSearchRequest
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RetrofitNetworkClient(
-    private val itunesService: ItunesApi, private val context: Context
+    private val itunesService: ItunesApi,
+    private val context: Context,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
@@ -20,7 +23,7 @@ class RetrofitNetworkClient(
 
         return if (dto is TracksSearchRequest) {
 
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 try {
 
                     val response = itunesService.searchTracks(dto.expression)

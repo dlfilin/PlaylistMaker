@@ -6,24 +6,36 @@ import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class HistoryStorageImpl(
     private val sharedPreferences: SharedPreferences,
-    private val gson: Gson
+    private val gson: Gson,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : HistoryStorage {
 
-    override fun getTracksFromHistory(): Response {
+    override suspend fun getTracksFromHistory(): Response {
 
-        val tracksJSON = sharedPreferences.getString(KEY_TRACKS_HISTORY, null)
+        return try {
+            withContext(dispatcher) {
+                val tracksJSON = sharedPreferences.getString(KEY_TRACKS_HISTORY, null)
 
-        return if (tracksJSON != null) {
-            TracksSearchResponse(gson.fromJson(tracksJSON, Array<TrackDto>::class.java).asList())
-        } else {
-            return TracksSearchResponse(emptyList())
+                if (tracksJSON != null) {
+                    TracksSearchResponse(
+                        gson.fromJson(tracksJSON, Array<TrackDto>::class.java).asList()
+                    )
+                } else {
+                    TracksSearchResponse(emptyList())
+                }
+            }
+        } catch (e: Throwable) {
+            Response().apply { resultCode = -1 }
         }
     }
 
-    override fun addTrackToHistory(track: TrackDto) {
+    override suspend fun addTrackToHistory(track: TrackDto) {
 
         val tracks = (getTracksFromHistory() as TracksSearchResponse).results.toMutableList()
 
@@ -39,7 +51,7 @@ class HistoryStorageImpl(
             .apply()
     }
 
-    override fun clearTracksHistory() {
+    override suspend fun clearTracksHistory() {
         sharedPreferences.edit()
             .remove(KEY_TRACKS_HISTORY).apply()
     }

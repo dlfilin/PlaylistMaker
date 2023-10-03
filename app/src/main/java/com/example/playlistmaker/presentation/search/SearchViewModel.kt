@@ -55,18 +55,17 @@ class SearchViewModel(
 
             viewModelScope.launch{
                 searchInteractor.searchTracks(newSearchText).collect { pair ->
-                    processResult(pair.first, pair.second)
+                    processSearchResult(pair.first, pair.second)
                 }
             }
         }
     }
 
-    private fun processResult(foundTracks: List<Track>?, errorCode: Int?) {
+    private fun processSearchResult(foundTracks: List<Track>?, errorCode: Int?) {
         val tracks = mutableListOf<Track>()
         if (foundTracks != null) {
             tracks.addAll(foundTracks)
         }
-
         when {
             errorCode != null -> {
                 renderState(SearchScreenState.Error(code = errorCode))
@@ -88,27 +87,47 @@ class SearchViewModel(
 
 
     fun renderTracksHistory() {
-        historyInteractor.getTracksFromHistory(object : HistoryInteractor.TracksConsumer {
-            override fun consume(foundTracks: List<Track>?, errorCode: Int?) {
-                if (foundTracks.isNullOrEmpty()) {
-                    renderState(SearchScreenState.ClearScreen)
-                } else {
-                    renderState(SearchScreenState.History(foundTracks))
-                }
+        viewModelScope.launch {
+            historyInteractor.getTracksFromHistory().collect { pair ->
+                processHistoryResult(pair.first, pair.second)
             }
-        })
+        }
+    }
+
+    private fun processHistoryResult(foundTracks: List<Track>?, errorCode: Int?) {
+        when {
+            errorCode != null -> {
+                renderState(SearchScreenState.Error(code = errorCode))
+            }
+
+            foundTracks.isNullOrEmpty() -> {
+                renderState(SearchScreenState.ClearScreen)
+            }
+
+            else -> {
+                renderState(
+                    SearchScreenState.History(
+                        history = foundTracks
+                    )
+                )
+            }
+        }
     }
 
     fun addTrackToHistory(track: Track) {
-        historyInteractor.addTrackToHistory(track)
-        if (stateLiveData.value is SearchScreenState.History) {
-            renderTracksHistory()
+        viewModelScope.launch {
+            historyInteractor.addTrackToHistory(track)
+            if (stateLiveData.value is SearchScreenState.History) {
+                renderTracksHistory()
+            }
         }
     }
 
     fun clearHistory() {
-        historyInteractor.clearTracksHistory()
-        renderState(SearchScreenState.ClearScreen)
+        viewModelScope.launch {
+            historyInteractor.clearTracksHistory()
+            renderState(SearchScreenState.ClearScreen)
+        }
     }
 
     private fun renderState(state: SearchScreenState) {
@@ -121,6 +140,5 @@ class SearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-
     }
 }

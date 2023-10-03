@@ -4,31 +4,32 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.HistoryInteractor
 import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.util.Resource
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class HistoryInteractorImpl(private val repository: HistoryRepository) : HistoryInteractor {
 
-    private val executor = Executors.newCachedThreadPool()
+    override fun getTracksFromHistory(): Flow<Pair<List<Track>?, Int?>> {
 
-    override fun addTrackToHistory(track: Track) {
-        repository.addTrackToHistory(track)
-    }
-
-    override fun clearTracksHistory() {
-        repository.clearTracksHistory()
-    }
-
-    override fun getTracksFromHistory(consumer: HistoryInteractor.TracksConsumer) {
-        executor.execute {
-            when (val resource = repository.getTracksFromHistory()) {
+        return repository.getTracksFromHistory().map { result ->
+            when (result) {
                 is Resource.Success -> {
-                    consumer.consume(resource.data, null)
+                    Pair(result.data, null)
                 }
 
                 is Resource.Error -> {
-                    consumer.consume(null, resource.code)
+                    Pair(null, result.code)
                 }
             }
         }
     }
+
+    override suspend fun addTrackToHistory(track: Track) {
+        repository.addTrackToHistory(track)
+    }
+
+    override suspend fun clearTracksHistory() {
+        repository.clearTracksHistory()
+    }
+
 }

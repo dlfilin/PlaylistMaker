@@ -2,13 +2,14 @@ package com.example.playlistmaker.domain.search
 
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {
 
-    fun addTrackToHistory(track: Track)
+    fun getTracksFromHistory(): Flow<Resource<List<Track>>>
 
-    fun clearTracksHistory()
+    suspend fun addTrackToHistory(track: Track)
 
-    fun getTracksFromHistory(): Resource<List<Track>>
+    suspend fun clearTracksHistory()
 
 }

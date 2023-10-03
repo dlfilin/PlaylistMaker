@@ -6,12 +6,43 @@ import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class HistoryRepositoryImpl(
     private val historyStorage: HistoryStorage,
 ) : HistoryRepository {
 
-    override fun addTrackToHistory(track: Track) {
+    override fun getTracksFromHistory(): Flow<Resource<List<Track>>> = flow {
+
+        val response = historyStorage.getTracksFromHistory()
+
+        when (response.resultCode) {
+            -1 -> {
+                emit(Resource.Error(code = -1))
+            }
+
+            else -> {
+                val data = (response as TracksSearchResponse).results.map {
+                    Track(
+                        it.trackId,
+                        it.trackName,
+                        it.artistName,
+                        it.collectionName,
+                        it.releaseDate,
+                        it.primaryGenreName,
+                        it.country,
+                        it.trackTimeMillis,
+                        it.artworkUrl100,
+                        it.previewUrl,
+                    )
+                }
+                emit(Resource.Success(data))
+            }
+        }
+    }
+
+    override suspend fun addTrackToHistory(track: Track) {
         val trackDto = TrackDto(
             trackId = track.trackId,
             trackName = track.trackName,
@@ -27,27 +58,8 @@ class HistoryRepositoryImpl(
         historyStorage.addTrackToHistory(trackDto)
     }
 
-    override fun clearTracksHistory() {
+    override suspend fun clearTracksHistory() {
         historyStorage.clearTracksHistory()
     }
 
-    override fun getTracksFromHistory(): Resource<List<Track>> {
-
-        val response = historyStorage.getTracksFromHistory()
-
-        return Resource.Success((response as TracksSearchResponse).results.map {
-            Track(
-                it.trackId,
-                it.trackName,
-                it.artistName,
-                it.collectionName,
-                it.releaseDate,
-                it.primaryGenreName,
-                it.country,
-                it.trackTimeMillis,
-                it.artworkUrl100,
-                it.previewUrl,
-            )
-        })
-    }
 }

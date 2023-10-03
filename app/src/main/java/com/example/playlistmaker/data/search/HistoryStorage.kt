@@ -5,10 +5,10 @@ import com.example.playlistmaker.data.dto.TrackDto
 
 interface HistoryStorage {
 
-    fun getTracksFromHistory(): Response
+    suspend fun getTracksFromHistory(): Response
 
-    fun addTrackToHistory(track: TrackDto)
+    suspend fun addTrackToHistory(track: TrackDto)
 
-    fun clearTracksHistory()
+    suspend fun clearTracksHistory()
 
 }

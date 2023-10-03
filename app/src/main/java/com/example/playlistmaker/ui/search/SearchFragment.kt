@@ -77,13 +77,15 @@ class SearchFragment : Fragment() {
 
             searchEditText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    hideInputKeyboard()
-                    viewModel.searchDebounced(
-                        changedText = binding.searchEditText.text.toString(),
-                        debounced = false
-                    )
+                    if (binding.searchEditText.text.isNotBlank()) {
+                        hideInputKeyboard()
+                        viewModel.searchDebounced(
+                            changedText = binding.searchEditText.text.toString(),
+                            debounced = false
+                        )
+                    }
                 }
-                false
+                true
             }
         }
 
