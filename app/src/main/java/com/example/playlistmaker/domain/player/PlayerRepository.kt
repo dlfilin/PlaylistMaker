@@ -1,5 +1,7 @@
 package com.example.playlistmaker.domain.player
 
+import kotlinx.coroutines.flow.Flow
+
 interface PlayerRepository {
 
     fun preparePlayer(url: String, statusObserver: PlayerInteractor.StatusObserver)
@@ -12,6 +14,6 @@ interface PlayerRepository {
 
     fun release()
 
-    fun currentPosition(): Int
+    fun currentPosition(): Flow<Int>
 
 }
