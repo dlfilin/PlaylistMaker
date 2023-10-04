@@ -3,6 +3,9 @@ package com.example.playlistmaker.data.player.impl
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.PlayerRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class PlayerRepositoryImpl : PlayerRepository {
 
@@ -43,6 +46,16 @@ class PlayerRepositoryImpl : PlayerRepository {
         mediaPlayer.release()
     }
 
-    override fun currentPosition(): Int = mediaPlayer.currentPosition
+    override fun currentPosition(): Flow<Int> = flow {
+        while (mediaPlayer.isPlaying) {
+            emit(mediaPlayer.currentPosition)
+            delay(REFRESH_TRACK_TIME_DELAY_MILLIS)
+        }
+    }
 
+    companion object {
+
+        private const val REFRESH_TRACK_TIME_DELAY_MILLIS = 300L
+
+    }
 }

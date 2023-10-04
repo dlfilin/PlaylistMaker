@@ -1,16 +1,16 @@
 package com.example.playlistmaker.data.settings.impl
 
-import com.example.playlistmaker.data.LocalStorage
+import com.example.playlistmaker.data.settings.SettingsStorage
 import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
-class SettingsRepositoryImpl(private val localStorage: LocalStorage) : SettingsRepository {
+class SettingsRepositoryImpl(private val settingsStorage: SettingsStorage) : SettingsRepository {
 
     override fun getThemeSettings(): ThemeSettings {
-        return localStorage.getThemeSettings()
+        return settingsStorage.getThemeSettings()
     }
 
     override fun updateThemeSetting(settings: ThemeSettings) {
-        localStorage.updateThemeSetting(settings)
+        settingsStorage.updateThemeSetting(settings)
     }
 }

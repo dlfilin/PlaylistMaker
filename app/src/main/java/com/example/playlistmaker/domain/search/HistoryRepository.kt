@@ -4,8 +4,12 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-interface SearchRepository {
+interface HistoryRepository {
 
-    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
+    fun getTracksFromHistory(): Flow<Resource<List<Track>>>
+
+    suspend fun addTrackToHistory(track: Track)
+
+    suspend fun clearTracksHistory()
 
 }

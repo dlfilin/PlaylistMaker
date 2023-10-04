@@ -1,28 +1,28 @@
 package com.example.playlistmaker.data.search.impl
 
-import com.example.playlistmaker.data.search.NetworkClient
-import com.example.playlistmaker.data.dto.TracksSearchRequest
+import com.example.playlistmaker.data.search.HistoryStorage
+import com.example.playlistmaker.data.dto.TrackDto
 import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.search.SearchRepository
+import com.example.playlistmaker.domain.search.HistoryRepository
 import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SearchRepositoryImpl(
-    private val networkClient: NetworkClient,
-) : SearchRepository {
+class HistoryRepositoryImpl(
+    private val historyStorage: HistoryStorage,
+) : HistoryRepository {
 
-    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
+    override fun getTracksFromHistory(): Flow<Resource<List<Track>>> = flow {
 
-        val response = networkClient.doRequest(TracksSearchRequest(expression))
+        val response = historyStorage.getTracksFromHistory()
 
         when (response.resultCode) {
             -1 -> {
                 emit(Resource.Error(code = -1))
             }
 
-            200 -> {
+            else -> {
                 val data = (response as TracksSearchResponse).results.map {
                     Track(
                         trackId = it.trackId,
@@ -39,10 +39,27 @@ class SearchRepositoryImpl(
                 }
                 emit(Resource.Success(data))
             }
-
-            else -> {
-                emit(Resource.Error(code = response.resultCode))
-            }
         }
     }
+
+    override suspend fun addTrackToHistory(track: Track) {
+        val trackDto = TrackDto(
+            trackId = track.trackId,
+            trackName = track.trackName,
+            artistName = track.artistName,
+            collectionName = track.collectionName,
+            releaseDate = track.releaseDate,
+            primaryGenreName = track.primaryGenreName,
+            country = track.country,
+            trackTimeMillis = track.trackTimeMillis,
+            artworkUrl100 = track.artworkUrl100,
+            previewUrl = track.previewUrl,
+        )
+        historyStorage.addTrackToHistory(trackDto)
+    }
+
+    override suspend fun clearTracksHistory() {
+        historyStorage.clearTracksHistory()
+    }
+
 }

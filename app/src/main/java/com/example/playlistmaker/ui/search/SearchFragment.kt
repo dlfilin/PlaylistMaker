@@ -2,8 +2,6 @@ package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -13,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
@@ -21,6 +20,8 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,8 +36,6 @@ class SearchFragment : Fragment() {
     private val tracksHistoryAdapter = SearchAdapter { onTrackClicked(it) }
 
     private var isClickAllowed = true
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private lateinit var textWatcher: TextWatcher
 
@@ -78,13 +77,15 @@ class SearchFragment : Fragment() {
 
             searchEditText.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    hideInputKeyboard()
-                    viewModel.searchDebounced(
-                        changedText = binding.searchEditText.text.toString(),
-                        debounced = false
-                    )
+                    if (binding.searchEditText.text.isNotBlank()) {
+                        hideInputKeyboard()
+                        viewModel.searchDebounced(
+                            changedText = binding.searchEditText.text.toString(),
+                            debounced = false
+                        )
+                    }
                 }
-                false
+                true
             }
         }
 
@@ -122,14 +123,17 @@ class SearchFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        viewModel.clearSearchHandler()
+        viewModel.clearSearchCoroutine()
     }
 
     private fun clickDebounced(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
         }
         return current
     }
@@ -227,6 +231,6 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }
