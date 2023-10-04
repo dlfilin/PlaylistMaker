@@ -25,16 +25,16 @@ class HistoryRepositoryImpl(
             else -> {
                 val data = (response as TracksSearchResponse).results.map {
                     Track(
-                        it.trackId,
-                        it.trackName,
-                        it.artistName,
-                        it.collectionName,
-                        it.releaseDate,
-                        it.primaryGenreName,
-                        it.country,
-                        it.trackTimeMillis,
-                        it.artworkUrl100,
-                        it.previewUrl,
+                        trackId = it.trackId,
+                        trackName = it.trackName,
+                        artistName = it.artistName,
+                        collectionName = it.collectionName,
+                        releaseDate = it.releaseDate,
+                        primaryGenreName = it.primaryGenreName,
+                        country = it.country,
+                        trackTimeMillis = it.trackTimeMillis,
+                        artworkUrl100 = it.artworkUrl100,
+                        previewUrl = it.previewUrl,
                     )
                 }
                 emit(Resource.Success(data))

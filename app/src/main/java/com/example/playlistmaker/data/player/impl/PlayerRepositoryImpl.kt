@@ -49,13 +49,13 @@ class PlayerRepositoryImpl : PlayerRepository {
     override fun currentPosition(): Flow<Int> = flow {
         while (mediaPlayer.isPlaying) {
             emit(mediaPlayer.currentPosition)
-            delay(REFRESH_TRACK_TIME_DELAY)
+            delay(REFRESH_TRACK_TIME_DELAY_MILLIS)
         }
     }
 
     companion object {
 
-        private const val REFRESH_TRACK_TIME_DELAY = 300L
+        private const val REFRESH_TRACK_TIME_DELAY_MILLIS = 300L
 
     }
 }

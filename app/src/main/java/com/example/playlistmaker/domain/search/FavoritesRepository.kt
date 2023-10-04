@@ -1,5 +1,7 @@
 package com.example.playlistmaker.domain.search
 
+import kotlinx.coroutines.flow.Flow
+
 interface FavoritesRepository {
 
     fun addToFavorites(trackId: Int)
@@ -8,6 +10,6 @@ interface FavoritesRepository {
 
     fun changeFavorites(trackId: Int, remove: Boolean)
 
-    fun getSavedFavorites(): Set<String>
+    fun getSavedFavorites(): Flow<Set<String>>
 
 }

@@ -41,7 +41,7 @@ class SearchViewModel(
         searchJob?.cancel()
         if (debounced) {
             searchJob = viewModelScope.launch {
-                delay(SEARCH_DEBOUNCE_DELAY)
+                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
                 searchRequest(changedText)
             }
         } else {
@@ -139,6 +139,6 @@ class SearchViewModel(
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 }

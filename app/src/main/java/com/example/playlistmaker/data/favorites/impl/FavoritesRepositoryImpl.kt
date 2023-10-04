@@ -2,6 +2,8 @@ package com.example.playlistmaker.data.favorites.impl
 
 import com.example.playlistmaker.data.FavoritesStorage
 import com.example.playlistmaker.domain.search.FavoritesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FavoritesRepositoryImpl(private val storage: FavoritesStorage) : FavoritesRepository {
 
@@ -17,8 +19,8 @@ class FavoritesRepositoryImpl(private val storage: FavoritesStorage) : Favorites
         storage.changeFavorites(trackId, remove)
     }
 
-    override fun getSavedFavorites(): Set<String> {
-        return storage.getSavedFavorites()
+    override fun getSavedFavorites(): Flow<Set<String>> = flow {
+        emit(storage.getSavedFavorites())
     }
 
 }

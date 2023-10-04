@@ -2,6 +2,7 @@ package com.example.playlistmaker.domain.search.impl
 
 import com.example.playlistmaker.domain.search.FavoritesInteractor
 import com.example.playlistmaker.domain.search.FavoritesRepository
+import kotlinx.coroutines.flow.Flow
 
 class FavoritesInteractorImpl(private val repository: FavoritesRepository) : FavoritesInteractor {
 
@@ -17,7 +18,7 @@ class FavoritesInteractorImpl(private val repository: FavoritesRepository) : Fav
         repository.changeFavorites(trackId, remove)
     }
 
-    override fun getSavedFavorites(): Set<String> {
+    override fun getSavedFavorites(): Flow<Set<String>> {
         return repository.getSavedFavorites()
     }
 
