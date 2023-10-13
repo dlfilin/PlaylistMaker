@@ -1,14 +1,26 @@
 package com.example.playlistmaker.ui.favorites
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.favorites.FavoritesScreenState
 import com.example.playlistmaker.presentation.favorites.FavoritesViewModel
+import com.example.playlistmaker.ui.player.PlayerActivity
+import com.example.playlistmaker.ui.search.TrackListAdapter
+import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment : Fragment() {
@@ -16,17 +28,32 @@ class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FavoritesViewModel by viewModel()
+    private val viewModel by viewModel<FavoritesViewModel>()
+
+    private var favoriteTracksAdapter: TrackListAdapter? = null
+
+    private var isClickAllowed = true
+
+    private val gson: Gson by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        Log.i("XXX", "Fragment onCreateView")
+
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i("XXX", "Fragment onViewCreated")
+
+        favoriteTracksAdapter = TrackListAdapter { onTrackClicked(track = it) }
+
+        binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.favoritesRV.adapter = favoriteTracksAdapter
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             renderScreen(it)
@@ -35,7 +62,11 @@ class FavoritesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        favoriteTracksAdapter = null
+        binding.favoritesRV.adapter = null
         _binding = null
+        Log.i("XXX", "Fragment onDestroyView")
+
     }
 
     private fun renderScreen(state: FavoritesScreenState) {
@@ -69,6 +100,7 @@ class FavoritesFragment : Fragment() {
             favoritesRV.isVisible = true
             placeholderView.isVisible = false
         }
+        favoriteTracksAdapter?.updateListItems(tracks)
     }
 
     private fun showLoading() {
@@ -79,8 +111,63 @@ class FavoritesFragment : Fragment() {
         }
     }
 
+    private fun clickDebounced(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    private fun onTrackClicked(track: Track) {
+        if (clickDebounced()) {
+            viewModel.addTrackToHistory(track = track)
+
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playerActivity,
+                PlayerActivity.createArgs(gson.toJson(track)))
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.fillData()
+        Log.i("XXX", "Fragment onStart")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("XXX", "Fragment onResume")
+
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.i("XXX", "Fragment onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("XXX", "Fragment onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("XXX", "Fragment onDestroy")
+
+    }
+
 
     companion object {
+
         fun newInstance() = FavoritesFragment()
+
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+
     }
 }

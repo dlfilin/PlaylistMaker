@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.player.PlayerScreenState
 import com.example.playlistmaker.presentation.player.PlayerState
 import com.example.playlistmaker.presentation.player.PlayerViewModel
 import com.google.gson.Gson
@@ -42,7 +43,7 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.getScreenStateLiveData().observe(this) { screenState ->
             when (screenState) {
                 is PlayerScreenState.Content -> {
-                    renderTrackInfo(screenState.track)
+                    renderScreenState(screenState.track)
                 }
 
                 is PlayerScreenState.Loading -> {
@@ -65,6 +66,8 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.btPlay.setOnClickListener { viewModel.playbackControl() }
 
+        binding.btAddToFav.setOnClickListener { viewModel.onFavoriteClicked() }
+
         viewModel.preparePlayer()
 
     }
@@ -79,29 +82,35 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.releasePlayer()
     }
 
-    private fun renderTrackInfo(currentTrack: Track) {
+    private fun renderScreenState(track: Track) {
 
         with(binding) {
 
-            Glide.with(applicationContext).load(currentTrack.getCoverArtwork())
+            Glide.with(applicationContext).load(Track.getCoverArtwork(track.artworkUrl100))
                 .placeholder(R.drawable.ic_placeholder_big).centerCrop().transform(
                     RoundedCorners(
                         this@PlayerActivity.resources.getDimensionPixelSize(R.dimen.album_rounded_corner)
                     )
                 ).into(albumCover)
 
-            trackName.text = currentTrack.trackName
-            artistName.text = currentTrack.artistName
-            trackLengthValue.text = currentTrack.getTrackTimeMMSS()
-            if (currentTrack.collectionName.isNotEmpty()) {
+            trackName.text = track.trackName
+            artistName.text = track.artistName
+            trackLengthValue.text = track.trackTimeMillis
+            if (track.collectionName.isNotEmpty()) {
                 albumInfoGroup.visibility = View.VISIBLE
-                albumValue.text = currentTrack.collectionName
+                albumValue.text = track.collectionName
             } else {
                 albumInfoGroup.visibility = View.GONE
             }
-            yearValue.text = currentTrack.getReleaseYear().toString()
-            genreValue.text = currentTrack.primaryGenreName
-            countryValue.text = currentTrack.country
+            yearValue.text = track.releaseYear
+            genreValue.text = track.primaryGenreName
+            countryValue.text = track.country
+
+            if (track.isFavorite) {
+                btAddToFav.setImageResource(R.drawable.bt_add_to_fav_on)
+            } else {
+                btAddToFav.setImageResource(R.drawable.bt_add_to_fav_off)
+            }
         }
     }
 

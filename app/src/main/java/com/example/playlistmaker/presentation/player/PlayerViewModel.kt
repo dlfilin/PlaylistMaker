@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerInteractor
-import com.example.playlistmaker.ui.player.PlayerScreenState
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val track: Track,
     private val playerInteractor: PlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor,
 ) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
@@ -88,4 +89,17 @@ class PlayerViewModel(
         }
     }
 
+    fun onFavoriteClicked() {
+
+        viewModelScope.launch {
+            val isFavorite = (screenStateLiveData.value as PlayerScreenState.Content).track.isFavorite
+            if (isFavorite) {
+                favoritesInteractor.removeFromFavorites(track)
+            } else {
+                favoritesInteractor.addToFavorites(track)
+            }
+
+            screenStateLiveData.postValue(PlayerScreenState.Content(track.copy(isFavorite = !isFavorite)))
+        }
+    }
 }

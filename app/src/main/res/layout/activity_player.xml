@@ -150,7 +150,7 @@
                 android:layout_height="51dp"
                 android:background="@null"
                 android:contentDescription="@string/add_to_favorites"
-                android:src="@drawable/bt_add_to_fav"
+                android:src="@drawable/bt_add_to_fav_off"
                 app:layout_constraintBottom_toBottomOf="@id/bt_add_to_playlist"
                 app:layout_constraintEnd_toEndOf="@id/right_guideline_24"
                 app:layout_constraintStart_toEndOf="@id/bt_play"

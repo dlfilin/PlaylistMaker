@@ -1,14 +1,15 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.data.converters.TrackDbConverter
 import com.example.playlistmaker.data.favorites.impl.FavoritesRepositoryImpl
 import com.example.playlistmaker.data.player.impl.PlayerRepositoryImpl
-import com.example.playlistmaker.data.search.impl.HistoryRepositoryImpl
+import com.example.playlistmaker.data.history.impl.HistoryRepositoryImpl
 import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.player.PlayerRepository
-import com.example.playlistmaker.domain.search.FavoritesRepository
-import com.example.playlistmaker.domain.search.HistoryRepository
+import com.example.playlistmaker.domain.favorites.FavoritesRepository
+import com.example.playlistmaker.domain.history.HistoryRepository
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.domain.sharing.ExternalNavigator
@@ -21,12 +22,14 @@ val repositoryModule = module {
 
     single<ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
 
-    single<SearchRepository> { SearchRepositoryImpl(get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 
-    single<HistoryRepository> { HistoryRepositoryImpl(get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
 
-    single<FavoritesRepository> { FavoritesRepositoryImpl(get()) }
+    single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
 
     single<PlayerRepository> { PlayerRepositoryImpl() }
+
+    factory { TrackDbConverter() }
 
 }

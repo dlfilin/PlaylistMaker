@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.search.SearchScreenState
 import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.google.gson.Gson
@@ -32,8 +33,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val tracksSearchAdapter = SearchAdapter { onTrackClicked(it) }
-    private val tracksHistoryAdapter = SearchAdapter { onTrackClicked(it) }
+    private val tracksSearchAdapter = TrackListAdapter { onTrackClicked(it) }
+    private val tracksHistoryAdapter = TrackListAdapter { onTrackClicked(it) }
 
     private var isClickAllowed = true
 
@@ -118,7 +119,6 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         textWatcher.let { binding.searchEditText.removeTextChangedListener(it) }
         _binding = null
-
     }
 
     override fun onStop() {

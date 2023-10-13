@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlists
+package com.example.playlistmaker.ui.playlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.models.Playlist
-import com.example.playlistmaker.presentation.playlists.PlaylistsViewModel
+import com.example.playlistmaker.presentation.playlist.PlaylistScreenState
+import com.example.playlistmaker.presentation.playlist.PlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment : Fragment() {
+class PlaylistFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PlaylistsViewModel by viewModel()
+    private val viewModel: PlaylistViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,12 +39,12 @@ class PlaylistsFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderScreen(state: PlaylistsScreenState) {
+    private fun renderScreen(state: PlaylistScreenState) {
         when (state) {
-            is PlaylistsScreenState.Loading -> showLoading()
-            is PlaylistsScreenState.EmptyList -> showEmpty()
-            is PlaylistsScreenState.Content -> showContent(state.playlists)
-            is PlaylistsScreenState.Error -> showError()
+            is PlaylistScreenState.Loading -> showLoading()
+            is PlaylistScreenState.EmptyList -> showEmpty()
+            is PlaylistScreenState.Content -> showContent(state.playlists)
+            is PlaylistScreenState.Error -> showError()
         }
     }
 
@@ -81,6 +82,6 @@ class PlaylistsFragment : Fragment() {
 
 
     companion object {
-        fun newInstance() = PlaylistsFragment()
+        fun newInstance() = PlaylistFragment()
     }
 }

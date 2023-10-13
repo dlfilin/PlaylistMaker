@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.favorites
+package com.example.playlistmaker.presentation.favorites
 
 import com.example.playlistmaker.domain.models.Track
 
