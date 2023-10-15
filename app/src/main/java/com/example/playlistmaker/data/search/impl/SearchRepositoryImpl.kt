@@ -25,20 +25,22 @@ class SearchRepositoryImpl(
             }
 
             200 -> {
-                val favoriteTracks = appDatabase.favoritesDao().getTracksIds()
+                val favoriteTracks = appDatabase.getFavoritesDao().getTracksIds()
 
                 val data = (response as TracksSearchResponse).results.map {
                     Track(
                         trackId = it.trackId,
-                        trackName = it.trackName,
-                        artistName = it.artistName,
-                        collectionName = it.collectionName,
-                        releaseYear = Track.getReleaseYear(it.releaseDate),
-                        primaryGenreName = it.primaryGenreName,
-                        country = it.country,
-                        trackTimeMillis = Track.getTrackTimeMMSS(it.trackTimeMillis),
-                        artworkUrl100 = it.artworkUrl100,
-                        previewUrl = it.previewUrl,
+                        trackName = it.trackName ?: "N/A",
+                        artistName = it.artistName ?: "N/A",
+                        collectionName = it.collectionName ?: "N/A",
+                        releaseYear = it.releaseDate?.let { it1 ->
+                            Track.getReleaseYear(it1) } ?: "N/A",
+                        primaryGenreName = it.primaryGenreName ?: "N/A",
+                        country = it.country ?: "N/A",
+                        trackTimeMillis = it.trackTimeMillis?.let { it1 ->
+                            Track.getTrackTimeMMSS(it1)} ?: "N/A",
+                        artworkUrl100 = it.artworkUrl100 ?: "N/A",
+                        previewUrl = it.previewUrl ?: "N/A",
                         isFavorite = favoriteTracks.contains(it.trackId)
                     )
                 }

@@ -25,7 +25,7 @@ class HistoryRepositoryImpl(
             }
 
             else -> {
-                val favoriteTracks = appDatabase.favoritesDao().getTracksIds()
+                val favoriteTracks = appDatabase.getFavoritesDao().getTracksIds()
 
                 val data = (response as TracksHistoryResponse).results.map {
                     Track(
@@ -59,6 +59,7 @@ class HistoryRepositoryImpl(
             trackTimeMillis = track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
             previewUrl = track.previewUrl,
+            addedOnDate = 0 // для истории этот параметр не нужен
         )
         historyStorage.addTrackToHistory(trackEntity)
     }

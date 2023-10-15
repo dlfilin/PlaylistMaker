@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.favorites
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,17 +38,12 @@ class FavoritesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        Log.i("XXX", "Fragment onCreateView")
-
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("XXX", "Fragment onViewCreated")
-
         favoriteTracksAdapter = TrackListAdapter { onTrackClicked(track = it) }
 
         binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -65,8 +59,6 @@ class FavoritesFragment : Fragment() {
         favoriteTracksAdapter = null
         binding.favoritesRV.adapter = null
         _binding = null
-        Log.i("XXX", "Fragment onDestroyView")
-
     }
 
     private fun renderScreen(state: FavoritesScreenState) {
@@ -137,31 +129,7 @@ class FavoritesFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         viewModel.fillData()
-        Log.i("XXX", "Fragment onStart")
-
     }
-
-    override fun onResume() {
-        super.onResume()
-        Log.i("XXX", "Fragment onResume")
-
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.i("XXX", "Fragment onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("XXX", "Fragment onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("XXX", "Fragment onDestroy")
-
-    }
-
 
     companion object {
 

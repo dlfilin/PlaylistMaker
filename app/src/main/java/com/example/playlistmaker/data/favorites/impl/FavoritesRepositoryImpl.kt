@@ -11,18 +11,22 @@ import kotlinx.coroutines.flow.flow
 class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val trackDbConverter: TrackDbConverter,
-    ) : FavoritesRepository {
+) : FavoritesRepository {
 
     override suspend fun addToFavorites(track: Track) {
-        appDatabase.favoritesDao().insertTrack(trackDbConverter.map(track))
+        appDatabase.getFavoritesDao().insertTrack(trackDbConverter.map(track))
     }
 
     override suspend fun removeFromFavorites(track: Track) {
-        appDatabase.favoritesDao().deleteTrack(trackDbConverter.map(track))
+        appDatabase.getFavoritesDao().deleteTrack(trackDbConverter.map(track))
     }
 
     override fun getFavoriteTracks(): Flow<List<Track>> = flow {
-        val tracks = appDatabase.favoritesDao().getTracks()
+        val tracks = appDatabase
+            .getFavoritesDao()
+            .getTracks()
+            .sortedByDescending { it.addedOnDate } // сортируем в обратном порядке по дате добавления в избранное
+
         emit(convertFromTrackEntity(tracks))
     }
 

@@ -32,6 +32,7 @@ class TrackDbConverter {
             trackTimeMillis = track.trackTimeMillis,
             artworkUrl100 = track.artworkUrl100,
             previewUrl = track.previewUrl,
+            addedOnDate = System.currentTimeMillis()
         )
     }
 }

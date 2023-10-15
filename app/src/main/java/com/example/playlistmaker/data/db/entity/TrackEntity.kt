@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_tracks_table")
 data class TrackEntity (
+
     @PrimaryKey @ColumnInfo(name = "track_id")
     val trackId: Int, // id трека
 
@@ -34,5 +35,9 @@ data class TrackEntity (
     val artworkUrl100: String?, // Ссылка на изображение обложки
 
     @ColumnInfo(name = "preview_url")
-    val previewUrl: String? // Ссылка на отрывок трека
+    val previewUrl: String?, // Ссылка на отрывок трека
+
+    @ColumnInfo(name = "added_on_date")
+    val addedOnDate: Long, // Дата добавления трека
+
 )
