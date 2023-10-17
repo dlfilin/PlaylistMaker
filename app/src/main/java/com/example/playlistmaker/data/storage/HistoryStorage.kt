@@ -1,13 +1,13 @@
-package com.example.playlistmaker.data.search
+package com.example.playlistmaker.data.storage
 
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.dto.Response
-import com.example.playlistmaker.data.dto.TrackDto
 
 interface HistoryStorage {
 
     suspend fun getTracksFromHistory(): Response
 
-    suspend fun addTrackToHistory(track: TrackDto)
+    suspend fun addTrackToHistory(track: TrackEntity)
 
     suspend fun clearTracksHistory()
 

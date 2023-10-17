@@ -2,16 +2,16 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.example.playlistmaker.App
-import com.example.playlistmaker.data.FavoritesStorage
-import com.example.playlistmaker.data.search.HistoryStorage
+import com.example.playlistmaker.data.db.AppDatabase
+import com.example.playlistmaker.data.storage.HistoryStorage
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.ItunesApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.search.impl.HistoryStorageImpl
+import com.example.playlistmaker.data.storage.impl.HistoryStorageImpl
 import com.example.playlistmaker.data.settings.SettingsStorage
 import com.example.playlistmaker.data.settings.impl.SettingsStorageImpl
-import com.example.playlistmaker.data.storage.FavoritesStorageImpl
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -40,12 +40,13 @@ val dataModule = module {
         HistoryStorageImpl(get(), get())
     }
 
-    single<FavoritesStorage> {
-        FavoritesStorageImpl(get())
-    }
-
     single<SettingsStorage> {
         SettingsStorageImpl(get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
 }

@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:itemCount="3"
-                    tools:listitem="@layout/search_item_view" />
+                    tools:listitem="@layout/track_item_view" />
 
                 <Button
                     android:id="@+id/tracks_history_clear"

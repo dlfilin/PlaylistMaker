@@ -1,8 +1,8 @@
-package com.example.playlistmaker.domain.search.impl
+package com.example.playlistmaker.domain.history.impl
 
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.search.HistoryInteractor
-import com.example.playlistmaker.domain.search.HistoryRepository
+import com.example.playlistmaker.domain.history.HistoryInteractor
+import com.example.playlistmaker.domain.history.HistoryRepository
 import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

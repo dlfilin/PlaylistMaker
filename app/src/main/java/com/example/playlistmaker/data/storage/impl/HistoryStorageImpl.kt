@@ -1,10 +1,10 @@
-package com.example.playlistmaker.data.search.impl
+package com.example.playlistmaker.data.storage.impl
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.data.search.HistoryStorage
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.dto.Response
-import com.example.playlistmaker.data.dto.TrackDto
-import com.example.playlistmaker.data.dto.TracksSearchResponse
+import com.example.playlistmaker.data.dto.TracksHistoryResponse
+import com.example.playlistmaker.data.storage.HistoryStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -23,11 +23,11 @@ class HistoryStorageImpl(
                 val tracksJSON = sharedPreferences.getString(KEY_TRACKS_HISTORY, null)
 
                 if (tracksJSON != null) {
-                    TracksSearchResponse(
-                        gson.fromJson(tracksJSON, Array<TrackDto>::class.java).asList()
+                    TracksHistoryResponse(
+                        gson.fromJson(tracksJSON, Array<TrackEntity>::class.java).asList()
                     )
                 } else {
-                    TracksSearchResponse(emptyList())
+                    TracksHistoryResponse(emptyList())
                 }
             }
         } catch (e: Throwable) {
@@ -35,9 +35,9 @@ class HistoryStorageImpl(
         }
     }
 
-    override suspend fun addTrackToHistory(track: TrackDto) {
+    override suspend fun addTrackToHistory(track: TrackEntity) {
 
-        val tracks = (getTracksFromHistory() as TracksSearchResponse).results.toMutableList()
+        val tracks = (getTracksFromHistory() as TracksHistoryResponse).results.toMutableList()
 
         val wasRemoved = tracks.remove(track)
         if (!wasRemoved && tracks.size == MAX_HISTORY_SIZE) {
