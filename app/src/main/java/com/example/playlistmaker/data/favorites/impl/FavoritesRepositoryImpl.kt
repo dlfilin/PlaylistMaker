@@ -25,7 +25,6 @@ class FavoritesRepositoryImpl(
         val tracks = appDatabase
             .getFavoritesDao()
             .getTracks()
-            .sortedByDescending { it.addedOnDate } // сортируем в обратном порядке по дате добавления в избранное
 
         emit(convertFromTrackEntity(tracks))
     }

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.favorites
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,8 +18,6 @@ class FavoritesViewModel(
     fun observeState(): LiveData<FavoritesScreenState> = stateLiveData
 
     fun fillData() {
-        Log.i("XXX", "fillData")
-
         renderState(FavoritesScreenState.Loading)
         viewModelScope.launch {
             favoritesInteractor

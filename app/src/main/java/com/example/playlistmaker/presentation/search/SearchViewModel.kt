@@ -52,7 +52,7 @@ class SearchViewModel(
         if (newSearchText.isNotEmpty()) {
             renderState(SearchScreenState.Loading)
 
-            viewModelScope.launch{
+            viewModelScope.launch {
                 searchInteractor.searchTracks(newSearchText).collect { pair ->
                     processSearchResult(pair.first, pair.second)
                 }
@@ -84,11 +84,10 @@ class SearchViewModel(
         }
     }
 
-
     fun renderTracksHistory() {
         viewModelScope.launch {
             historyInteractor.getTracksFromHistory().collect { pair ->
-                processHistoryResult(pair.first, pair.second)
+                processHistoryResult(foundTracks = pair.first, errorCode = pair.second)
             }
         }
     }
