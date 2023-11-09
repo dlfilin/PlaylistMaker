@@ -28,7 +28,7 @@
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginBottom="@dimen/space_24"
         android:background="@drawable/rounded_rect"
-        android:backgroundTint="@color/search_bg">
+        android:backgroundTint="@color/light_gray_white">
 
         <EditText
             android:id="@+id/searchEditText"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:autofillHints="@string/search"
-            android:backgroundTint="@color/search_bg"
+            android:backgroundTint="@color/light_gray_white"
             android:drawableStart="@drawable/ic_search_16"
             android:drawablePadding="@dimen/space_8"
             android:drawableTint="@color/gray_black"

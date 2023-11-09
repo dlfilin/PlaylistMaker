@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.converters
 
+import com.example.playlistmaker.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.models.Track
 
@@ -35,4 +36,5 @@ class TrackDbConverter {
             addedOnDate = System.currentTimeMillis()
         )
     }
+
 }

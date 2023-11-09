@@ -34,5 +34,14 @@
     <string name="new_playlist">New playlist</string>
     <string name="favorites_title">Favorite tracks</string>
     <string name="playlists_title">Playlists</string>
+    <string name="playlist_cover">playlist_cover</string>
+    <string name="playlist_name">Name*</string>
+    <string name="playlist_description">Description</string>
+    <string name="playlist_create">Create</string>
+    <string name="playlist_created">Playlist %1$s is created</string>
+    <string name="exit_dialog_title">Завершить создание плейлиста?</string>
+    <string name="exit_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="exit_dialog_close">Завершить</string>
+    <string name="exit_dialog_cancel">Отмена</string>
 
 </resources>

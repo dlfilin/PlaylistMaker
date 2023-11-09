@@ -15,7 +15,7 @@ class TrackViewHolder(private val binding: TrackItemViewBinding) :
             .load(model.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.track_rounded_corner)))
+            .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.rounded_corner_2)))
             .into(binding.trackArt)
 
         with(binding) {

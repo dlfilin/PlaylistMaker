@@ -10,8 +10,10 @@ import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.ItunesApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.storage.impl.HistoryStorageImpl
-import com.example.playlistmaker.data.settings.SettingsStorage
-import com.example.playlistmaker.data.settings.impl.SettingsStorageImpl
+import com.example.playlistmaker.data.storage.SettingsStorage
+import com.example.playlistmaker.data.storage.impl.SettingsStorageImpl
+import com.example.playlistmaker.data.storage.ImagesStorage
+import com.example.playlistmaker.data.storage.impl.ImagesStorageImpl
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -42,6 +44,10 @@ val dataModule = module {
 
     single<SettingsStorage> {
         SettingsStorageImpl(get())
+    }
+
+    single<ImagesStorage> {
+        ImagesStorageImpl(androidContext())
     }
 
     single {

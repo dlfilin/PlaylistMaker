@@ -73,7 +73,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/ys_regular_13</item>
-        <item name="android:textColor">@color/track_gray</item>
+        <item name="android:textColor">@color/yp_gray</item>
     </style>
 
     <style name="track_info_values">

@@ -20,6 +20,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.search.SearchScreenState
 import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.player.PlayerActivity
+import com.example.playlistmaker.ui.root.RootActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -223,6 +224,8 @@ class SearchFragment : Fragment() {
     private fun onTrackClicked(track: Track) {
         if (clickDebounced()) {
             viewModel.addTrackToHistory(track = track)
+
+            (activity as RootActivity).animateBottomNavigationView()
 
             findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                 PlayerActivity.createArgs(gson.toJson(track)))

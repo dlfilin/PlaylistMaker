@@ -3,7 +3,7 @@ package com.example.playlistmaker.ui.library
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.playlistmaker.ui.favorites.FavoritesFragment
-import com.example.playlistmaker.ui.playlist.PlaylistFragment
+import com.example.playlistmaker.ui.playlists.PlaylistsFragment
 
 class LibraryViewPagerAdapter(parentFragment: Fragment) :
     FragmentStateAdapter(parentFragment) {
@@ -15,7 +15,7 @@ class LibraryViewPagerAdapter(parentFragment: Fragment) :
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> FavoritesFragment.newInstance()
-            else -> PlaylistFragment.newInstance()
+            else -> PlaylistsFragment.newInstance()
         }
     }
 

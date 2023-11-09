@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/space_8"
+    android:paddingStart="@dimen/space_13"
+    android:paddingEnd="@dimen/space_12"
+    tools:viewBindingIgnore="false">
+
+    <ImageView
+        android:id="@+id/playlist_cover"
+        android:layout_width="@dimen/size_45"
+        android:layout_height="@dimen/size_45"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_placeholder"
+        android:contentDescription="@string/playlist_cover" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_8"
+        android:layout_marginEnd="@dimen/space_8"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/playlist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/ys_regular_16"
+            android:textColor="@color/bw_text"
+            tools:text="Yesterday (Remastered 2009)1111111111111111111111111" />
+
+        <TextView
+            android:id="@+id/playlist_track_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/ys_regular_11"
+            android:textColor="@color/gray_white"
+            tools:text="The Beatles111111111111111111111111111111111111" />
+
+    </LinearLayout>
+
+</LinearLayout>
