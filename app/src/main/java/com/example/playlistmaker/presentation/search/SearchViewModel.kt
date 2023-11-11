@@ -30,7 +30,7 @@ class SearchViewModel(
     fun searchDebounced(changedText: String, debounced: Boolean) {
 
         if (changedText.isBlank()) {
-            renderTracksHistory()
+            //renderTracksHistory()
             searchJob?.cancel()
             return
         }

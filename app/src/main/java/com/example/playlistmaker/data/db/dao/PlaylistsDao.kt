@@ -1,31 +1,27 @@
 package com.example.playlistmaker.data.db.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.Update
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.data.db.entity.PlaylistTrackCrossRef
-import com.example.playlistmaker.data.db.entity.PlaylistTrackEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlaylistTracksDao {
+interface PlaylistsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrack(track: PlaylistTrackEntity): Long
+    suspend fun insertNewPlaylist(playlist: PlaylistEntity): Long
+
+    @Update
+    suspend fun updatePlaylist(playlist: PlaylistEntity): Int
+
+    @Query("SELECT * FROM playlists_table")
+    fun getPlaylists(): Flow<List<PlaylistEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCrossRef(crossRef: PlaylistTrackCrossRef): Long
-
-    @Query("""
-            SELECT COUNT(*) > 0
-            FROM playlist_track_crossref
-            WHERE playlist_id = :playlistId
-            AND track_id = :trackId
-        """
-    )
-    suspend fun isTrackInPlaylist(trackId: Int, playlistId: Long): Boolean
 
 }

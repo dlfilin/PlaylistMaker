@@ -40,7 +40,18 @@ data class TrackEntity (
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean, // Добавлен ли в Favorites
 
-    @ColumnInfo(name = "added_to_fav")
-    val addedToFav: Long, // Дата добавления трека в Favorites
+    @ColumnInfo(name = "fav_last_update")
+    val favLastUpdate: Long?, // Дата изменения статуса isFavorite
 
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TrackEntity) return false
+
+        return trackId == other.trackId
+    }
+
+    override fun hashCode(): Int {
+        return trackId.hashCode()
+    }
+}

@@ -19,7 +19,7 @@ class PlayerBottomSheetViewHolder(private val binding: PlaylistItemSmallBinding)
 
         with(binding) {
             playlistName.text = model.name
-            playlistTrackCount.text = model.trackIds.size.toString()
+            playlistTrackCount.text = model.tracksCount.toString()
         }
     }
 

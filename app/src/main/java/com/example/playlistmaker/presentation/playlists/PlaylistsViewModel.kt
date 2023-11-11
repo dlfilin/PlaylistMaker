@@ -22,11 +22,11 @@ class PlaylistsViewModel(
 
     fun loadPlaylists() {
 
-        Log.d("loadPlaylists", System.currentTimeMillis().toString())
+        Log.d("XXX", "loadPlaylists before coroutine")
 
         viewModelScope.launch {
             playlistsInteractor.getPlaylists().collect {
-                Log.d("Coroutine", it.toString())
+                Log.d("XXX", "loadPlaylists $it")
                 processLoadPlaylists(it)
             }
         }

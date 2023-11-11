@@ -20,6 +20,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.new_playlist.NewPlaylistViewModel
+import com.example.playlistmaker.ui.root.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -103,7 +104,7 @@ class NewPlaylistFragment : Fragment() {
         }
 
         viewModel.observeCloseFragmentEvent().observe(viewLifecycleOwner) { toBeClosed ->
-            if (toBeClosed == true) findNavController().navigateUp()
+            if (toBeClosed == true) closeFragment()
         }
 
     }
@@ -119,7 +120,7 @@ class NewPlaylistFragment : Fragment() {
             if (imageUri != null || edittextName.text!!.isNotBlank() || edittextDescription.text!!.isNotBlank()) {
                 showExitDialog()
             } else {
-                findNavController().navigateUp()
+                closeFragment()
             }
         }
     }
@@ -128,11 +129,22 @@ class NewPlaylistFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.exit_dialog_title))
             .setMessage(getString(R.string.exit_dialog_message))
             .setPositiveButton(getString(R.string.exit_dialog_close)) { _, _ ->
-                findNavController().navigateUp()
+                closeFragment()
             }.setNeutralButton(getString(R.string.exit_dialog_cancel)) { _, _ ->
             }.show()
     }
 
+    private fun closeFragment() {
+        Log.d("XXX", "closeFragment" + requireActivity()::class.toString())
+        val rootActivity = requireActivity()
+        if (rootActivity is RootActivity) {
+            Log.d("XXX", "RootActivity")
+            findNavController().navigateUp()
+        } else {
+            Log.d("XXX", "PlayerActivity")
+            rootActivity.supportFragmentManager.popBackStack()
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         textWatcher.let { binding.edittextName.removeTextChangedListener(it) }

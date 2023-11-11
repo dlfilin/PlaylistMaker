@@ -48,7 +48,7 @@ class PlaylistsFragment : Fragment() {
         binding.playlistsRV.adapter = playlistsAdapter
 
         binding.newPlaylistButton.setOnClickListener {
-            (activity as RootActivity).animateBottomNavigationView()
+//            (activity as RootActivity).animateBottomNavigationView()
             findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment)
         }
 
@@ -56,16 +56,16 @@ class PlaylistsFragment : Fragment() {
             renderScreen(it)
         }
 
-        binding.addList.setOnClickListener {
-            Log.d("pressed", it.toString())
-
-            viewModel.addRandomPlaylist(
-                Playlist(
-                    name = UUID.randomUUID().toString(),
-                    description = UUID.randomUUID().toString(),
-                )
-            )
-        }
+//        binding.addList.setOnClickListener {
+//            Log.d("pressed", it.toString())
+//
+//            viewModel.addRandomPlaylist(
+//                Playlist(
+//                    name = UUID.randomUUID().toString(),
+//                    description = UUID.randomUUID().toString(),
+//                )
+//            )
+//        }
     }
 
     override fun onDestroyView() {

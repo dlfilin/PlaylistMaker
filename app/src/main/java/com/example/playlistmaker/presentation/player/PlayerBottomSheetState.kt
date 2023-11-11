@@ -6,7 +6,7 @@ sealed interface PlayerBottomSheetState {
 
     object Hidden : PlayerBottomSheetState
 
-    data class Shown(val playlists: List<Playlist>) : PlayerBottomSheetState
+    data class Content(val playlists: List<Playlist>) : PlayerBottomSheetState
 
     data class TrackAddedResult(val result: Boolean) : PlayerBottomSheetState
 

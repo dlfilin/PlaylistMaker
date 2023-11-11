@@ -3,6 +3,7 @@ package com.example.playlistmaker.ui.player
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -18,6 +19,7 @@ import com.example.playlistmaker.presentation.player.PlayerBottomSheetState
 import com.example.playlistmaker.presentation.player.PlayerScreenState
 import com.example.playlistmaker.presentation.player.PlayerState
 import com.example.playlistmaker.presentation.player.PlayerViewModel
+import com.example.playlistmaker.ui.new_playlist.NewPlaylistFragment
 import com.example.playlistmaker.ui.playlists.PlaylistsAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
@@ -46,7 +48,6 @@ class PlayerActivity : AppCompatActivity() {
     private var isClickAllowed = true
 
     private val playlistsAdapter = PlaylistsAdapter { onPlaylistClicked(it) }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,15 +136,16 @@ class PlayerActivity : AppCompatActivity() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        binding.addList.setOnClickListener {
-            Log.d("pressed", it.toString())
+        binding.btCreatePlaylist.setOnClickListener {
 
-            viewModel.addRandomPlaylist(
-                Playlist(
-                    name = UUID.randomUUID().toString(),
-                    description = UUID.randomUUID().toString(),
-                )
-            )
+            Log.d("XXX", "supportFragmentManager.fragments before = ${supportFragmentManager.fragments}")
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, NewPlaylistFragment()).addToBackStack(null)
+                .commit()
+
+            Log.d("XXX", "supportFragmentManager.fragments after = ${supportFragmentManager.fragments}")
+
         }
 
         viewModel.preparePlayer()
@@ -214,12 +216,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun renderBottomSheetState(state: PlayerBottomSheetState) {
         when (state) {
-            is PlayerBottomSheetState.Shown -> {
+            is PlayerBottomSheetState.Content -> {
                 playlistsAdapter.updateListItems(state.playlists)
             }
+
             is PlayerBottomSheetState.Hidden -> {
 
             }
+
             is PlayerBottomSheetState.TrackAddedResult -> {
                 Log.d("renderBottomSheetState", state.result.toString())
             }
@@ -241,7 +245,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun onPlaylistClicked(playlist: Playlist) {
         if (clickDebounced()) {
             Toast.makeText(
-                this, playlist.name, Toast.LENGTH_LONG
+                this, playlist.toString(), Toast.LENGTH_LONG
             ).show()
             viewModel.addTrackToPlaylist(playlist)
         }

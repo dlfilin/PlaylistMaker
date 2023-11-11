@@ -20,7 +20,7 @@ class PlaylistViewHolder(private val binding: PlaylistItemBigBinding) :
 
         with(binding) {
             playlistName.text = model.name
-            playlistTrackCount.text = model.trackIds.size.toString()
+            playlistTrackCount.text = model.tracksCount.toString()
         }
     }
 

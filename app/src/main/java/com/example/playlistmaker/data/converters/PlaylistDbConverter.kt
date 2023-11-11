@@ -13,6 +13,7 @@ class PlaylistDbConverter {
                 name = name,
                 description = description,
                 imageUri = imageUri?.toString(),
+                tracksCount = tracksCount
             )
         }
     }
@@ -24,6 +25,7 @@ class PlaylistDbConverter {
                 name = name,
                 description = description,
                 imageUri = imageUri?.let { Uri.parse(it) ?: null },
+                tracksCount = tracksCount
             )
         }
     }

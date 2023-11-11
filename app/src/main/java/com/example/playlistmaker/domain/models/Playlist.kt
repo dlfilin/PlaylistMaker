@@ -7,5 +7,5 @@ data class Playlist(
     val name: String,
     val description: String?,
     val imageUri: Uri? = null,
-    val trackIds: List<Int> = emptyList(),
+    val tracksCount: Int = 0,
 )

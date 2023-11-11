@@ -1,40 +1,45 @@
 package com.example.playlistmaker.data.converters
 
-import com.example.playlistmaker.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.models.Track
 
 class TrackDbConverter {
 
     fun map(track: TrackEntity): Track {
-        return Track(
-            trackId = track.trackId,
-            trackName = track.trackName ?: "",
-            artistName = track.artistName ?: "",
-            collectionName = track.collectionName ?: "",
-            releaseYear = track.releaseYear ?: "",
-            primaryGenreName = track.primaryGenreName ?: "",
-            country = track.country ?: "",
-            trackTimeMillis = track.trackTimeMillis ?: "",
-            artworkUrl100 = track.artworkUrl100 ?: "",
-            previewUrl = track.previewUrl ?: "",
-        )
+        return with(track) {
+            Track(
+                trackId = trackId,
+                trackName = trackName ?: "",
+                artistName = artistName ?: "",
+                collectionName = collectionName ?: "",
+                releaseYear = releaseYear ?: "",
+                primaryGenreName = primaryGenreName ?: "",
+                country = country ?: "",
+                trackTimeMillis = trackTimeMillis ?: "",
+                artworkUrl100 = artworkUrl100 ?: "",
+                previewUrl = previewUrl ?: "",
+                isFavorite = isFavorite
+            )
+        }
     }
 
     fun map(track: Track): TrackEntity {
-        return TrackEntity(
-            trackId = track.trackId,
-            trackName = track.trackName,
-            artistName = track.artistName,
-            collectionName = track.collectionName,
-            releaseYear = track.releaseYear,
-            primaryGenreName = track.primaryGenreName,
-            country = track.country,
-            trackTimeMillis = track.trackTimeMillis,
-            artworkUrl100 = track.artworkUrl100,
-            previewUrl = track.previewUrl,
-            addedOnDate = System.currentTimeMillis()
-        )
+        return with(track)  {
+            TrackEntity(
+                trackId = trackId,
+                trackName = trackName,
+                artistName = artistName,
+                collectionName = collectionName,
+                releaseYear = releaseYear,
+                primaryGenreName = primaryGenreName,
+                country = country,
+                trackTimeMillis = trackTimeMillis,
+                artworkUrl100 = artworkUrl100,
+                previewUrl = previewUrl,
+                isFavorite = isFavorite,
+                favLastUpdate = null
+            )
+        }
     }
 
 }

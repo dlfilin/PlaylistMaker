@@ -23,12 +23,6 @@
         android:textColor="@color/white_black"
         app:cornerRadius="@dimen/corner_radius_PH_button" />
 
-    <Button
-        android:id="@+id/addList"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Add Random"/>
-
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="44dp"
@@ -41,7 +35,8 @@
         android:id="@+id/playlistsRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_marginTop="76dp"
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/placeholderView"

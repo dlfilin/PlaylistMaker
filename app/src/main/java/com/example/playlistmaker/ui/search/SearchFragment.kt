@@ -225,7 +225,7 @@ class SearchFragment : Fragment() {
         if (clickDebounced()) {
             viewModel.addTrackToHistory(track = track)
 
-            (activity as RootActivity).animateBottomNavigationView()
+//            (activity as RootActivity).animateBottomNavigationView()
 
             findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
                 PlayerActivity.createArgs(gson.toJson(track)))

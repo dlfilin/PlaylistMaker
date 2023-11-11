@@ -13,13 +13,13 @@ import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    private val track: Track,
+    private var track: Track,
     private val playerInteractor: PlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
     private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
-    private val screenStateLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
+    private val screenStateLiveData = MutableLiveData<PlayerScreenState>()
     private val playerStateLiveData = MutableLiveData(PlayerState.STATE_DEFAULT)
     private val trackPositionLiveData = MutableLiveData(0)
     private val bottomSheetStateLiveData =
@@ -99,48 +99,37 @@ class PlayerViewModel(
     }
 
     fun onFavoriteClicked() {
-
         viewModelScope.launch {
-            val isFavorite =
-                (screenStateLiveData.value as PlayerScreenState.Content).track.isFavorite
-            if (isFavorite) {
-                favoritesInteractor.removeFromFavorites(track)
-            } else {
-                favoritesInteractor.addToFavorites(track)
-            }
-
-            screenStateLiveData.postValue(PlayerScreenState.Content(track.copy(isFavorite = !isFavorite)))
+            favoritesInteractor.reverseFavoriteState(track)
+            track = track.let { old -> old.copy(isFavorite = !old.isFavorite) }
+            screenStateLiveData.postValue(PlayerScreenState.Content(track))
         }
     }
 
     fun loadPlaylists() {
 
-        Log.d("loadPlaylists", System.currentTimeMillis().toString())
+        Log.d("XXX", "loadPlaylists before launch coroutine")
 
         viewModelScope.launch {
             playlistsInteractor.getPlaylists().collect {
-                Log.d("Coroutine", it.toString())
-                bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Shown(it))
+                Log.d("XXX", "Coroutine loadPlaylists $it")
+
+                bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Content(it))
             }
         }
     }
 
     fun addTrackToPlaylist(playlist: Playlist) {
 
-        Log.d("addTrackToPlaylist", System.currentTimeMillis().toString())
+        Log.d("XXX", "addTrackToPlaylist before launch coroutine $playlist")
 
         viewModelScope.launch {
             val result = playlistsInteractor.addTrackToPlaylist(track, playlist)
-            Log.d("Coroutine", result.toString())
+            Log.d("XXX", "addTrackToPlaylist $result")
+            //тут надо поменять логику показа Toast
             bottomSheetStateLiveData.postValue(PlayerBottomSheetState.TrackAddedResult(result))
         }
 
-    }
-
-    fun addRandomPlaylist(playlist: Playlist) {
-        viewModelScope.launch {
-            playlistsInteractor.createPLaylist(playlist)
-        }
     }
 
 }

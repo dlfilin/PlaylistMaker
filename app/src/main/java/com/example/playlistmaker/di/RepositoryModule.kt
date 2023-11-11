@@ -1,7 +1,6 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.converters.PlaylistDbConverter
-import com.example.playlistmaker.data.converters.PlaylistTrackDbConverter
 import com.example.playlistmaker.data.converters.TrackDbConverter
 import com.example.playlistmaker.data.favorites.FavoritesRepositoryImpl
 import com.example.playlistmaker.data.player.PlayerRepositoryImpl
@@ -30,7 +29,7 @@ val repositoryModule = module {
 
     single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 
-    single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(get(), get(), get()) }
 
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
 
@@ -41,8 +40,6 @@ val repositoryModule = module {
     single<ImagesStorage> { ImagesStorageImpl(androidContext()) }
 
     factory { TrackDbConverter() }
-
-    factory { PlaylistTrackDbConverter() }
 
     factory { PlaylistDbConverter() }
 

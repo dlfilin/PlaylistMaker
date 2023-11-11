@@ -7,11 +7,11 @@
     android:orientation="vertical"
     tools:context=".ui.player.PlayerActivity">
 
-    <Button
-        android:id="@+id/addList"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Add Random"/>
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_black" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -269,13 +269,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/playlists_bottom_sheet"
         android:layout_width="match_parent"
@@ -303,7 +296,7 @@
             android:textSize="@dimen/font_19" />
 
         <Button
-            android:id="@+id/create_button"
+            android:id="@+id/bt_create_playlist"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size_36"
             android:layout_marginTop="@dimen/space_16"
@@ -328,11 +321,9 @@
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_graph_player"
+        android:id="@+id/fragment_container_view"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        app:defaultNavHost="false" />
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
