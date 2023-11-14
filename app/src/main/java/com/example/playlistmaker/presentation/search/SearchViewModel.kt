@@ -30,7 +30,6 @@ class SearchViewModel(
     fun searchDebounced(changedText: String, debounced: Boolean) {
 
         if (changedText.isBlank()) {
-            //renderTracksHistory()
             searchJob?.cancel()
             return
         }
@@ -69,11 +68,9 @@ class SearchViewModel(
             errorCode != null -> {
                 stateLiveData.postValue(SearchScreenState.Error(code = errorCode))
             }
-
             tracks.isEmpty() -> {
                 stateLiveData.postValue(SearchScreenState.EmptySearch)
             }
-
             else -> {
                 stateLiveData.postValue(
                     SearchScreenState.Content(
@@ -97,11 +94,9 @@ class SearchViewModel(
             errorCode != null -> {
                 stateLiveData.postValue(SearchScreenState.Error(code = errorCode))
             }
-
             foundTracks.isNullOrEmpty() -> {
                 stateLiveData.postValue(SearchScreenState.ClearScreen)
             }
-
             else -> {
                 stateLiveData.postValue(
                     SearchScreenState.History(

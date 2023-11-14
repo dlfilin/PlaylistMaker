@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.new_playlist
 
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -8,13 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
@@ -22,7 +24,9 @@ import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.new_playlist.NewPlaylistViewModel
 import com.example.playlistmaker.ui.root.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class NewPlaylistFragment : Fragment() {
 
@@ -31,9 +35,12 @@ class NewPlaylistFragment : Fragment() {
 
     private val viewModel: NewPlaylistViewModel by viewModel()
 
-    private lateinit var textWatcher: TextWatcher
+    private lateinit var textWatcherName: TextWatcher
+    private lateinit var textWatcherDescription: TextWatcher
 
     private var imageUri: Uri? = null
+    private lateinit var boxStrokeEmpty: ColorStateList
+    private lateinit var boxStrokeFilled: ColorStateList
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -49,17 +56,16 @@ class NewPlaylistFragment : Fragment() {
             handleBackPressed()
         }
 
+        boxStrokeEmpty = AppCompatResources.getColorStateList(requireContext(), R.color.outlined_stroke_empty)
+        boxStrokeFilled = AppCompatResources.getColorStateList(requireContext(), R.color.outlined_stroke_filled)
+
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                // Callback вызовется, когда пользователь выберет картинку
                 if (uri != null) {
-                    Log.d("PhotoPicker", "Выбранный URI: $uri")
-//                binding.playlistCover.setImageURI(uri)
-//                binding.playlistCover.scaleType = ImageView.ScaleType.CENTER_CROP
-
-                    Glide.with(this).load(uri).centerCrop()
-                        .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.rounded_corner_8)))
-                        .into(binding.playlistCover)
+                    Glide.with(this).load(uri).transform(
+                        CenterCrop(),
+                        RoundedCorners(resources.getDimensionPixelSize(R.dimen.rounded_corner_8))
+                    ).into(binding.playlistCover)
 
                     imageUri = uri
 
@@ -84,23 +90,52 @@ class NewPlaylistFragment : Fragment() {
             )
         }
 
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        textWatcherName = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.d("textWatcher", (!s.isNullOrBlank()).toString())
                 binding.btCreatePlaylist.isEnabled = !s.isNullOrBlank()
+
+                with (binding.textLayoutName) {
+                    defaultHintTextColor = if (s.isNullOrBlank()) {
+                        setBoxStrokeColorStateList(boxStrokeEmpty)
+                        boxStrokeEmpty
+                    } else {
+                        setBoxStrokeColorStateList(boxStrokeFilled)
+                        boxStrokeFilled
+                    }
+                }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
         }
+        binding.edittextName.addTextChangedListener(textWatcherName)
 
-        binding.edittextName.addTextChangedListener(textWatcher)
+        textWatcherDescription = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        viewModel.observeShowToastEvent().observe(viewLifecycleOwner) { toast ->
-            showToast(getString(R.string.playlist_created, toast))
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                with (binding.textLayoutDescription) {
+                    defaultHintTextColor = if (s.isNullOrBlank()) {
+                        setBoxStrokeColorStateList(boxStrokeEmpty)
+                        boxStrokeEmpty
+                    } else {
+                        setBoxStrokeColorStateList(boxStrokeFilled)
+                        boxStrokeFilled
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+        binding.edittextDescription.addTextChangedListener(textWatcherDescription)
+
+        viewModel.observeShowSnackBarEvent().observe(viewLifecycleOwner) { message ->
+            if (message != null) {
+                showSnackBar(getString(R.string.playlist_created, message))
+            } else {
+                showSnackBar(getString(R.string.playlist_not_created))
+            }
         }
 
         viewModel.observeCloseFragmentEvent().observe(viewLifecycleOwner) { toBeClosed ->
@@ -109,10 +144,8 @@ class NewPlaylistFragment : Fragment() {
 
     }
 
-    private fun showToast(toast: String) {
-        Toast.makeText(
-            requireContext(), toast, Toast.LENGTH_LONG
-        ).show()
+    private fun showSnackBar(toast: String) {
+        Snackbar.make(binding.root, toast, Snackbar.LENGTH_LONG).show()
     }
 
     private fun handleBackPressed() {
@@ -135,19 +168,18 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun closeFragment() {
-        Log.d("XXX", "closeFragment" + requireActivity()::class.toString())
         val rootActivity = requireActivity()
         if (rootActivity is RootActivity) {
-            Log.d("XXX", "RootActivity")
             findNavController().navigateUp()
         } else {
-            Log.d("XXX", "PlayerActivity")
             rootActivity.supportFragmentManager.popBackStack()
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        textWatcher.let { binding.edittextName.removeTextChangedListener(it) }
+        binding.edittextName.removeTextChangedListener(textWatcherName)
+        binding.edittextDescription.removeTextChangedListener(textWatcherDescription)
         _binding = null
     }
 

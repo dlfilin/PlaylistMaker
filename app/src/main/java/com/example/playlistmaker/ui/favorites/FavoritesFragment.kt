@@ -29,7 +29,8 @@ class FavoritesFragment : Fragment() {
 
     private val viewModel by viewModel<FavoritesViewModel>()
 
-    private var favoriteTracksAdapter: TrackListAdapter? = null
+    private var _favoriteTracksAdapter: TrackListAdapter? = null
+    private val favoriteTracksAdapter get() = _favoriteTracksAdapter!!
 
     private var isClickAllowed = true
 
@@ -39,15 +40,15 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _favoriteTracksAdapter = TrackListAdapter { onTrackClicked(track = it) }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        favoriteTracksAdapter = TrackListAdapter { onTrackClicked(track = it) }
 
-        binding.favoritesRV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.favoritesRV.adapter = favoriteTracksAdapter
+        binding.favoritesRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.favoritesRv.adapter = favoriteTracksAdapter
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             renderScreen(it)
@@ -56,8 +57,8 @@ class FavoritesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        favoriteTracksAdapter = null
-        binding.favoritesRV.adapter = null
+        _favoriteTracksAdapter = null
+        binding.favoritesRv.adapter = null
         _binding = null
     }
 
@@ -71,35 +72,28 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        with(binding) {
-            progressBar.isVisible = false
-            favoritesRV.isVisible = false
-            placeholderView.isVisible = true
-        }
+        showScreenViews(progressVisible = false, recyclerVisible = false, placeholderVisible = true)
     }
 
     private fun showError() {
-        with(binding) {
-            progressBar.isVisible = false
-            favoritesRV.isVisible = false
-            placeholderView.isVisible = true
-        }
+        showScreenViews(progressVisible = false, recyclerVisible = false, placeholderVisible = true)
     }
 
     private fun showContent(tracks: List<Track>) {
-        with(binding) {
-            progressBar.isVisible = false
-            favoritesRV.isVisible = true
-            placeholderView.isVisible = false
-        }
-        favoriteTracksAdapter?.updateListItems(tracks)
+        favoriteTracksAdapter.updateListItems(tracks)
+        showScreenViews(progressVisible = false, recyclerVisible = true, placeholderVisible = false)
     }
 
     private fun showLoading() {
+        showScreenViews(progressVisible = true, recyclerVisible = false, placeholderVisible = false)
+    }
+
+    private fun showScreenViews(progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean) {
         with(binding) {
-            progressBar.isVisible = true
-            favoritesRV.isVisible = false
-            placeholderView.isVisible = false
+            progressBar.isVisible = progressVisible
+            favoritesRv.isVisible = recyclerVisible
+            placeholderImage.isVisible = placeholderVisible
+            placeholderText.isVisible = placeholderVisible
         }
     }
 
@@ -122,13 +116,7 @@ class FavoritesFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_libraryFragment_to_playerActivity,
                 PlayerActivity.createArgs(gson.toJson(track)))
-
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.fillData()
     }
 
     companion object {

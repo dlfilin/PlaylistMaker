@@ -20,7 +20,6 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.search.SearchScreenState
 import com.example.playlistmaker.presentation.search.SearchViewModel
 import com.example.playlistmaker.ui.player.PlayerActivity
-import com.example.playlistmaker.ui.root.RootActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -68,8 +67,7 @@ class SearchFragment : Fragment() {
 
             placeholderRefresh.setOnClickListener {
                 viewModel.searchDebounced(
-                    changedText = searchEditText.text.toString(),
-                    debounced = false
+                    changedText = searchEditText.text.toString(), debounced = false
                 )
             }
 
@@ -82,8 +80,7 @@ class SearchFragment : Fragment() {
                     if (binding.searchEditText.text.isNotBlank()) {
                         hideInputKeyboard()
                         viewModel.searchDebounced(
-                            changedText = binding.searchEditText.text.toString(),
-                            debounced = false
+                            changedText = binding.searchEditText.text.toString(), debounced = false
                         )
                     }
                 }
@@ -99,8 +96,7 @@ class SearchFragment : Fragment() {
 
                 binding.clearSearch.isVisible = !s.isNullOrEmpty()
                 viewModel.searchDebounced(
-                    changedText = s.toString(),
-                    debounced = true
+                    changedText = s.toString(), debounced = true
                 )
             }
 
@@ -157,32 +153,31 @@ class SearchFragment : Fragment() {
     }
 
     private fun showClearScreen() {
-        with(binding) {
-            rvTrackSearch.visibility = View.GONE
-            tracksHistoryView.visibility = View.GONE
-            placeholderView.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
+        showScreenViews(
+            progressVisible = false,
+            searchRvVisible = false,
+            historyRvVisible = false,
+            placeholderVisible = false
+        )
     }
 
     private fun showLoading() {
-        with(binding) {
-            rvTrackSearch.visibility = View.GONE
-            tracksHistoryView.visibility = View.GONE
-            placeholderView.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-        }
+        showScreenViews(
+            progressVisible = true,
+            searchRvVisible = false,
+            historyRvVisible = false,
+            placeholderVisible = false
+        )
     }
 
     private fun showPlaceholder(isEmptyResult: Boolean, code: Int?) {
-
         with(binding) {
-
-            progressBar.visibility = View.GONE
-            rvTrackSearch.visibility = View.GONE
-            tracksHistoryView.visibility = View.GONE
-            placeholderView.visibility = View.VISIBLE
-
+            showScreenViews(
+                progressVisible = false,
+                searchRvVisible = false,
+                historyRvVisible = false,
+                placeholderVisible = true
+            )
             if (isEmptyResult) {
                 placeholderImage.setImageResource(R.drawable.ic_nothing_found)
                 placeholderText.text = getString(R.string.nothing_found)
@@ -203,16 +198,36 @@ class SearchFragment : Fragment() {
             rvTrackSearch.visibility = View.VISIBLE
         }
         tracksSearchAdapter.updateListItems(tracks)
+        showScreenViews(
+            progressVisible = false,
+            searchRvVisible = true,
+            historyRvVisible = false,
+            placeholderVisible = false
+        )
     }
 
     private fun showHistory(tracks: List<Track>) {
-        with(binding) {
-            progressBar.visibility = View.GONE
-            placeholderView.visibility = View.GONE
-            rvTrackSearch.visibility = View.GONE
-            tracksHistoryView.visibility = View.VISIBLE
-        }
         tracksHistoryAdapter.updateListItems(tracks)
+        showScreenViews(
+            progressVisible = false,
+            searchRvVisible = false,
+            historyRvVisible = true,
+            placeholderVisible = false
+        )
+    }
+
+    private fun showScreenViews(
+        progressVisible: Boolean,
+        searchRvVisible: Boolean,
+        historyRvVisible: Boolean,
+        placeholderVisible: Boolean
+    ) {
+        with(binding) {
+            progressBar.isVisible = progressVisible
+            placeholderView.isVisible = placeholderVisible
+            rvTrackSearch.isVisible = searchRvVisible
+            tracksHistoryView.isVisible = historyRvVisible
+        }
     }
 
     private fun handleClearSearchClick() {
@@ -225,10 +240,10 @@ class SearchFragment : Fragment() {
         if (clickDebounced()) {
             viewModel.addTrackToHistory(track = track)
 
-//            (activity as RootActivity).animateBottomNavigationView()
-
-            findNavController().navigate(R.id.action_searchFragment_to_playerActivity,
-                PlayerActivity.createArgs(gson.toJson(track)))
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerActivity,
+                PlayerActivity.createArgs(gson.toJson(track))
+            )
 
         }
     }

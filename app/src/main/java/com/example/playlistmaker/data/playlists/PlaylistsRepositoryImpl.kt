@@ -1,7 +1,6 @@
 package com.example.playlistmaker.data.playlists
 
 import android.net.Uri
-import android.util.Log
 import androidx.room.withTransaction
 import com.example.playlistmaker.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.data.converters.TrackDbConverter
@@ -44,28 +43,18 @@ class PlaylistsRepositoryImpl(
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
-        Log.d("XXX", "PlaylistsRepositoryImpl getPlaylists")
-
-        val result =  appDatabase.getPlaylistsDao().getPlaylists().map { listOfEntities ->
+        val result = appDatabase.getPlaylistsDao().getPlaylists().map { listOfEntities ->
             listOfEntities.map {
                 playlistDbConverter.map(it)
             }
         }
-        Log.d("XXX", "PlaylistsRepositoryImpl getPlaylists $result")
-
         return result
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Boolean {
-
-
-        Log.d("XXX", "addTrackToPlaylist 1  $playlist")
-
         val trackEntity = trackDbConverter.map(track)
         val playlistEntity = playlistDbConverter.map(playlist)
-        var result = true
-
-        Log.d("XXX", "addTrackToPlaylist 2  $playlistEntity")
+        var result = false
 
         appDatabase.withTransaction {
 
@@ -75,13 +64,7 @@ class PlaylistsRepositoryImpl(
             ) {
                 //не нужно добавлять
                 result = false
-
-                Log.d("XXX", "isTrackInPlaylist $result")
-
             } else {
-
-                Log.d("XXX", "isTrackInPlaylist $result")
-
                 appDatabase.getPlaylistsDao().insertCrossRef(
                     PlaylistTrackCrossRef(
                         playlistId = playlistEntity.playlistId,
@@ -89,21 +72,13 @@ class PlaylistsRepositoryImpl(
                         addedOnDate = System.currentTimeMillis()
                     )
                 )
-                Log.d("XXX", "before insertTrack $result")
-
                 appDatabase.getTracksDao().insertTrack(trackEntity)
-
-                Log.d("XXX", "before incrementTracksCount $result")
 
                 val pl = playlistEntity.incrementTracksCount()
 
-                Log.d("XXX", "pl = $pl")
-
-                appDatabase.getPlaylistsDao().updatePlaylist(pl)
-
+                result = appDatabase.getPlaylistsDao().updatePlaylist(pl) > 0
             }
         }
-
         return result
     }
 

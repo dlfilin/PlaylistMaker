@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_black"
+    android:clickable="true"
     tools:context=".ui.new_playlist.NewPlaylistFragment">
 
     <ImageButton
@@ -52,12 +53,14 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_layout_name"
+        style="@style/Widget.App.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_16"
         android:layout_marginTop="32dp"
         android:hint="@string/playlist_name"
-        app:boxBackgroundMode="outline"
+
+        android:minHeight="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playlist_cover">
@@ -65,16 +68,20 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edittext_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ys_regular_16"
+            android:textColor="@color/black_white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_layout_description"
+        style="@style/Widget.App.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="@dimen/space_16"
         android:hint="@string/playlist_description"
+        android:minHeight="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_layout_name">
@@ -82,16 +89,19 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edittext_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ys_regular_16"
+            android:textColor="@color/black_white" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
+        style="@style/Widget.App.CreateButton"
         android:id="@+id/bt_create_playlist"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:enabled="false"
         android:layout_marginHorizontal="17dp"
         android:layout_marginBottom="32dp"
-        android:enabled="false"
         android:text="@string/playlist_create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,30 +14,26 @@ class FavoritesViewModel(
     private val historyInteractor: HistoryInteractor
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<FavoritesScreenState>(FavoritesScreenState.EmptyList)
+    private val stateLiveData =
+        MutableLiveData<FavoritesScreenState>(FavoritesScreenState.EmptyList)
+
     fun observeState(): LiveData<FavoritesScreenState> = stateLiveData
 
-    fun fillData() {
-        renderState(FavoritesScreenState.Loading)
+    init {
+        fillData()
+    }
+
+    private fun fillData() {
+        stateLiveData.postValue(FavoritesScreenState.Loading)
         viewModelScope.launch {
-            favoritesInteractor
-                .getSavedFavorites()
-                .collect { tracks ->
-                    processResult(tracks)
+            favoritesInteractor.getSavedFavorites().collect { tracks ->
+                if (tracks.isEmpty()) {
+                    stateLiveData.postValue(FavoritesScreenState.EmptyList)
+                } else {
+                    stateLiveData.postValue(FavoritesScreenState.Content(tracks))
                 }
+            }
         }
-    }
-
-    private fun processResult(tracks: List<Track>) {
-        if (tracks.isEmpty()) {
-            renderState(FavoritesScreenState.EmptyList)
-        } else {
-            renderState(FavoritesScreenState.Content(tracks))
-        }
-    }
-
-    private fun renderState(state: FavoritesScreenState) {
-        stateLiveData.postValue(state)
     }
 
     fun addTrackToHistory(track: Track) {

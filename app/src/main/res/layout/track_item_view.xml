@@ -15,8 +15,7 @@
         android:id="@+id/track_art"
         android:layout_width="@dimen/size_45"
         android:layout_height="@dimen/size_45"
-        android:contentDescription="@string/track_image"
-        />
+        android:contentDescription="@string/track_image" />
 
     <LinearLayout
         android:layout_width="0dp"

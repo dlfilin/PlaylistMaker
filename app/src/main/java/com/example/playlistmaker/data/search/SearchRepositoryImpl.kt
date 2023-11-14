@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.search
 
-import android.util.Log
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.dto.TracksSearchResponse
@@ -23,10 +22,8 @@ class SearchRepositoryImpl(
             -1 -> {
                 emit(Resource.Error(code = -1))
             }
-
             200 -> {
                 val favoriteTracks = appDatabase.getTracksDao().getFavoriteTracksIds()
-                Log.d("SearchRepositoryImpl", favoriteTracks.toString())
 
                 val data = (response as TracksSearchResponse).results.map {
                     Track(

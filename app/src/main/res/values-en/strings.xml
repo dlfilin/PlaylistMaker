@@ -39,9 +39,12 @@
     <string name="playlist_description">Description</string>
     <string name="playlist_create">Create</string>
     <string name="playlist_created">Playlist %1$s is created</string>
-    <string name="exit_dialog_title">Завершить создание плейлиста?</string>
-    <string name="exit_dialog_message">Все несохраненные данные будут потеряны</string>
-    <string name="exit_dialog_close">Завершить</string>
-    <string name="exit_dialog_cancel">Отмена</string>
+    <string name="playlist_not_created">Playlist %1$s was not created</string>
+    <string name="exit_dialog_title">Confirm exit?</string>
+    <string name="exit_dialog_message">All unsaved data will be lost</string>
+    <string name="exit_dialog_close">Exit</string>
+    <string name="exit_dialog_cancel">Cancel</string>
+    <string name="track_added">Added to playlist %1$s</string>
+    <string name="track_not_added">Track is already added to %1$s</string>
 
 </resources>

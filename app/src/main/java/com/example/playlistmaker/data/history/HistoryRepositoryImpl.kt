@@ -1,13 +1,11 @@
 package com.example.playlistmaker.data.history
 
-import android.util.Log
 import com.example.playlistmaker.data.converters.TrackDbConverter
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.dto.TracksHistoryResponse
 import com.example.playlistmaker.data.storage.HistoryStorage
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.history.HistoryRepository
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,10 +24,8 @@ class HistoryRepositoryImpl(
             -1 -> {
                 emit(Resource.Error(code = -1))
             }
-
             else -> {
                 val favoriteTracks = appDatabase.getTracksDao().getFavoriteTracksIds()
-                Log.d("HistoryRepositoryImpl", favoriteTracks.toString())
 
                 val data = (response as TracksHistoryResponse).results.map {
                     trackDbConverter.map(it.copy(isFavorite = favoriteTracks.contains(it.trackId)))

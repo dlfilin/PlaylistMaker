@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.playlists
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +15,9 @@ import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.playlists.PlaylistsScreenState
 import com.example.playlistmaker.presentation.playlists.PlaylistsViewModel
-import com.example.playlistmaker.ui.root.RootActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.UUID
 
 class PlaylistsFragment : Fragment() {
 
@@ -31,45 +28,36 @@ class PlaylistsFragment : Fragment() {
 
     private var isClickAllowed = true
 
-    private val playlistsAdapter = PlaylistsAdapter { onPlaylistClicked(it) }
-
+    private var _playlistsAdapter: PlaylistsAdapter? = null
+    private val playlistsAdapter get() = _playlistsAdapter!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _playlistsAdapter = PlaylistsAdapter { onPlaylistClicked(playlist = it) }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.playlistsRV.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.playlistsRV.adapter = playlistsAdapter
+        binding.playlistsRv.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.playlistsRv.adapter = playlistsAdapter
 
-        binding.newPlaylistButton.setOnClickListener {
-//            (activity as RootActivity).animateBottomNavigationView()
+        binding.btNewPlaylist.setOnClickListener {
             findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment)
         }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             renderScreen(it)
         }
-
-//        binding.addList.setOnClickListener {
-//            Log.d("pressed", it.toString())
-//
-//            viewModel.addRandomPlaylist(
-//                Playlist(
-//                    name = UUID.randomUUID().toString(),
-//                    description = UUID.randomUUID().toString(),
-//                )
-//            )
-//        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _playlistsAdapter = null
+        binding.playlistsRv.adapter = null
         _binding = null
     }
 
@@ -83,35 +71,28 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        with(binding) {
-            progressBar.isVisible = false
-            playlistsRV.isVisible = false
-            placeholderView.isVisible = true
-        }
+        showScreenViews(progressVisible = false, recyclerVisible = false, placeholderVisible = true)
     }
 
     private fun showError() {
-        with(binding) {
-            progressBar.isVisible = false
-            playlistsRV.isVisible = false
-            placeholderView.isVisible = true
-        }
+        showScreenViews(progressVisible = false, recyclerVisible = false, placeholderVisible = true)
     }
 
     private fun showContent(playlists: List<Playlist>) {
-        with(binding) {
-            progressBar.isVisible = false
-            playlistsRV.isVisible = true
-            placeholderView.isVisible = false
-        }
         playlistsAdapter.updateListItems(playlists)
+        showScreenViews(progressVisible = false, recyclerVisible = true, placeholderVisible = false)
     }
 
     private fun showLoading() {
+        showScreenViews(progressVisible = true, recyclerVisible = false, placeholderVisible = false)
+    }
+
+    private fun showScreenViews(progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean) {
         with(binding) {
-            progressBar.isVisible = true
-            playlistsRV.isVisible = false
-            placeholderView.isVisible = false
+            progressBar.isVisible = progressVisible
+            playlistsRv.isVisible = recyclerVisible
+            placeholderImage.isVisible = placeholderVisible
+            placeholderText.isVisible = placeholderVisible
         }
     }
 

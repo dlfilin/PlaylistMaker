@@ -1,73 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.playlists.PlaylistsFragment">
-
-    <Button
-        android:id="@+id/newPlaylistButton"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_36"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/space_24"
-        android:backgroundTint="@color/black_white"
-        android:insetTop="@dimen/zeroDP"
-        android:insetBottom="@dimen/zeroDP"
-        android:paddingHorizontal="@dimen/space_14"
-        android:paddingVertical="@dimen/space_6"
-        android:text="@string/new_playlist"
-        android:textAllCaps="false"
-        android:textAppearance="@style/ys_medium_14"
-        android:textColor="@color/white_black"
-        app:cornerRadius="@dimen/corner_radius_PH_button" />
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_gravity="center_horizontal|center_vertical"
         android:indeterminateTint="@color/main_blue_color"
-        android:visibility="gone" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playlistsRV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="76dp"
-        android:visibility="visible" />
+    <Button
+        android:id="@+id/bt_new_playlist"
+        style="@style/rounded_black_button"
+        android:layout_marginTop="@dimen/space_24"
+        android:text="@string/new_playlist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/placeholderView"
+    <ImageView
+        android:id="@+id/placeholder_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/space_106"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_marginTop="46dp"
+        android:contentDescription="@string/placeholder_image"
+        android:src="@drawable/ic_nothing_found"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_new_playlist" />
 
-        <ImageView
-            android:id="@+id/placeholderImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_16"
-            android:contentDescription="@string/placeholder_image"
-            android:src="@drawable/ic_nothing_found" />
+    <TextView
+        android:id="@+id/placeholder_text"
+        style="@style/placeholder_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:text="@string/empty_playlists"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeholder_image" />
 
-        <TextView
-            android:id="@+id/placeholderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="@dimen/space_24"
-            android:layout_marginBottom="@dimen/space_24"
-            android:text="@string/empty_playlists"
-            android:textAlignment="center"
-            android:textAppearance="@style/ys_medium_19"
-            android:textColor="@color/black_white" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlists_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_8"
+        android:paddingHorizontal="@dimen/space_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_new_playlist" />
 
-    </LinearLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.player
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
@@ -22,20 +22,19 @@ class PlayerViewModel(
     private val screenStateLiveData = MutableLiveData<PlayerScreenState>()
     private val playerStateLiveData = MutableLiveData(PlayerState.STATE_DEFAULT)
     private val trackPositionLiveData = MutableLiveData(0)
-    private val bottomSheetStateLiveData =
-        MutableLiveData<PlayerBottomSheetState>(PlayerBottomSheetState.Hidden)
+    private val bottomSheetStateLiveData = MutableLiveData<PlayerBottomSheetState>()
+    private val showSnackBarEvent = SingleLiveEvent<Pair<Boolean, String>>()
 
     fun getScreenStateLiveData(): LiveData<PlayerScreenState> = screenStateLiveData
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
     fun getTrackPositionLiveData(): LiveData<Int> = trackPositionLiveData
     fun getBottomSheetStateLiveData(): LiveData<PlayerBottomSheetState> = bottomSheetStateLiveData
+    fun getShowSnackBarEvent(): LiveData<Pair<Boolean, String>> = showSnackBarEvent
 
     init {
-
         screenStateLiveData.postValue(PlayerScreenState.Content(track))
 
         loadPlaylists()
-
     }
 
     override fun onCleared() {
@@ -84,16 +83,13 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-
         when (getCurrentPlayerState()) {
             PlayerState.STATE_PLAYING -> {
                 pausePlayer()
             }
-
             PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
                 startPlayer()
             }
-
             PlayerState.STATE_DEFAULT -> {}
         }
     }
@@ -106,30 +102,23 @@ class PlayerViewModel(
         }
     }
 
-    fun loadPlaylists() {
-
-        Log.d("XXX", "loadPlaylists before launch coroutine")
-
+    private fun loadPlaylists() {
         viewModelScope.launch {
             playlistsInteractor.getPlaylists().collect {
-                Log.d("XXX", "Coroutine loadPlaylists $it")
-
-                bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Content(it))
+                if (it.isEmpty()) {
+                    bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Empty)
+                } else {
+                    bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Content(it))
+                }
             }
         }
     }
 
     fun addTrackToPlaylist(playlist: Playlist) {
-
-        Log.d("XXX", "addTrackToPlaylist before launch coroutine $playlist")
-
         viewModelScope.launch {
             val result = playlistsInteractor.addTrackToPlaylist(track, playlist)
-            Log.d("XXX", "addTrackToPlaylist $result")
-            //тут надо поменять логику показа Toast
-            bottomSheetStateLiveData.postValue(PlayerBottomSheetState.TrackAddedResult(result))
+            showSnackBarEvent.postValue(Pair(result, playlist.name))
         }
-
     }
 
 }
