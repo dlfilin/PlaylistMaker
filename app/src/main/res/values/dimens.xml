@@ -23,11 +23,11 @@
     <dimen name="space_86">86dp</dimen>
     <dimen name="space_106">106dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
-    <dimen name="track_image">45dp</dimen>
-    <dimen name="track_rounded_corner">2dp</dimen>
-    <dimen name="album_rounded_corner">8dp</dimen>
+    <dimen name="rounded_corner_2">2dp</dimen>
+    <dimen name="rounded_corner_8">8dp</dimen>
     <dimen name="corner_radius_PH_button">54dp</dimen>
     <dimen name="size_36">36dp</dimen>
+    <dimen name="size_45">45dp</dimen>
     <dimen name="size_48">48dp</dimen>
     <dimen name="size_91">91dp</dimen>
     <dimen name="zeroDP">0dp</dimen>

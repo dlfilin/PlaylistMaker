@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorite_tracks_table")
+@Entity(tableName = "tracks_table")
 data class TrackEntity (
 
     @PrimaryKey @ColumnInfo(name = "track_id")
@@ -37,7 +37,21 @@ data class TrackEntity (
     @ColumnInfo(name = "preview_url")
     val previewUrl: String?, // Ссылка на отрывок трека
 
-    @ColumnInfo(name = "added_on_date")
-    val addedOnDate: Long, // Дата добавления трека
+    @ColumnInfo(name = "is_favorite")
+    val isFavorite: Boolean, // Добавлен ли в Favorites
 
-)
+    @ColumnInfo(name = "fav_last_update")
+    val favLastUpdate: Long?, // Дата изменения статуса isFavorite
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TrackEntity) return false
+
+        return trackId == other.trackId
+    }
+
+    override fun hashCode(): Int {
+        return trackId.hashCode()
+    }
+}

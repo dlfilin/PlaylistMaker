@@ -57,6 +57,12 @@
         <item name="android:textFontWeight">500</item>
     </style>
 
+    <style name="ys_medium_16">
+        <item name="android:textSize">@dimen/font_16</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
     <style name="ys_medium_19">
         <item name="android:textSize">@dimen/font_19</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -73,7 +79,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/ys_regular_13</item>
-        <item name="android:textColor">@color/track_gray</item>
+        <item name="android:textColor">@color/yp_gray</item>
     </style>
 
     <style name="track_info_values">
@@ -91,6 +97,70 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/font_12</item>
+    </style>
+
+    <style name="snackbar_font_style">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/font_14</item>
+    </style>
+
+    <!--SNACKBAR STYLE-->
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+        <item name="android:background">@drawable/snackbar</item>
+    </style>
+
+    <style name="Widget.App.SnackbarTextView" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textAppearance">@style/snackbar_font_style</item>
+        <item name="android:textColor">@color/white_black</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorPrimary">@color/black_white</item>
+    </style>
+    <!--SNACKBAR STYLE-->
+
+    <!--OUTLINED TEXTFIELD STYLE-->
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/outlined_stroke_empty</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="hintTextColor">@color/outlined_stroke_empty</item>
+        <item name="hintTextAppearance">@style/ys_regular_12</item>
+        <item name="android:textColorHint">@color/black_white</item>
+        <item name="cursorColor">@color/main_blue_color</item>
+    </style>
+    <!--OUTLINED TEXTFIELD STYLE-->
+
+    <style name="Widget.App.CreateButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAppearance">@style/ys_medium_16</item>
+        <item name="android:textColor">@color/yp_white</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:backgroundTint">@color/btn_color_selector</item>
+        <item name="android:elevation">0dp</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="rounded_black_button" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/size_36</item>
+        <item name="android:minWidth">133dp</item>
+        <item name="android:textAppearance">@style/ys_medium_14</item>
+        <item name="android:textColor">@color/white_black</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:backgroundTint">@color/black_white</item>
+        <item name="android:elevation">0dp</item>
+        <item name="cornerRadius">@dimen/corner_radius_PH_button</item>
+    </style>
+
+    <style name="placeholder_text">
+        <item name="android:textAppearance">@style/ys_medium_19</item>
+        <item name="android:textColor">@color/black_white</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
 </resources>

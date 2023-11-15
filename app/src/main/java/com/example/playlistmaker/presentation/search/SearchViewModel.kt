@@ -30,7 +30,6 @@ class SearchViewModel(
     fun searchDebounced(changedText: String, debounced: Boolean) {
 
         if (changedText.isBlank()) {
-            renderTracksHistory()
             searchJob?.cancel()
             return
         }
@@ -50,7 +49,7 @@ class SearchViewModel(
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            renderState(SearchScreenState.Loading)
+            stateLiveData.postValue(SearchScreenState.Loading)
 
             viewModelScope.launch {
                 searchInteractor.searchTracks(newSearchText).collect { pair ->
@@ -67,15 +66,13 @@ class SearchViewModel(
         }
         when {
             errorCode != null -> {
-                renderState(SearchScreenState.Error(code = errorCode))
+                stateLiveData.postValue(SearchScreenState.Error(code = errorCode))
             }
-
             tracks.isEmpty() -> {
-                renderState(SearchScreenState.EmptySearch)
+                stateLiveData.postValue(SearchScreenState.EmptySearch)
             }
-
             else -> {
-                renderState(
+                stateLiveData.postValue(
                     SearchScreenState.Content(
                         tracks = tracks,
                     )
@@ -95,15 +92,13 @@ class SearchViewModel(
     private fun processHistoryResult(foundTracks: List<Track>?, errorCode: Int?) {
         when {
             errorCode != null -> {
-                renderState(SearchScreenState.Error(code = errorCode))
+                stateLiveData.postValue(SearchScreenState.Error(code = errorCode))
             }
-
             foundTracks.isNullOrEmpty() -> {
-                renderState(SearchScreenState.ClearScreen)
+                stateLiveData.postValue(SearchScreenState.ClearScreen)
             }
-
             else -> {
-                renderState(
+                stateLiveData.postValue(
                     SearchScreenState.History(
                         history = foundTracks
                     )
@@ -124,12 +119,8 @@ class SearchViewModel(
     fun clearHistory() {
         viewModelScope.launch {
             historyInteractor.clearTracksHistory()
-            renderState(SearchScreenState.ClearScreen)
+            stateLiveData.postValue(SearchScreenState.ClearScreen)
         }
-    }
-
-    private fun renderState(state: SearchScreenState) {
-        stateLiveData.postValue(state)
     }
 
     fun clearSearchCoroutine() {

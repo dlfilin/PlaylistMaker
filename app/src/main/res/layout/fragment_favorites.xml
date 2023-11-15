@@ -1,55 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.favorites.FavoritesFragment">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_gravity="center_horizontal|center_vertical"
         android:indeterminateTint="@color/main_blue_color"
-        android:visibility="gone" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favoritesRV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/space_16"
-        android:visibility="visible" />
-
-    <LinearLayout
-        android:id="@+id/placeholderView"
+    <ImageView
+        android:id="@+id/placeholder_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/space_106"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:contentDescription="@string/placeholder_image"
+        android:src="@drawable/ic_nothing_found"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/placeholderImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_16"
-            android:contentDescription="@string/placeholder_image"
-            android:src="@drawable/ic_nothing_found" />
+    <TextView
+        android:id="@+id/placeholder_text"
+        style="@style/placeholder_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_16"
+        android:text="@string/empty_favorites"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/placeholder_image" />
 
-        <TextView
-            android:id="@+id/placeholderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="@dimen/space_24"
-            android:layout_marginBottom="@dimen/space_24"
-            android:text="@string/empty_favorites"
-            android:textAlignment="center"
-            android:textAppearance="@style/ys_medium_19"
-            android:textColor="@color/black_white" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorites_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

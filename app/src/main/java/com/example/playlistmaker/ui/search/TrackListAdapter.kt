@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemViewBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.util.ListDiffCallback
 import java.util.ArrayList
 
 class TrackListAdapter(private val onTrackClickListener: TrackClickListener) :
@@ -34,7 +35,7 @@ class TrackListAdapter(private val onTrackClickListener: TrackClickListener) :
             items.clear()
             this.notifyItemRangeRemoved(0, size)
         } else {
-            val diffCallback = TracksDiffCallback(oldList = items, newList = newList)
+            val diffCallback = ListDiffCallback(oldList = items, newList = newList)
             val diffResult = DiffUtil.calculateDiff(diffCallback)
 
             items.clear()

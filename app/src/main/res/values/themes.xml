@@ -2,10 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/main_menu_background</item>
-        <item name="colorOnPrimary">@color/black_white</item>
+        <item name="colorPrimary">@color/main_blue_color</item>
+        <item name="colorOnPrimary">@color/yp_white</item>
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">@color/white_black</item>
+        <item name="android:statusBarColor">@color/yp_white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.App.SnackbarTextView</item>
     </style>
 </resources>

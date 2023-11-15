@@ -7,6 +7,8 @@ import com.example.playlistmaker.domain.history.HistoryInteractor
 import com.example.playlistmaker.domain.search.SearchInteractor
 import com.example.playlistmaker.domain.favorites.impl.FavoritesInteractorImpl
 import com.example.playlistmaker.domain.history.impl.HistoryInteractorImpl
+import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.domain.playlists.impl.PlaylistsInteractorImpl
 import com.example.playlistmaker.domain.search.impl.SearchInteractorImpl
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
@@ -39,4 +41,9 @@ val domainModule = module {
     single<PlayerInteractor> {
         PlayerInteractorImpl(get())
     }
+
+    single<PlaylistsInteractor> {
+        PlaylistsInteractorImpl(get())
+    }
+
 }

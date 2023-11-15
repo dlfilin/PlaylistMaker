@@ -1,15 +1,20 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.data.converters.TrackDbConverter
-import com.example.playlistmaker.data.favorites.impl.FavoritesRepositoryImpl
-import com.example.playlistmaker.data.player.impl.PlayerRepositoryImpl
-import com.example.playlistmaker.data.history.impl.HistoryRepositoryImpl
-import com.example.playlistmaker.data.search.impl.SearchRepositoryImpl
-import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
-import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.data.favorites.FavoritesRepositoryImpl
+import com.example.playlistmaker.data.player.PlayerRepositoryImpl
+import com.example.playlistmaker.data.history.HistoryRepositoryImpl
+import com.example.playlistmaker.data.storage.impl.ImagesStorageImpl
+import com.example.playlistmaker.data.playlists.PlaylistsRepositoryImpl
+import com.example.playlistmaker.data.search.SearchRepositoryImpl
+import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
+import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.favorites.FavoritesRepository
 import com.example.playlistmaker.domain.history.HistoryRepository
+import com.example.playlistmaker.data.storage.ImagesStorage
+import com.example.playlistmaker.domain.playlists.PlaylistsRepository
 import com.example.playlistmaker.domain.search.SearchRepository
 import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.domain.sharing.ExternalNavigator
@@ -24,12 +29,20 @@ val repositoryModule = module {
 
     single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
 
-    single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(get(), get(), get()) }
 
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
 
     single<PlayerRepository> { PlayerRepositoryImpl() }
 
+    single<PlaylistsRepository> { PlaylistsRepositoryImpl(get(), get(), get(), get()) }
+
+    single<ImagesStorage> { ImagesStorageImpl(androidContext()) }
+
     factory { TrackDbConverter() }
+
+    factory { PlaylistDbConverter() }
+
+
 
 }

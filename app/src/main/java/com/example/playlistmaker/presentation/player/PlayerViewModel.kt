@@ -5,28 +5,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.util.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
-    private val track: Track,
+    private var track: Track,
     private val playerInteractor: PlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
-    private val screenStateLiveData = MutableLiveData<PlayerScreenState>(PlayerScreenState.Loading)
+    private val screenStateLiveData = MutableLiveData<PlayerScreenState>()
     private val playerStateLiveData = MutableLiveData(PlayerState.STATE_DEFAULT)
     private val trackPositionLiveData = MutableLiveData(0)
+    private val bottomSheetStateLiveData = MutableLiveData<PlayerBottomSheetState>()
+    private val showSnackBarEvent = SingleLiveEvent<Pair<Boolean, String>>()
 
     fun getScreenStateLiveData(): LiveData<PlayerScreenState> = screenStateLiveData
     fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
     fun getTrackPositionLiveData(): LiveData<Int> = trackPositionLiveData
+    fun getBottomSheetStateLiveData(): LiveData<PlayerBottomSheetState> = bottomSheetStateLiveData
+    fun getShowSnackBarEvent(): LiveData<Pair<Boolean, String>> = showSnackBarEvent
 
     init {
-
         screenStateLiveData.postValue(PlayerScreenState.Content(track))
 
+        loadPlaylists()
     }
 
     override fun onCleared() {
@@ -75,31 +83,42 @@ class PlayerViewModel(
     }
 
     fun playbackControl() {
-
         when (getCurrentPlayerState()) {
             PlayerState.STATE_PLAYING -> {
                 pausePlayer()
             }
-
             PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
                 startPlayer()
             }
-
             PlayerState.STATE_DEFAULT -> {}
         }
     }
 
     fun onFavoriteClicked() {
-
         viewModelScope.launch {
-            val isFavorite = (screenStateLiveData.value as PlayerScreenState.Content).track.isFavorite
-            if (isFavorite) {
-                favoritesInteractor.removeFromFavorites(track)
-            } else {
-                favoritesInteractor.addToFavorites(track)
-            }
-
-            screenStateLiveData.postValue(PlayerScreenState.Content(track.copy(isFavorite = !isFavorite)))
+            favoritesInteractor.reverseFavoriteState(track)
+            track = track.let { old -> old.copy(isFavorite = !old.isFavorite) }
+            screenStateLiveData.postValue(PlayerScreenState.Content(track))
         }
     }
+
+    private fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistsInteractor.getPlaylists().collect {
+                if (it.isEmpty()) {
+                    bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Empty)
+                } else {
+                    bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Content(it))
+                }
+            }
+        }
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            val result = playlistsInteractor.addTrackToPlaylist(track, playlist)
+            showSnackBarEvent.postValue(Pair(result, playlist.name))
+        }
+    }
+
 }

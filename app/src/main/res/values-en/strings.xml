@@ -34,5 +34,17 @@
     <string name="new_playlist">New playlist</string>
     <string name="favorites_title">Favorite tracks</string>
     <string name="playlists_title">Playlists</string>
+    <string name="playlist_cover">playlist_cover</string>
+    <string name="playlist_name">Name*</string>
+    <string name="playlist_description">Description</string>
+    <string name="playlist_create">Create</string>
+    <string name="playlist_created">Playlist %1$s is created</string>
+    <string name="playlist_not_created">Playlist %1$s was not created</string>
+    <string name="exit_dialog_title">Confirm exit?</string>
+    <string name="exit_dialog_message">All unsaved data will be lost</string>
+    <string name="exit_dialog_close">Exit</string>
+    <string name="exit_dialog_cancel">Cancel</string>
+    <string name="track_added">Added to playlist %1$s</string>
+    <string name="track_not_added">Track is already added to %1$s</string>
 
 </resources>
