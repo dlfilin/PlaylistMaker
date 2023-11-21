@@ -13,7 +13,7 @@ class FavoritesRepositoryImpl(
 ) : FavoritesRepository {
 
     override fun getFavoriteTracks(): Flow<List<Track>> {
-        return appDatabase.getTracksDao().getFavoriteTracks().map { listOfEntities ->
+        return appDatabase.getTracksDao().getFavoriteTracksFlow().map { listOfEntities ->
             listOfEntities.map {
                 trackDbConverter.map(it)
             }

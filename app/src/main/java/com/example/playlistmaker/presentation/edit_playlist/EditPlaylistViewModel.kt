@@ -19,7 +19,9 @@ class EditPlaylistViewModel(
 
     private val screenStateLiveData =
         MutableLiveData<EditPlaylistScreenState>(EditPlaylistScreenState.NoActionState)
+
     fun getScreenStateLiveData(): LiveData<EditPlaylistScreenState> = screenStateLiveData
+
     init {
         if (playlistId != null) {
             viewModelScope.launch {
@@ -27,7 +29,7 @@ class EditPlaylistViewModel(
                 currentPlaylist?.apply {
                     screenStateLiveData.postValue(
                         EditPlaylistScreenState.PlaylistLoaded(
-                            uri = imageUri, name = name, description = description
+                            uri = imageUri, name = name, description = description ?: ""
                         )
                     )
                 }
@@ -47,10 +49,8 @@ class EditPlaylistViewModel(
             if (newImageUri != null || name != updatedPlaylist.name || description != updatedPlaylist.description) {
                 updatePlaylist(
                     updatedPlaylist.copy(
-                        name = name,
-                        description = description
-                    ),
-                    newImageUri
+                        name = name, description = description
+                    ), newImageUri
                 )
             } else {
                 screenStateLiveData.postValue(EditPlaylistScreenState.PlaylistUpdated)
@@ -61,7 +61,11 @@ class EditPlaylistViewModel(
     private fun createPlaylist(playlist: Playlist) {
         viewModelScope.launch {
             val result = playlistsInteractor.createNewPlaylist(playlist) > 0
-            screenStateLiveData.postValue(EditPlaylistScreenState.PlaylistCreated(result, playlist.name))
+            screenStateLiveData.postValue(
+                EditPlaylistScreenState.PlaylistCreated(
+                    result, playlist.name
+                )
+            )
         }
     }
 

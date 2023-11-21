@@ -116,7 +116,7 @@ class PlayerViewModel(
 
     private fun loadPlaylists() {
         viewModelScope.launch {
-            playlistsInteractor.getPlaylists().collect {
+            playlistsInteractor.getPlaylistsFlow().collect {
 
                 if (it.isEmpty()) {
                     bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Empty)

@@ -15,27 +15,12 @@ data class Track(
     val artworkUrl100: String, // Ссылка на изображение обложки
     val previewUrl: String, // Ссылка на отрывок трека
     var isFavorite: Boolean = false
-) {
-
-
-    companion object {
-//        fun getCoverArtworkBig(artworkUrl100: String) =
-//            artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-//
-//        fun getReleaseYear(releaseDate: String): String {
-//            return releaseDate.substringBefore('-')
-//        }
-    }
-}
+)
 
 fun Track.getTrackTimeMMSS(): String {
-    return SimpleDateFormat("mm:ss", Locale.getDefault()).format(
-            this.trackTimeMillis
-        )
+    return SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
 }
 
-fun Track.getCoverArtwork512() =
-    this.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+fun Track.getCoverArtwork512() = this.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 
-fun Track.getCoverArtwork60() =
-    this.artworkUrl100.replaceAfterLast('/', "60x60bb.jpg")
+fun Track.getCoverArtwork60() = this.artworkUrl100.replaceAfterLast('/', "60x60bb.jpg")

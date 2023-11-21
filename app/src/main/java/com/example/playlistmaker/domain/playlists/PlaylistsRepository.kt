@@ -9,7 +9,7 @@ interface PlaylistsRepository {
 
     suspend fun createNewPlaylist(playlist: Playlist): Long
 
-    fun getPlaylists(): Flow<List<Playlist>>
+    fun getPlaylistsFlow(): Flow<List<Playlist>>
 
     fun getPlaylistFlow(id: Long): Flow<Playlist>
 
@@ -17,7 +17,9 @@ interface PlaylistsRepository {
 
     suspend fun updatePlaylist(playlist: Playlist, newImageUri: Uri?): Int
 
-    fun getPlaylistWithTracks(id: Long): Flow<Pair<Playlist, List<Track>>>
+    fun getPlaylistWithTracksFlow(id: Long): Flow<Pair<Playlist, List<Track>>>
+
+    fun getTracksFromPlaylistSortedFlow(id: Long): Flow<List<Track>>
 
     suspend fun addTrackToPlaylist(track: Track, playlistId: Long): Boolean
 

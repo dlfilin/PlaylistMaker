@@ -42,6 +42,6 @@ class TrackDbConverter {
         }
     }
 
-    fun map(tracks: List<TrackEntity>): List<Track> = tracks.map(this::map)
+    fun map(tracks: List<TrackEntity>): List<Track> = tracks.map(::map)
 
 }

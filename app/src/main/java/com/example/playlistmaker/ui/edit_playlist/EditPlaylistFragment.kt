@@ -164,7 +164,7 @@ class EditPlaylistFragment : Fragment() {
                     }
 
                     binding.edittextName.setText(state.name)
-                    binding.edittextDescription.setText(state.description ?: "")
+                    binding.edittextDescription.setText(state.description)
                     binding.btCreatePlaylist.text = getString(R.string.edit_playlist_save)
 
                     viewModel.changeScreenState(EditPlaylistScreenState.NoActionState)

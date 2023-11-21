@@ -24,6 +24,11 @@ class PlaylistsRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : PlaylistsRepository {
 
+    private val playlistsDao
+        get() = appDatabase.getPlaylistsDao()
+    private val tracksDao
+        get() = appDatabase.getTracksDao()
+
     override suspend fun createNewPlaylist(playlist: Playlist): Long {
 
         var privatePath: Uri? = playlist.imageUri
@@ -34,7 +39,7 @@ class PlaylistsRepositoryImpl(
             }
         }
 
-        return appDatabase.getPlaylistsDao().insertNewPlaylist(
+        return playlistsDao.insertNewPlaylist(
             playlistDbConverter.map(
                 playlist.copy(imageUri = privatePath)
             )
@@ -47,42 +52,51 @@ class PlaylistsRepositoryImpl(
 
         if (newImageUri != null) {
             privatePath = withContext(dispatcher) {
-                if (playlist.imageUri != null)
-                    imagesStorage.deleteImageFromPrivateStorage(playlist.imageUri, ALBUM_NAME)
+                if (playlist.imageUri != null) imagesStorage.deleteImageFromPrivateStorage(
+                    playlist.imageUri,
+                    ALBUM_NAME
+                )
                 imagesStorage.saveImageToPrivateStorage(newImageUri, ALBUM_NAME)
             }
         }
-        return appDatabase.getPlaylistsDao().updatePlaylist(
+        return playlistsDao.updatePlaylist(
             playlistDbConverter.map(playlist.copy(imageUri = privatePath))
         )
     }
 
-    override fun getPlaylists(): Flow<List<Playlist>> {
-        val result = appDatabase.getPlaylistsDao().getPlaylists().map { listOfEntities ->
-            listOfEntities.map {
-                playlistDbConverter.map(it)
-            }
+    override fun getPlaylistsFlow(): Flow<List<Playlist>> {
+        val result = playlistsDao.getPlaylistsFlow().map { listOfEntities ->
+//            listOfEntities.map {
+//                playlistDbConverter.map(it)
+//            }
+            playlistDbConverter.map(listOfEntities)
         }
         return result
     }
 
     override fun getPlaylistFlow(id: Long): Flow<Playlist> {
-        return appDatabase.getPlaylistsDao().getPlaylistFlow(id).map {
+        return playlistsDao.getPlaylistFlow(id).map {
             playlistDbConverter.map(it)
         }
     }
 
     override suspend fun getPlaylist(id: Long): Playlist {
         return playlistDbConverter.map(
-            appDatabase.getPlaylistsDao().getPlaylist(id)
+            playlistsDao.getPlaylist(id)
         )
     }
 
-    override fun getPlaylistWithTracks(id: Long): Flow<Pair<Playlist, List<Track>>> {
-        return appDatabase.getPlaylistsDao().getPlaylistWithTracks(id).map {
+    override fun getPlaylistWithTracksFlow(id: Long): Flow<Pair<Playlist, List<Track>>> {
+        return playlistsDao.getPlaylistWithTracksFlow(id).map {
             Pair(
                 playlistDbConverter.map(it.playlist), trackDbConverter.map(it.tracks)
             )
+        }
+    }
+
+    override fun getTracksFromPlaylistSortedFlow(id: Long): Flow<List<Track>> {
+        return tracksDao.getTracksFromPlaylistSortedFlow(id).map {
+            trackDbConverter.map(it)
         }
     }
 
@@ -92,15 +106,15 @@ class PlaylistsRepositoryImpl(
 
         appDatabase.withTransaction {
 
-            if (appDatabase.getTracksDao().isTrackInPlaylist(
+            if (tracksDao.isTrackInPlaylist(
                     trackId = trackEntity.trackId, playlistId = playlistId
                 )
             ) {
                 //не нужно добавлять
                 result = false
             } else {
-                if (!appDatabase.getTracksDao().wasTrackAdded(trackId = trackEntity.trackId)) {
-                    appDatabase.getTracksDao().insertTrack(trackEntity)
+                if (!tracksDao.isTrackAdded(trackId = trackEntity.trackId)) {
+                    tracksDao.insertTrack(trackEntity)
                 }
 
                 val crossRef = PlaylistTrackCrossRef(
@@ -109,9 +123,9 @@ class PlaylistsRepositoryImpl(
                     addedOnDate = System.currentTimeMillis()
                 )
 
-                appDatabase.getPlaylistsDao().insertPlaylistTrackCrossRef(crossRef)
+                playlistsDao.insertPlaylistTrackCrossRef(crossRef)
 
-                appDatabase.getPlaylistsDao().incPlaylistTrackCount(playlistId)
+                playlistsDao.incPlaylistTrackCount(playlistId)
 
                 result = true
             }
@@ -123,16 +137,16 @@ class PlaylistsRepositoryImpl(
 
         appDatabase.withTransaction {
 
-            val trackIds = appDatabase.getPlaylistsDao().getPlaylistTracksIds(playlistId)
+            val trackIds = playlistsDao.getPlaylistTracksIds(playlistId)
 
-            appDatabase.getPlaylistsDao().deletePlaylist(playlistId)
+            playlistsDao.deletePlaylist(playlistId)
 
             trackIds.forEach { trackId ->
-                if (!appDatabase.getTracksDao()
-                        .isTrackInAnyPlaylist(trackId) && !appDatabase.getTracksDao()
+                if (!tracksDao
+                        .isTrackInAnyPlaylist(trackId) && !tracksDao
                         .isTrackInFavorites(trackId)
                 ) {
-                    appDatabase.getTracksDao().deleteTrack(trackId)
+                    tracksDao.deleteTrack(trackId)
                 }
             }
         }
@@ -143,25 +157,25 @@ class PlaylistsRepositoryImpl(
 
         appDatabase.withTransaction {
 
-            result = appDatabase.getPlaylistsDao().deletePlaylistTrackCrossRef(
+            result = playlistsDao.deletePlaylistTrackCrossRef(
                 playlistId = playlistId, trackId = trackId
             ) > 0
 
-            if (!appDatabase.getTracksDao()
-                    .isTrackInFavorites(trackId = trackId) && !appDatabase.getTracksDao()
+            if (!tracksDao
+                    .isTrackInFavorites(trackId = trackId) && !tracksDao
                     .isTrackInAnyPlaylist(trackId)
             ) {
-                appDatabase.getTracksDao().deleteTrack(trackId)
+                tracksDao.deleteTrack(trackId)
             }
 
-            appDatabase.getPlaylistsDao().decPlaylistTrackCount(playlistId)
+            playlistsDao.decPlaylistTrackCount(playlistId)
         }
 
         return result
     }
 
     override suspend fun isTrackInFavorites(trackId: Int): Boolean {
-        return appDatabase.getTracksDao().isTrackInFavorites(trackId)
+        return tracksDao.isTrackInFavorites(trackId)
     }
 
     companion object {

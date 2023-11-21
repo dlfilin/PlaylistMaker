@@ -40,11 +40,16 @@ class PlaylistViewModel(
         screenStateLiveData.postValue(PlaylistScreenState.Loading)
 
         viewModelScope.launch {
-            playlistsInteractor.getPlaylistWithTracks(playlistId).catch {
+            playlistsInteractor.getPlaylistFlow(playlistId).catch {
                 screenStateLiveData.postValue(PlaylistScreenState.Error)
             }.collect {
-                screenStateLiveData.postValue(PlaylistScreenState.Content(it.first))
-                bottomSheetStateLiveData.postValue((TracksBottomSheetState.Content(it.second)))
+                screenStateLiveData.postValue(PlaylistScreenState.Content(it))
+            }
+        }
+
+        viewModelScope.launch {
+            playlistsInteractor.getTracksFromPlaylistSortedFlow(playlistId).collect {
+                bottomSheetStateLiveData.postValue((TracksBottomSheetState.Content(it)))
             }
         }
     }
@@ -60,7 +65,11 @@ class PlaylistViewModel(
             val result =
                 playlistsInteractor.deleteTrackFromPlaylist(track.trackId, playlistId = playlistId)
 
-            playlistSingleEventState.postValue(PlaylistSingleEventState.TrackDeleted(result, track.trackName))
+            playlistSingleEventState.postValue(
+                PlaylistSingleEventState.TrackDeleted(
+                    result, track.trackName
+                )
+            )
         }
     }
 

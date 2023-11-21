@@ -21,13 +21,22 @@ interface PlaylistsDao {
     suspend fun updatePlaylist(playlist: PlaylistEntity): Int
 
     @Query("SELECT * FROM playlists_table ORDER BY tracks_count DESC")
-    fun getPlaylists(): Flow<List<PlaylistEntity>>
+    fun getPlaylistsFlow(): Flow<List<PlaylistEntity>>
 
     @Query("SELECT * FROM playlists_table WHERE playlist_id = :id")
     fun getPlaylistFlow(id: Long): Flow<PlaylistEntity>
 
     @Query("SELECT * FROM playlists_table WHERE playlist_id = :id")
     suspend fun getPlaylist(id: Long): PlaylistEntity
+
+    @Query("DELETE FROM playlists_table WHERE playlist_id = :playlistId")
+    suspend fun deletePlaylist(playlistId: Long): Int
+
+    @Query("UPDATE playlists_table SET tracks_count = tracks_count + 1 WHERE playlist_id = :playlistId")
+    suspend fun incPlaylistTrackCount(playlistId: Long)
+
+    @Query("UPDATE playlists_table SET tracks_count = tracks_count - 1 WHERE playlist_id = :playlistId")
+    suspend fun decPlaylistTrackCount(playlistId: Long)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPlaylistTrackCrossRef(crossRef: PlaylistTrackCrossRef): Long
@@ -37,16 +46,7 @@ interface PlaylistsDao {
 
     @Transaction
     @Query("SELECT * FROM playlists_table WHERE playlist_id = :id")
-    fun getPlaylistWithTracks(id: Long): Flow<PlaylistWithTracks>
-
-    @Query("UPDATE playlists_table SET tracks_count = tracks_count + 1 WHERE playlist_id = :playlistId")
-    suspend fun incPlaylistTrackCount(playlistId: Long)
-
-    @Query("UPDATE playlists_table SET tracks_count = tracks_count - 1 WHERE playlist_id = :playlistId")
-    suspend fun decPlaylistTrackCount(playlistId: Long)
-
-    @Query("DELETE FROM playlists_table WHERE playlist_id = :playlistId")
-    suspend fun deletePlaylist(playlistId: Long): Int
+    fun getPlaylistWithTracksFlow(id: Long): Flow<PlaylistWithTracks>
 
     @Query(value = "SELECT track_id FROM playlist_track_crossref WHERE playlist_id = :playlistId ORDER BY added_on_date DESC")
     suspend fun getPlaylistTracksIds(playlistId: Long): List<Int>

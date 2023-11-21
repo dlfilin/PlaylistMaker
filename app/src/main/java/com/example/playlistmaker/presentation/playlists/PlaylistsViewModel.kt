@@ -22,7 +22,7 @@ class PlaylistsViewModel(
 
     private fun loadPlaylists() {
         viewModelScope.launch {
-            playlistsInteractor.getPlaylists().collect { playlists ->
+            playlistsInteractor.getPlaylistsFlow().collect { playlists ->
 
                 if (playlists.isEmpty()) {
                     stateLiveData.postValue(PlaylistsScreenState.EmptyList)
