@@ -10,7 +10,7 @@ import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import kotlinx.coroutines.launch
 
 class EditPlaylistViewModel(
-    private val playlistId: String?,
+    val playlistId: String?,
     private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
@@ -18,8 +18,7 @@ class EditPlaylistViewModel(
     var newImageUri: Uri? = null
 
     private val screenStateLiveData =
-        MutableLiveData<EditPlaylistScreenState>(EditPlaylistScreenState.NoActionState)
-
+        MutableLiveData<EditPlaylistScreenState>(EditPlaylistScreenState.InitState)
     fun getScreenStateLiveData(): LiveData<EditPlaylistScreenState> = screenStateLiveData
 
     init {
@@ -38,29 +37,31 @@ class EditPlaylistViewModel(
     }
 
     fun createOrUpdatePressed(name: String, description: String?) {
-        if (currentPlaylist == null) {
+        val updatedPlaylist = currentPlaylist
+        if (updatedPlaylist == null) {
             createPlaylist(
                 Playlist(
                     imageUri = newImageUri, name = name, description = description
                 )
             )
         } else {
-            val updatedPlaylist = currentPlaylist!!.copy()
-            if (newImageUri != null || name != updatedPlaylist.name || description != updatedPlaylist.description) {
-                updatePlaylist(
-                    updatedPlaylist.copy(
-                        name = name, description = description
-                    ), newImageUri
-                )
-            } else {
-                screenStateLiveData.postValue(EditPlaylistScreenState.PlaylistUpdated)
+            updatedPlaylist.let {
+                if (newImageUri != null || name != it.name || description != it.description) {
+                    updatePlaylist(
+                        it.copy(
+                            name = name, description = description
+                        ), newImageUri
+                    )
+                } else {
+                    screenStateLiveData.postValue(EditPlaylistScreenState.PlaylistUpdated)
+                }
             }
         }
     }
 
     private fun createPlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            val result = playlistsInteractor.createNewPlaylist(playlist) > 0
+            val result = playlistsInteractor.createNewPlaylist(playlist)
             screenStateLiveData.postValue(
                 EditPlaylistScreenState.PlaylistCreated(
                     result, playlist.name
@@ -79,4 +80,5 @@ class EditPlaylistViewModel(
     fun changeScreenState(state: EditPlaylistScreenState) {
         screenStateLiveData.postValue(state)
     }
+
 }

@@ -85,20 +85,22 @@ class PlaylistViewModel(
     }
 
     private fun prepareSharingInfo(playlist: Playlist, tracks: List<Track>): String {
-        var message = "${playlist.name}\n"
-        if (playlist.description != null) message += "${playlist.description}\n"
-        message += "${
-            resourceProvider.getQuantityString(
-                R.plurals.tracks,
-                playlist.tracksCount,
-            )
-        }\n"
+        val builder = StringBuilder()
+
+        builder.append("${playlist.name}\n")
+        if (playlist.description != null) builder.append("${playlist.description}\n")
+        builder.append(
+            "${resourceProvider.getQuantityString(
+                    R.plurals.tracks,
+                    playlist.tracksCount,
+                )}\n"
+        )
 
         tracks.forEachIndexed { index, track ->
-            message += "${index + 1}. ${track.artistName} - ${track.trackName} (${track.getTrackTimeMMSS()})\n"
+            builder.append("${index + 1}. ${track.artistName} - ${track.trackName} (${track.getTrackTimeMMSS()})\n")
         }
 
-        return message
+        return builder.toString()
     }
 
     fun deletePlaylist() {

@@ -167,7 +167,7 @@ class EditPlaylistFragment : Fragment() {
                     binding.edittextDescription.setText(state.description)
                     binding.btCreatePlaylist.text = getString(R.string.edit_playlist_save)
 
-                    viewModel.changeScreenState(EditPlaylistScreenState.NoActionState)
+//                    viewModel.changeScreenState(EditPlaylistScreenState.InitState)
                 }
 
                 is EditPlaylistScreenState.PlaylistCreated -> {
@@ -176,16 +176,16 @@ class EditPlaylistFragment : Fragment() {
                     } else {
                         showSnackBar(getString(R.string.playlist_not_created))
                     }
-                    viewModel.changeScreenState(EditPlaylistScreenState.NoActionState)
+                    viewModel.changeScreenState(EditPlaylistScreenState.InitState)
                     closeFragment()
                 }
 
                 is EditPlaylistScreenState.PlaylistUpdated -> {
-                    viewModel.changeScreenState(EditPlaylistScreenState.NoActionState)
+                    viewModel.changeScreenState(EditPlaylistScreenState.InitState)
                     closeFragment()
                 }
 
-                is EditPlaylistScreenState.NoActionState -> {}
+                is EditPlaylistScreenState.InitState -> {}
             }
         }
     }
