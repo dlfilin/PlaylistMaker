@@ -1,14 +1,21 @@
 package com.example.playlistmaker.data.db.entity
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Junction
-import androidx.room.Relation
+import androidx.room.ForeignKey
 
 @Entity(
     tableName = "playlist_track_crossref",
     primaryKeys = ["playlist_id", "track_id"],
+    foreignKeys = [
+        ForeignKey(
+            entity = PlaylistEntity::class,
+            parentColumns = ["playlist_id"],
+            childColumns = ["playlist_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.NO_ACTION
+        ),
+    ]
 )
 data class PlaylistTrackCrossRef(
 
@@ -19,6 +26,6 @@ data class PlaylistTrackCrossRef(
     val trackId: Int,
 
     @ColumnInfo(name = "added_on_date")
-    val addedOnDate: Long, // Дата добавления трека
+    val addedOnDate: Long = 0, // Дата добавления трека
 
 )

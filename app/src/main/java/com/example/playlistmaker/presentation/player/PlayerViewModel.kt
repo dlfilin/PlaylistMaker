@@ -32,7 +32,18 @@ class PlayerViewModel(
     fun getShowSnackBarEvent(): LiveData<Pair<Boolean, String>> = showSnackBarEvent
 
     init {
-        screenStateLiveData.postValue(PlayerScreenState.Content(track))
+        viewModelScope.launch {
+            val isFavorite = playlistsInteractor.isTrackInFavorites(trackId = track.trackId)
+
+            track = track.copy(isFavorite = isFavorite)
+
+            screenStateLiveData.postValue(
+                PlayerScreenState.Content(track)
+            )
+
+        }
+
+
 
         loadPlaylists()
     }
@@ -97,7 +108,8 @@ class PlayerViewModel(
     fun onFavoriteClicked() {
         viewModelScope.launch {
             favoritesInteractor.reverseFavoriteState(track)
-            track = track.let { old -> old.copy(isFavorite = !old.isFavorite) }
+            val isFavorite = track.isFavorite
+            track = track.copy(isFavorite = !isFavorite)
             screenStateLiveData.postValue(PlayerScreenState.Content(track))
         }
     }
@@ -105,6 +117,7 @@ class PlayerViewModel(
     private fun loadPlaylists() {
         viewModelScope.launch {
             playlistsInteractor.getPlaylists().collect {
+
                 if (it.isEmpty()) {
                     bottomSheetStateLiveData.postValue(PlayerBottomSheetState.Empty)
                 } else {
@@ -116,7 +129,7 @@ class PlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            val result = playlistsInteractor.addTrackToPlaylist(track, playlist)
+            val result = playlistsInteractor.addTrackToPlaylist(track, playlist.id)
             showSnackBarEvent.postValue(Pair(result, playlist.name))
         }
     }

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemViewBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.util.ListDiffCallback
-import java.util.ArrayList
 
 class TrackListAdapter(private val onTrackClickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
@@ -17,12 +16,13 @@ class TrackListAdapter(private val onTrackClickListener: TrackClickListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
 
-        return TrackViewHolder(TrackItemViewBinding.inflate(layoutInspector, parent, false))
+        return TrackViewHolder(
+            TrackItemViewBinding.inflate(layoutInspector, parent, false), onTrackClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(items[position])
-        holder.itemView.setOnClickListener { onTrackClickListener.onTrackClick(items[holder.adapterPosition]) }
     }
 
     override fun getItemCount(): Int {
@@ -44,8 +44,9 @@ class TrackListAdapter(private val onTrackClickListener: TrackClickListener) :
         }
     }
 
-    fun interface TrackClickListener {
+    interface TrackClickListener {
         fun onTrackClick(item: Track)
+        fun onTrackLongClick(item: Track)
     }
 
 }

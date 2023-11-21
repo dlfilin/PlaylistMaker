@@ -18,10 +18,6 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
         repository.pause()
     }
 
-    override fun seek(position: Float) {
-        repository.seek(position)
-    }
-
     override fun release() {
         repository.release()
     }

@@ -27,6 +27,7 @@ class FavoritesViewModel(
         stateLiveData.postValue(FavoritesScreenState.Loading)
         viewModelScope.launch {
             favoritesInteractor.getSavedFavorites().collect { tracks ->
+
                 if (tracks.isEmpty()) {
                     stateLiveData.postValue(FavoritesScreenState.EmptyList)
                 } else {

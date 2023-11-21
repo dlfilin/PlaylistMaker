@@ -9,7 +9,7 @@ class SharingInteractorImpl(
 ) : SharingInteractor {
 
     override fun shareApp(link: String) {
-        externalNavigator.shareLink(link)
+        externalNavigator.shareText(link)
     }
 
     override fun openTerms(link: String) {
@@ -18,6 +18,10 @@ class SharingInteractorImpl(
 
     override fun openSupport(emailData: EmailData) {
         externalNavigator.openEmail(emailData)
+    }
+
+    override fun shareMessage(message: String) {
+        externalNavigator.shareText(message)
     }
 
 }

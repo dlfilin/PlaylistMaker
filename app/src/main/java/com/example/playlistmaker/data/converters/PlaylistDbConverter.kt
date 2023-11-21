@@ -29,4 +29,7 @@ class PlaylistDbConverter {
             )
         }
     }
+
+    fun map(playlists: List<PlaylistEntity>): List<Playlist> = playlists.map(this::map)
+
 }

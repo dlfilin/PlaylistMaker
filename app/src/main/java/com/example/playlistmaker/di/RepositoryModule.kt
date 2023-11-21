@@ -27,9 +27,9 @@ val repositoryModule = module {
 
     single<ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
 
-    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get()) }
 
-    single<HistoryRepository> { HistoryRepositoryImpl(get(), get(), get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(get(), get()) }
 
     single<FavoritesRepository> { FavoritesRepositoryImpl(get(), get()) }
 
@@ -42,7 +42,5 @@ val repositoryModule = module {
     factory { TrackDbConverter() }
 
     factory { PlaylistDbConverter() }
-
-
 
 }

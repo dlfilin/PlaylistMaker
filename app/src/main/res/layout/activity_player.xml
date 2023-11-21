@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.player.PlayerActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -288,7 +287,8 @@
             android:src="@drawable/bottom_sheet_dash"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/dash" />
 
         <TextView
             android:id="@+id/caption"

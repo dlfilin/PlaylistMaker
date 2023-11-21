@@ -10,8 +10,6 @@ interface PlayerInteractor {
 
     fun pause()
 
-    fun seek(position: Float)
-
     fun release()
 
     fun currentPosition(): Flow<Int>

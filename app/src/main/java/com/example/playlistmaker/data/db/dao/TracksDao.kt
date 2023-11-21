@@ -1,7 +1,6 @@
 package com.example.playlistmaker.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -13,13 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface TracksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrack(track: TrackEntity)
+    suspend fun insertTrack(track: TrackEntity): Long
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTrack(track: TrackEntity): Int
-
-    @Delete(entity = TrackEntity::class)
-    suspend fun deleteTrack(track: TrackEntity)
 
     @Query(value = "SELECT * FROM tracks_table WHERE is_favorite = 1 ORDER BY fav_last_update DESC")
     fun getFavoriteTracks(): Flow<List<TrackEntity>>
@@ -27,7 +23,13 @@ interface TracksDao {
     @Query(value = "SELECT track_id FROM tracks_table WHERE is_favorite = 1")
     suspend fun getFavoriteTracksIds(): List<Int>
 
-    @Query("""
+    @Query(value = "SELECT COUNT(*) > 0 FROM tracks_table WHERE track_id = :trackId")
+    suspend fun wasTrackAdded(trackId: Int): Boolean
+
+    @Query(value = "SELECT COUNT(*) > 0 FROM tracks_table WHERE track_id = :trackId AND is_favorite = 1")
+    suspend fun isTrackInFavorites(trackId: Int): Boolean
+
+    @Query(value = """
             SELECT COUNT(*) > 0
             FROM playlist_track_crossref
             WHERE playlist_id = :playlistId
@@ -35,6 +37,13 @@ interface TracksDao {
         """
     )
     suspend fun isTrackInPlaylist(trackId: Int, playlistId: Long): Boolean
+
+    @Query(value = "SELECT COUNT(*) > 0 FROM playlist_track_crossref WHERE track_id = :trackId")
+    suspend fun isTrackInAnyPlaylist(trackId: Int): Boolean
+
+    @Query("DELETE FROM tracks_table WHERE track_id = :trackId")
+    suspend fun deleteTrack(trackId: Int): Int
+
 
 
 }

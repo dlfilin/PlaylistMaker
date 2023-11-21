@@ -38,10 +38,6 @@ class PlayerRepositoryImpl : PlayerRepository {
             mediaPlayer.pause()
     }
 
-    override fun seek(position: Float) {
-        TODO("Not yet implemented")
-    }
-
     override fun release() {
         mediaPlayer.release()
     }

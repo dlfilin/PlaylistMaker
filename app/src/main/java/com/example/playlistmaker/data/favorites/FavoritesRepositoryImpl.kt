@@ -2,11 +2,9 @@ package com.example.playlistmaker.data.favorites
 
 import com.example.playlistmaker.data.converters.TrackDbConverter
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.favorites.FavoritesRepository
 import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class FavoritesRepositoryImpl(
@@ -26,8 +24,16 @@ class FavoritesRepositoryImpl(
         val trackEntity = trackDbConverter.map(track)
             .copy(isFavorite = !track.isFavorite, favLastUpdate = System.currentTimeMillis())
 
-        if (appDatabase.getTracksDao().updateTrack(trackEntity) == 0) {
-            appDatabase.getTracksDao().insertTrack(trackEntity)
+        //если трек есть хоть в одном плейлисте, значит запись в таблице есть - обновляем isFavorite
+        if (appDatabase.getTracksDao().isTrackInAnyPlaylist(track.trackId)) {
+            appDatabase.getTracksDao().updateTrack(trackEntity)
+        } else {
+            //если нет в плейлисте, то проверяем, создавать или удалять
+            if (track.isFavorite) {
+                appDatabase.getTracksDao().deleteTrack(track.trackId)
+            } else {
+                appDatabase.getTracksDao().insertTrack(trackEntity)
+            }
         }
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -15,8 +14,9 @@ import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.playlists.PlaylistsScreenState
 import com.example.playlistmaker.presentation.playlists.PlaylistsViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.playlistmaker.ui.edit_playlist.EditPlaylistFragment
+import com.example.playlistmaker.ui.playlist.PlaylistFragment
+import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -26,27 +26,41 @@ class PlaylistsFragment : Fragment() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
 
-    private var isClickAllowed = true
+    private var playlistsAdapter: PlaylistsAdapter? = null
 
-    private var _playlistsAdapter: PlaylistsAdapter? = null
-    private val playlistsAdapter get() = _playlistsAdapter!!
+    private lateinit var onPlaylistClickDebounced: (Playlist) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-        _playlistsAdapter = PlaylistsAdapter { onPlaylistClicked(playlist = it) }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onPlaylistClickDebounced = debounce(
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false
+        ) { playlist ->
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playlistFragment,
+                PlaylistFragment.createArgs(playlist.id)
+            )
+        }
+        playlistsAdapter = PlaylistsAdapter(onPlaylistClickDebounced)
+
         binding.playlistsRv.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playlistsRv.adapter = playlistsAdapter
 
         binding.btNewPlaylist.setOnClickListener {
-            findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment)
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(playlistId = null)
+            )
         }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -56,7 +70,7 @@ class PlaylistsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _playlistsAdapter = null
+        playlistsAdapter = null
         binding.playlistsRv.adapter = null
         _binding = null
     }
@@ -79,7 +93,7 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showContent(playlists: List<Playlist>) {
-        playlistsAdapter.updateListItems(playlists)
+        playlistsAdapter?.updateListItems(playlists)
         showScreenViews(progressVisible = false, recyclerVisible = true, placeholderVisible = false)
     }
 
@@ -87,7 +101,9 @@ class PlaylistsFragment : Fragment() {
         showScreenViews(progressVisible = true, recyclerVisible = false, placeholderVisible = false)
     }
 
-    private fun showScreenViews(progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean) {
+    private fun showScreenViews(
+        progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean
+    ) {
         with(binding) {
             progressBar.isVisible = progressVisible
             playlistsRv.isVisible = recyclerVisible
@@ -96,30 +112,10 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    private fun clickDebounced(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
-
-    private fun onPlaylistClicked(playlist: Playlist) {
-        if (clickDebounced()) {
-            Toast.makeText(
-                requireContext(), playlist.name, Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
     companion object {
         fun newInstance() = PlaylistsFragment()
 
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 20L
 
     }
 }

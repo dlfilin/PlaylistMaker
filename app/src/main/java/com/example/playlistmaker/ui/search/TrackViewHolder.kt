@@ -7,23 +7,32 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.TrackItemViewBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.getCoverArtwork60
+import com.example.playlistmaker.domain.models.getTrackTimeMMSS
 
-class TrackViewHolder(private val binding: TrackItemViewBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class TrackViewHolder(
+    private val binding: TrackItemViewBinding,
+    private val clickListener: TrackListAdapter.TrackClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(model: Track) {
+    fun bind(track: Track) {
         Glide.with(itemView)
-            .load(model.artworkUrl100)
+            .load(track.getCoverArtwork60())
             .placeholder(R.drawable.ic_placeholder)
             .transform(
                 CenterCrop(),
-                RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.rounded_corner_2)))
-            .into(binding.trackArt)
+                RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.rounded_corner_2))
+            ).into(binding.trackArt)
 
         with(binding) {
-            trackName.text = model.trackName
-            artistName.text = model.artistName
-            trackTime.text = model.trackTimeMillis
+            trackName.text = track.trackName
+            artistName.text = track.artistName
+            trackTime.text = track.getTrackTimeMMSS()
+        }
+        itemView.setOnClickListener { clickListener.onTrackClick(track) }
+        itemView.setOnLongClickListener {
+            clickListener.onTrackLongClick(track)
+            true
         }
     }
 

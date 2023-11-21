@@ -1,7 +1,6 @@
 package com.example.playlistmaker.data.history
 
 import com.example.playlistmaker.data.converters.TrackDbConverter
-import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.dto.TracksHistoryResponse
 import com.example.playlistmaker.data.storage.HistoryStorage
 import com.example.playlistmaker.domain.history.HistoryRepository
@@ -11,10 +10,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class HistoryRepositoryImpl(
-    private val appDatabase: AppDatabase,
     private val historyStorage: HistoryStorage,
     private val trackDbConverter: TrackDbConverter,
-    ) : HistoryRepository {
+) : HistoryRepository {
 
     override fun getTracksFromHistory(): Flow<Resource<List<Track>>> = flow {
 
@@ -24,11 +22,11 @@ class HistoryRepositoryImpl(
             -1 -> {
                 emit(Resource.Error(code = -1))
             }
+
             else -> {
-                val favoriteTracks = appDatabase.getTracksDao().getFavoriteTracksIds()
 
                 val data = (response as TracksHistoryResponse).results.map {
-                    trackDbConverter.map(it.copy(isFavorite = favoriteTracks.contains(it.trackId)))
+                    trackDbConverter.map(it)
                 }
                 emit(Resource.Success(data))
             }
