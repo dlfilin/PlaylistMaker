@@ -15,7 +15,7 @@ class TrackDbConverter {
                 releaseYear = releaseYear ?: "",
                 primaryGenreName = primaryGenreName ?: "",
                 country = country ?: "",
-                trackTimeMillis = trackTimeMillis ?: "",
+                trackTimeMillis = trackTimeMillis ?: 0,
                 artworkUrl100 = artworkUrl100 ?: "",
                 previewUrl = previewUrl ?: "",
                 isFavorite = isFavorite
@@ -41,5 +41,7 @@ class TrackDbConverter {
             )
         }
     }
+
+    fun map(tracks: List<TrackEntity>): List<Track> = tracks.map(::map)
 
 }

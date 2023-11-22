@@ -29,7 +29,7 @@ data class TrackEntity (
     val country: String?, // Страна исполнителя
 
     @ColumnInfo(name = "track_time_millis")
-    val trackTimeMillis: String?, // Продолжительность трека
+    val trackTimeMillis: Int?, // Продолжительность трека
 
     @ColumnInfo(name = "artwork_url")
     val artworkUrl100: String?, // Ссылка на изображение обложки

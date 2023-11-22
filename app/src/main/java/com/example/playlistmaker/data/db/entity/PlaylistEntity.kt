@@ -1,9 +1,11 @@
 package com.example.playlistmaker.data.db.entity
 
-import android.util.Log
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Junction
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "playlists_table")
 data class PlaylistEntity(
@@ -17,12 +19,13 @@ data class PlaylistEntity(
     @ColumnInfo(name = "image_uri") val imageUri: String?,
 
     @ColumnInfo(name = "tracks_count") var tracksCount: Int = 0,
-
     )
 
-fun PlaylistEntity.incrementTracksCount(): PlaylistEntity {
-
-    val count = ++tracksCount
-
-    return this.copy(tracksCount = count)
-}
+data class PlaylistWithTracks(
+    @Embedded val playlist: PlaylistEntity,
+    @Relation(
+        parentColumn = "playlist_id",
+        entityColumn = "track_id",
+        associateBy = Junction(PlaylistTrackCrossRef::class)
+    ) val tracks: List<TrackEntity>
+)

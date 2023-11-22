@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.favorites
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,8 @@ import com.example.playlistmaker.presentation.favorites.FavoritesScreenState
 import com.example.playlistmaker.presentation.favorites.FavoritesViewModel
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackListAdapter
+import com.example.playlistmaker.util.debounce
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,10 +29,9 @@ class FavoritesFragment : Fragment() {
 
     private val viewModel by viewModel<FavoritesViewModel>()
 
-    private var _favoriteTracksAdapter: TrackListAdapter? = null
-    private val favoriteTracksAdapter get() = _favoriteTracksAdapter!!
+    private var favoriteTracksAdapter: TrackListAdapter? = null
 
-    private var isClickAllowed = true
+    private lateinit var onTrackClickDebounced: (Track) -> Unit
 
     private val gson: Gson by inject()
 
@@ -40,14 +39,38 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        _favoriteTracksAdapter = TrackListAdapter { onTrackClicked(track = it) }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.favoritesRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        onTrackClickDebounced = debounce(
+            delayMillis = CLICK_DEBOUNCE_DELAY_MILLIS,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = false
+        ) { track ->
+            viewModel.addTrackToHistory(track = track)
+
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playerActivity,
+                PlayerActivity.createArgs(gson.toJson(track))
+            )
+        }
+
+        favoriteTracksAdapter = TrackListAdapter(object : TrackListAdapter.TrackClickListener {
+            override fun onTrackClick(item: Track) {
+                onTrackClickDebounced(item)
+            }
+
+            override fun onTrackLongClick(item: Track) {
+                Log.d("XXX", "onTrackLongClick $item")
+            }
+        })
+
+        binding.favoritesRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.favoritesRv.adapter = favoriteTracksAdapter
 
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -57,7 +80,7 @@ class FavoritesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _favoriteTracksAdapter = null
+        favoriteTracksAdapter = null
         binding.favoritesRv.adapter = null
         _binding = null
     }
@@ -80,7 +103,7 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun showContent(tracks: List<Track>) {
-        favoriteTracksAdapter.updateListItems(tracks)
+        favoriteTracksAdapter?.updateListItems(tracks)
         showScreenViews(progressVisible = false, recyclerVisible = true, placeholderVisible = false)
     }
 
@@ -88,7 +111,9 @@ class FavoritesFragment : Fragment() {
         showScreenViews(progressVisible = true, recyclerVisible = false, placeholderVisible = false)
     }
 
-    private fun showScreenViews(progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean) {
+    private fun showScreenViews(
+        progressVisible: Boolean, recyclerVisible: Boolean, placeholderVisible: Boolean
+    ) {
         with(binding) {
             progressBar.isVisible = progressVisible
             favoritesRv.isVisible = recyclerVisible
@@ -97,33 +122,11 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    private fun clickDebounced(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
-
-    private fun onTrackClicked(track: Track) {
-        if (clickDebounced()) {
-            viewModel.addTrackToHistory(track = track)
-
-            findNavController().navigate(
-                R.id.action_libraryFragment_to_playerActivity,
-                PlayerActivity.createArgs(gson.toJson(track)))
-        }
-    }
-
     companion object {
 
         fun newInstance() = FavoritesFragment()
 
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 20L
 
     }
 }

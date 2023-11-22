@@ -12,3 +12,7 @@ data class TrackDto(
     val artworkUrl100: String?, // Ссылка на изображение обложки
     val previewUrl: String? // Ссылка на отрывок трека
 )
+
+
+fun TrackDto.getReleaseYear() =
+    this.releaseDate?.substringBefore('-') ?: "N/A"

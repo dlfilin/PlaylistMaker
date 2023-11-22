@@ -5,15 +5,15 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.playlistmaker.App
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.storage.HistoryStorage
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.ItunesApi
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.storage.impl.HistoryStorageImpl
-import com.example.playlistmaker.data.storage.SettingsStorage
-import com.example.playlistmaker.data.storage.impl.SettingsStorageImpl
+import com.example.playlistmaker.data.storage.HistoryStorage
 import com.example.playlistmaker.data.storage.ImagesStorage
+import com.example.playlistmaker.data.storage.SettingsStorage
+import com.example.playlistmaker.data.storage.impl.HistoryStorageImpl
 import com.example.playlistmaker.data.storage.impl.ImagesStorageImpl
+import com.example.playlistmaker.data.storage.impl.SettingsStorageImpl
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -32,7 +32,9 @@ val dataModule = module {
         androidContext().getSharedPreferences(App.LOCAL_STORAGE, Context.MODE_PRIVATE)
     }
 
-    factory { Gson() }
+    factory {
+        Gson()
+    }
 
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidContext())
@@ -51,8 +53,7 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .build()
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
     }
 
 }

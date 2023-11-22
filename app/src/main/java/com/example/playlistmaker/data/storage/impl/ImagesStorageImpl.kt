@@ -33,12 +33,21 @@ class ImagesStorageImpl(
             // записываем картинку с помощью BitmapFactory
             BitmapFactory.decodeStream(inputStream)
                 .compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
-
-            Log.d("imageStorage", file.absolutePath)
         } catch (e: Exception) {
             return null
         }
         return file.toUri()
+    }
+
+    override suspend fun deleteImageFromPrivateStorage(uri: Uri, album: String): Boolean {
+        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), album)
+        val file = File(filePath, uri.lastPathSegment ?: "")
+        return try {
+            file.delete()
+        } catch (e: Exception) {
+            Log.d("deleteImageFromPrivateStorage", e.printStackTrace().toString())
+            false
+        }
     }
 
 }

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.history.HistoryInteractor
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.search.SearchInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -84,6 +84,7 @@ class SearchViewModel(
     fun renderTracksHistory() {
         viewModelScope.launch {
             historyInteractor.getTracksFromHistory().collect { pair ->
+
                 processHistoryResult(foundTracks = pair.first, errorCode = pair.second)
             }
         }

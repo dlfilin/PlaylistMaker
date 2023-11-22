@@ -6,4 +6,6 @@ interface ImagesStorage {
 
     suspend fun saveImageToPrivateStorage(sharedPath: Uri, album: String): Uri?
 
+    suspend fun deleteImageFromPrivateStorage(uri: Uri, album: String): Boolean
+
 }

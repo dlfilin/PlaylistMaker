@@ -6,4 +6,6 @@ interface SharingInteractor {
     fun shareApp(link: String)
     fun openTerms(link: String)
     fun openSupport(emailData: EmailData)
+
+    fun shareMessage(message: String)
 }
